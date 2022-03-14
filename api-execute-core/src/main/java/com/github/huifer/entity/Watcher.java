@@ -11,11 +11,17 @@ public class Watcher {
     private String type;
     private String condition;
     private List<Then> thens;
+    private List<Then> caches;
 
 
     @Data
     public static class Then {
         private String actionId;
+    }
 
+
+    @Data
+    public static class Cache {
+        private String actionId;
     }
 }

@@ -58,6 +58,26 @@ public class Demo {
                     paramsMap,
                     actionResult);
         }
+
+        Map<String, Object> result = new HashMap<>();
+        List<Key> keys = resultTag.getKeys();
+        for (Key key : keys) {
+            String exId = key.getExId();
+            String name = key.getName();
+            ExtractTag extractTag = exMap.get(exId);
+
+            String el = extractTag.getEl();
+            String fromAction = extractTag.getFromAction();
+            Object rs = actionResult.get(fromAction);
+
+            String s = JSON.toJSONString(rs);
+            Map map = JSON.parseObject(s, Map.class);
+            Object o = map.get(el);
+
+
+            result.put(name, o);
+        }
+        System.out.println(result);
     }
 
     private void wt(WorkTag workTag,
