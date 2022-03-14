@@ -13,8 +13,8 @@
     </params>
     <actions>
         <action id="login" class="com.github.huifer.LoginAction" method="login">
-            <param arg_name="username" param_group="a" ex="username"/>
-            <param arg_name="password" param_group="a" ex="password"></param>
+            <param index="0" arg_name="username" param_group="a" ex="username"/>
+            <param index="1" arg_name="password" param_group="a" ex="password"></param>
         </action>
         <action id="sendPoint" class="com.github.huifer.SendPointAction"
                 method="sendPoint">
@@ -27,10 +27,11 @@
         <action id="print" class="com.github.huifer.PrintAction">
         </action>
     </actions>
+
     <watchers>
-        <watcher id="w1" exid="e3" type="java.lang.Integer" condition="> 10">
+        <watcherTag id="w1" exid="e3"  condition="> 10">
             <then actionId="sendPoint"/>
-        </watcher>
+        </watcherTag>
     </watchers>
 
     <result>
@@ -47,9 +48,39 @@
     <flow>
         <work id="work1" type="action" ref_id="login">
             <then>
-                <work id="work2" type="watcher" ref_id="w1"/>
+                <work id="work2" type="watcher" ref_id="w1">
+                    <then>
+                        <work id="work3" type="watcher" ref_id="w1"/>
+                    </then>
+                </work>
+
+                <work id="work2" type="watcher" ref_id="w1">
+                    <then>
+                        <work id="work3" type="watcher" ref_id="w1"/>
+                    </then>
+                </work>
             </then>
         </work>
+
+
+
+        <work id="22" type="action" ref_id="login">
+            <then>
+                <work id="work2" type="watcher" ref_id="w1">
+                    <then>
+                        <work id="work3" type="watcher" ref_id="w1"/>
+                    </then>
+                </work>
+
+                <work id="work2" type="watcher" ref_id="w1">
+                    <then>
+                        <work id="work3" type="watcher" ref_id="w1"/>
+                    </then>
+                </work>
+            </then>
+        </work>
+
+
     </flow>
 
 </ae>

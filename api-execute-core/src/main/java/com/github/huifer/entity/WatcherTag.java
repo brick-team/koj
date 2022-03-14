@@ -5,13 +5,12 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Watcher {
+public class WatcherTag {
     private String id;
     private String exId;
-    private String type;
     private String condition;
     private List<Then> thens;
-    private List<Then> caches;
+    private List<Cache> caches;
 
 
     @Data

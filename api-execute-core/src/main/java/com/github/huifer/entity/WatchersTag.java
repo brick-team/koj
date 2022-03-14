@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class WatchersTag {
-    private List<Watcher> list;
+    private List<WatcherTag> list;
 }

@@ -27,9 +27,9 @@ public class Demo {
         ExtractsTag extractsTag = initExtracts();
         FlowTag flowTag = flowTag();
 
-        List<Watcher> list = watchersTag.getList();
-        Map<String, Watcher> watcherMap = list.stream().collect(Collectors.toMap(
-                Watcher::getId, x -> x
+        List<WatcherTag> list = watchersTag.getList();
+        Map<String, WatcherTag> watcherMap = list.stream().collect(Collectors.toMap(
+                WatcherTag::getId, x -> x
         ));
 
         Map<String, ActionTag> actionTagMap =
@@ -81,7 +81,7 @@ public class Demo {
     }
 
     private void wt(WorkTag workTag,
-                    Map<String, Watcher> watcherMap,
+                    Map<String, WatcherTag> watcherMap,
                     Map<String, ExtractTag> exMap,
                     Map<String, ActionTag> actionTagMap,
                     Map<String, List<ParamTag>> paramsMap,
@@ -91,9 +91,9 @@ public class Demo {
 
 
         if (type.equalsIgnoreCase("watcher")) {
-            Watcher watcher = watcherMap.get(workTag.getRefId());
+            WatcherTag watcherTag = watcherMap.get(workTag.getRefId());
 
-            String exId = watcher.getExId();
+            String exId = watcherTag.getExId();
             ExtractTag extractTag = exMap.get(exId);
 
             String el = extractTag.getEl();
@@ -105,12 +105,12 @@ public class Demo {
             Object o = map.get(el);
 
 
-            Expression expression = parser.parseExpression(o + watcher.getCondition());
+            Expression expression = parser.parseExpression(o + watcherTag.getCondition());
             EvaluationContext context = new StandardEvaluationContext();
             Boolean value = expression.getValue(context, Boolean.class);
             if (value) {
-                List<Watcher.Then> thens = watcher.getThens();
-                for (Watcher.Then then : thens) {
+                List<WatcherTag.Then> thens = watcherTag.getThens();
+                for (WatcherTag.Then then : thens) {
                     String actionId = then.getActionId();
                     ActionTag actionTag = actionTagMap.get(actionId);
                     fillActionTag(paramsMap, actionTag);
@@ -300,17 +300,16 @@ public class Demo {
 
     private WatchersTag initWatchers() {
         WatchersTag watchersTag = new WatchersTag();
-        ArrayList<Watcher> list = new ArrayList<>();
+        ArrayList<WatcherTag> list = new ArrayList<>();
 
-        Watcher w1 = new Watcher();
+        WatcherTag w1 = new WatcherTag();
         w1.setId("w1");
         w1.setExId("e3");
-        w1.setType("java.lang.Integer");
         w1.setCondition("> 10");
 
 
-        ArrayList<Watcher.Then> thens = new ArrayList<>();
-        Watcher.Then e = new Watcher.Then();
+        ArrayList<WatcherTag.Then> thens = new ArrayList<>();
+        WatcherTag.Then e = new WatcherTag.Then();
         e.setActionId("sendPoint");
         thens.add(e);
         w1.setThens(thens);
