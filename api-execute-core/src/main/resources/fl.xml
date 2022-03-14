@@ -54,11 +54,11 @@
                     </then>
                 </work>
 
-                <work id="work2" type="watcher" ref_id="w1">
-                    <then>
-                        <work id="work3" type="watcher" ref_id="w1"/>
-                    </then>
-                </work>
+<!--                <work id="work2" type="watcher" ref_id="w1">-->
+<!--                    <then>-->
+<!--                        <work id="work3" type="watcher" ref_id="w1"/>-->
+<!--                    </then>-->
+<!--                </work>-->
             </then>
         </work>
 
