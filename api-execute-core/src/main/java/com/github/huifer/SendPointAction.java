@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SendPointAction {
-    Map<String, String> points = new HashMap<>();
+    Map<String, Object> points = new HashMap<>();
 
-    public Map<String, String > sendPoint(String uid, String point) {
+    public Map<String, Object > sendPoint(String uid, Integer point) {
 
         points.put(uid, point);
         System.out.println(points);

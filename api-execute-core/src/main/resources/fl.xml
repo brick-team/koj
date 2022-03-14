@@ -18,8 +18,11 @@
         </action>
         <action id="sendPoint" class="com.github.huifer.SendPointAction"
                 method="sendPoint">
-            <param index="0" arg_name="uid" param_group="a" ex="username"></param>
-            <param index="1" arg_name="point" value="10"></param>
+            <param index="0" arg_name="uid" param_group="a" ex="username">
+            </param>
+            <param index="1" arg_name="point" value="10">
+                <format id="f1" class="com.github.huifer.StringToIntegerFormat"></format>
+            </param>
         </action>
         <action id="print" class="com.github.huifer.PrintAction">
         </action>

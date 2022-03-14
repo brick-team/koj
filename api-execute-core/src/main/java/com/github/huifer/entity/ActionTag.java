@@ -3,6 +3,7 @@ package com.github.huifer.entity;
 import lombok.Data;
 
 import java.lang.reflect.Method;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Map;
 
@@ -28,5 +29,7 @@ public class ActionTag {
         private String paramGroup;
         private String ex;
         private Integer index;
+
+        private FormatTag formatTag;
     }
 }

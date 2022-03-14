@@ -137,6 +137,7 @@ public class Demo {
             Param param = params.get(i);
             String argName = param.getArgName();
             Object o = methodArg.get(argName);
+
             args[i] = o;
         }
 
@@ -147,7 +148,7 @@ public class Demo {
     }
 
     private void fillActionTag(Map<String, List<ParamTag>> paramsMap, ActionTag actionTag)
-            throws ClassNotFoundException, NoSuchMethodException {
+            throws Exception {
         String clazzStr = actionTag.getClazzStr();
         Class<?> aClass = Class.forName(clazzStr);
         actionTag.setClazz(aClass);
@@ -169,6 +170,8 @@ public class Demo {
         for (Param param : params) {
             String argName = param.getArgName();
             String paramGroup = param.getParamGroup();
+            FormatTag formatTag = param.getFormatTag();
+            String valueValue = null;
             if (paramGroup != null) {
 
                 String ex = param.getEx();
@@ -177,13 +180,30 @@ public class Demo {
                         paramTags.stream()
                                 .collect(Collectors.toMap(s -> s.getKey(), s -> s));
                 ParamTag value = collect.get(ex);
-                String valueValue = value.getValue();
+                valueValue = value.getValue();
 
                 oo.put(argName, valueValue);
             } else {
-                String value1 = param.getValue();
-                oo.put(argName, value1);
+                valueValue = param.getValue();
+
+                oo.put(argName, valueValue);
             }
+
+
+            if (formatTag != null) {
+                String classStr = formatTag.getClassStr();
+                Class<?> aClass1 = Class.forName(classStr);
+                if (Format.class.isAssignableFrom(aClass1)) {
+                    Object o = aClass1.newInstance();
+                    Format format = (Format) o;
+                    Object format1 = format.format(valueValue);
+                    oo.put(argName, format1);
+
+                }
+
+            }
+
+
         }
 
         actionTag.setMethodArg(oo);
@@ -325,6 +345,12 @@ public class Demo {
         e3.setArgName("point");
         e3.setValue("10");
         e3.setIndex(1);
+
+
+        FormatTag formatTag = new FormatTag();
+        formatTag.setId("f1");
+        formatTag.setClassStr("com.github.huifer.StringToIntegerFormat");
+        e3.setFormatTag(formatTag);
 
         params1.add(e3);
 
