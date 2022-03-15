@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.huifer.entity.*;
 import com.github.huifer.entity.ActionTag.Param;
 import com.github.huifer.entity.ResultTag.Key;
+import com.github.huifer.format.Format;
 import org.junit.Test;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
@@ -368,7 +369,7 @@ public class Demo {
 
         FormatTag formatTag = new FormatTag();
         formatTag.setId("f1");
-        formatTag.setClassStr("com.github.huifer.StringToIntegerFormat");
+        formatTag.setClassStr("com.github.huifer.format.num.StringToIntegerFormat");
         e3.setFormatTag(formatTag);
 
         params1.add(e3);

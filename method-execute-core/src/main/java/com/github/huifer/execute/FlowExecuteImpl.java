@@ -1,9 +1,11 @@
 package com.github.huifer.execute;
 
-import com.github.huifer.Format;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.huifer.entity.*;
 import com.github.huifer.extract.Extract;
 import com.github.huifer.extract.ExtractImpl;
+import com.github.huifer.format.Format;
 import com.github.huifer.parse.DocParse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +29,7 @@ public class FlowExecuteImpl implements FlowExecute {
     Extract extract = new ExtractImpl();
 
     @Override
-    public Object execute(String file,String  flowId) throws Exception {
+    public Object execute(String file, String flowId) throws Exception {
         DocTag parse = null;
         try {
             parse = docParse.parse(file);
@@ -96,7 +98,7 @@ public class FlowExecuteImpl implements FlowExecute {
             if (rs instanceof Throwable) {
                 extract = rs;
             } else {
-                 extract = this.extract.extract(rs, el);
+                extract = this.extract.extract(rs, el);
             }
             result.put(name, extract);
         }
@@ -142,21 +144,33 @@ public class FlowExecuteImpl implements FlowExecute {
                         paramTags.stream()
                                 .collect(Collectors.toMap(ParamTag::getKey, s -> s));
                 ParamTag value = collect.get(ex);
-                valueValue = value.getValue();
-                methodArgs.put(argName, valueValue);
+                if (value != null) {
+
+                    valueValue = value.getValue();
+                    methodArgs.put(argName, valueValue);
+                }
             } else {
                 valueValue = param.getValue();
                 methodArgs.put(argName, valueValue);
             }
+            Class<?> typeClass = param.getTypeClass();
+
 
             if (formatTag != null) {
+                // FIXME: 2022/3/15 编写Format搜索器
                 String classStr = formatTag.getClassStr();
                 Class<?> aClass1 = Class.forName(classStr);
                 if (Format.class.isAssignableFrom(aClass1)) {
                     Object o = aClass1.newInstance();
-                    Format format = (Format) o;
+                    Format<Object, Object> format = (Format<Object, Object>) o;
                     Object format1 = format.format(valueValue);
-                    methodArgs.put(argName, format1);
+                    if (format1 instanceof JSONObject) {
+                        Object argData = JSON.parseObject(valueValue, typeClass);
+                        methodArgs.put(argName, argData);
+                    } else {
+
+                        methodArgs.put(argName, format1);
+                    }
 
                 }
 
