@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>api-execute</artifactId>
+    <artifactId>method-execute</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>api-execute-core</module>
+        <module>method-execute-core</module>
     </modules>
 
     <properties>
