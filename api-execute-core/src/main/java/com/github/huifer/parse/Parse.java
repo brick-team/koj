@@ -1,7 +1,8 @@
 package com.github.huifer.parse;
 
-import org.w3c.dom.Element;
+
+import org.dom4j.Element;
 
 public interface Parse<T> {
-    T parse(Element element);
+    T parse(Element element)throws Exception;
 }

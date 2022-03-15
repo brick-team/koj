@@ -10,7 +10,7 @@ public class WatcherTag {
     private String exId;
     private String condition;
     private List<Then> thens;
-    private List<Cache> caches;
+    private List<Catch> catchs;
 
 
     @Data
@@ -20,7 +20,7 @@ public class WatcherTag {
 
 
     @Data
-    public static class Cache {
+    public static class Catch {
         private String actionId;
     }
 }

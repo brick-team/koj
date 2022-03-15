@@ -12,5 +12,5 @@ public class WorkTag {
 
 
     private List<WorkTag> then;
-    private List<WorkTag> cache;
+    private List<WorkTag> catchs;
 }

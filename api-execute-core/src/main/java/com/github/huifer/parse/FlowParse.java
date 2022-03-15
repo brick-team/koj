@@ -2,105 +2,75 @@ package com.github.huifer.parse;
 
 import com.github.huifer.entity.FlowTag;
 import com.github.huifer.entity.WorkTag;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.dom4j.Element;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FlowParse implements Parse<FlowTag> {
-    FlowWorkParse flowWorkParse = new FlowWorkParse();
+    WorkParse workParse = new WorkParse();
 
     @Override
-    public FlowTag parse(Element element) {
+    public FlowTag parse(Element element) throws Exception {
 
+
+        List<Element> work = element.elements("work");
         FlowTag flowTag = new FlowTag();
         ArrayList<WorkTag> workTags = new ArrayList<>();
 
+        for (Element element1 : work) {
 
-        NodeList childNodes = element.getChildNodes();
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            Node item = childNodes.item(i);
-            if (item instanceof Element) {
-                WorkTag parse = flowWorkParse.parse((Element) item);
-                workTags.add(parse);
-            }
+
+            WorkTag workTag = workParse.parse(element1);
+            workTags.add(workTag);
         }
         flowTag.setWorkTags(workTags);
+
         return flowTag;
     }
 
 
-    public class FlowWorkParse implements Parse<WorkTag> {
+    public class WorkParse implements Parse<WorkTag> {
         @Override
-        public WorkTag parse(Element element) {
+        public WorkTag parse(Element element) throws Exception {
             WorkTag workTag = new WorkTag();
-            workTag.setType(element.getAttribute("type"));
-            workTag.setRefId(element.getAttribute("ref_id"));
-            workTag.setId(element.getAttribute("id"));
+
+            String id = element.attributeValue("id");
+            String type = element.attributeValue("type");
+            String refId = element.attributeValue("ref_id");
+
+            workTag.setType(type);
+            workTag.setRefId(refId);
+            workTag.setId(id);
 
 
+            ArrayList<WorkTag> then1 = new ArrayList<>();
+            List<Element> then = element.elements("then");
+            for (Element element1 : then) {
+                List<Element> work = element1.elements("work");
+                for (Element element2 : work) {
 
-
-
-            NodeList then = element.getElementsByTagName("then");
-
-
-
-            List<WorkTag> thens = new ArrayList<>();
-
-
-            for (int i = 0; i < then.getLength(); i++) {
-                // fixme: then 节点解析
-                Node item = then.item(i);
-                if (item.getNodeName().equals("then")) {
-
-                    Element item2 = (Element) item;
-                    NodeList work = item2.getElementsByTagName("work");
-
-                    NodeList childNodes = item.getChildNodes();
-                    for (int i1 = 0; i1 < childNodes.getLength(); i1++) {
-
-                        Node item1 = childNodes.item(i1);
-                        if (item1.getNodeName().equals("work")) {
-
-                            WorkTag parse = parse((Element) item1);
-
-                            thens.add(parse);
-                        }
-                    }
+                    WorkTag workTag1 = parse(element2);
+                    then1.add(workTag1);
                 }
             }
-            workTag.setThen(thens);
-            NodeList cache = element.getElementsByTagName("cache");
-            List<WorkTag> caches = new ArrayList<>();
+            workTag.setThen(then1);
 
-            for (int i = 0; i < cache.getLength(); i++) {
-                Node item = cache.item(i);
 
-                if (item.getNodeName().equals("cache")) {
+            ArrayList<WorkTag> catchls = new ArrayList<>();
+            List<Element> catchs = element.elements("catch");
+            for (Element element1 : catchs) {
+                List<Element> work = element1.elements("work");
+                for (Element element2 : work) {
 
-                    // fixme: 节点解析
-                    NodeList childNodes = item.getChildNodes();
-                    for (int i1 = 0; i1 < childNodes.getLength(); i1++) {
-
-                        Node item1 = childNodes.item(i1);
-                        if (item1.getNodeName().equals("work")) {
-
-                            WorkTag parse = parse((Element) item1);
-
-                            caches.add(parse);
-                        }
-                    }
+                    WorkTag workTag1 = parse(element2);
+                    catchls.add(workTag1);
                 }
-
             }
-
-            workTag.setCache(caches);
-
+            workTag.setCatchs(catchls);
             return workTag;
         }
-    }
 
+
+    }
 }

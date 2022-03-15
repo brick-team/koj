@@ -1,16 +1,20 @@
 package com.github.huifer.parse;
 
 import com.github.huifer.entity.FormatTag;
-import org.w3c.dom.Element;
+import org.dom4j.Element;
 
 public class FormatParse implements Parse<FormatTag> {
     @Override
-    public FormatTag parse(Element element) {
-        String id = element.getAttribute("id");
-        String aClass = element.getAttribute("class");
+    public FormatTag parse(Element element) throws Exception{
+        String id = element.attributeValue("id");
+
+        String clazz = element.attributeValue("class");
+
         FormatTag formatTag = new FormatTag();
         formatTag.setId(id);
-        formatTag.setClassStr(aClass);
+        formatTag.setClassStr(clazz);
+        formatTag.setClazz(Class.forName(clazz));
+
 
 
         return formatTag;

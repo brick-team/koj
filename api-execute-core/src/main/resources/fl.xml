@@ -13,25 +13,27 @@
     </params>
     <actions>
         <action id="login" class="com.github.huifer.LoginAction" method="login">
-            <param index="0" arg_name="username" param_group="a" ex="username"/>
-            <param index="1" arg_name="password" param_group="a" ex="password"></param>
+            <param index="0" arg_name="username" param_group="a" ex="username" type="java.lang.String"/>
+            <param index="1" arg_name="password" param_group="a" ex="password" type="java.lang.String"></param>
         </action>
         <action id="sendPoint" class="com.github.huifer.SendPointAction"
                 method="sendPoint">
-            <param index="0" arg_name="uid" param_group="a" ex="username">
+            <param index="0" arg_name="uid" param_group="a" ex="username" type="java.lang.String">
             </param>
-            <param index="1" arg_name="point" value="10">
+            <param index="1" arg_name="point" value="10" type="java.lang.Integer">
                 <format id="f1" class="com.github.huifer.StringToIntegerFormat"></format>
             </param>
         </action>
-        <action id="print" class="com.github.huifer.PrintAction">
+        <action id="print" class="com.github.huifer.PrintAction" method="print">
+            <param index="0" arg_name="o" type="java.lang.Object"></param>
         </action>
     </actions>
 
     <watchers>
-        <watcherTag id="w1" exid="e3"  condition="> 10">
+        <watcher id="w1" exid="e3"  condition="> 10">
             <then actionId="sendPoint"/>
-        </watcherTag>
+<!--            <catch-->
+        </watcher>
     </watchers>
 
     <result>
@@ -53,13 +55,29 @@
                         <work id="work3" type="watcher" ref_id="w1"/>
                     </then>
                 </work>
+                <work id="work2" type="watcher" ref_id="w1">
+                    <then>
+                        <work id="work3" type="watcher" ref_id="w1"/>
+                    </then>
+                    <catch>
+                        <work id="work3" type="watcher" ref_id="w1"/>
+                    </catch>
 
+                </work>
+            </then>
+<!--            <then>-->
 <!--                <work id="work2" type="watcher" ref_id="w1">-->
 <!--                    <then>-->
 <!--                        <work id="work3" type="watcher" ref_id="w1"/>-->
 <!--                    </then>-->
 <!--                </work>-->
-            </then>
+<!--                <work id="work2" type="watcher" ref_id="w1">-->
+<!--                    <then>-->
+<!--                        <work id="work3" type="watcher" ref_id="w1"/>-->
+<!--                    </then>-->
+<!--                </work>-->
+<!--            </then>-->
+
         </work>
 
 
