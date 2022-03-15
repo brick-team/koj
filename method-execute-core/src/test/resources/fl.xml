@@ -4,12 +4,12 @@
     <params>
         <param group="a">
             <key>username</key>
-            <value>username</value>
+            <value>zhangsan</value>
         </param>
 
         <param group="a">
             <key>password</key>
-            <value>password</value>
+            <value>lisi</value>
         </param>
     </params>
     <actions>
@@ -59,7 +59,17 @@
                 <then>
                     <work id="work2" type="watcher" ref_id="w1">
                         <then>
-                            <work id="work3" type="watcher" ref_id="w1"/>
+                            <work id="work3" type="watcher" ref_id="w1">
+                                <then>
+                                    <work id="work3" type="watcher" ref_id="w1">
+                                        <then>
+                                            <work id="work3" type="watcher" ref_id="w1">
+
+                                            </work>
+                                        </then>
+                                    </work>
+                                </then>
+                            </work>
                         </then>
                     </work>
                 </then>

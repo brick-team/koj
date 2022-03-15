@@ -14,10 +14,10 @@ public class LoginAction {
         if (logger.isInfoEnabled()) {
             logger.info("login,username = {}, password = {}", username, password);
         }
-        if (true) {
-            throw new RuntimeException("aaa");
-
-        }
+//        if (true) {
+//            throw new RuntimeException("aaa");
+//
+//        }
 
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("username", "zhangsan");

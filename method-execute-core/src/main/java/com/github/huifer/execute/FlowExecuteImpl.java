@@ -45,24 +45,17 @@ public class FlowExecuteImpl implements FlowExecute {
 
         ResultTag resultTag = parse.getResult();
 
-        Map<String, FlowTag> collect =
-                flows.getFlowTags().stream().collect(Collectors.toMap(FlowTag::getId, x -> x));
+        Map<String, FlowTag> collect = flows.getFlowTags().stream().collect(Collectors.toMap(FlowTag::getId, x -> x));
         FlowTag flowTag = collect.get(flowId);
         List<WatcherTag> list = watchersTag.getList();
-        Map<String, WatcherTag> watcherMap = list.stream().collect(Collectors.toMap(
-                WatcherTag::getId, x -> x
-        ));
+        Map<String, WatcherTag> watcherMap = list.stream().collect(Collectors.toMap(WatcherTag::getId, x -> x));
 
-        Map<String, ActionTag> actionTagMap =
-                actionsTag.getList().stream().collect(Collectors.toMap(ActionTag::getId, s -> s));
+        Map<String, ActionTag> actionTagMap = actionsTag.getList().stream().collect(Collectors.toMap(ActionTag::getId, s -> s));
 
-        Map<String, ExtractTag> exMap = extractsTag.getExtractTags().stream()
-                .collect(Collectors.toMap(ExtractTag::getId, s -> s));
+        Map<String, ExtractTag> exMap = extractsTag.getExtractTags().stream().collect(Collectors.toMap(ExtractTag::getId, s -> s));
 
 
-        Map<String, List<ParamTag>> paramsMap =
-                paramsTag.getList().stream().collect(Collectors.groupingBy(ParamTag::getGroup));
-
+        Map<String, List<ParamTag>> paramsMap = paramsTag.getList().stream().collect(Collectors.groupingBy(ParamTag::getGroup));
 
 
         // 执行
@@ -75,12 +68,8 @@ public class FlowExecuteImpl implements FlowExecute {
 
 
         for (WorkTag workTag : workTags) {
-            wt(workTag,
-                    watcherMap,
-                    exMap,
-                    actionTagMap,
-                    paramsMap,
-                    actionResult);
+            wt(workTag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+
         }
 
 
@@ -126,8 +115,7 @@ public class FlowExecuteImpl implements FlowExecute {
         return method.invoke(clazz.newInstance(), args);
     }
 
-    private void fillActionTag(Map<String, List<ParamTag>> paramsMap, ActionTag actionTag)
-            throws Exception {
+    private void fillActionTag(Map<String, List<ParamTag>> paramsMap, ActionTag actionTag) throws Exception {
         // 解析param
         List<ActionTag.Param> params = actionTag.getParams();
         //
@@ -140,9 +128,7 @@ public class FlowExecuteImpl implements FlowExecute {
             if (paramGroup != null) {
                 String ex = param.getEx();
                 List<ParamTag> paramTags = paramsMap.get(paramGroup);
-                Map<String, ParamTag> collect =
-                        paramTags.stream()
-                                .collect(Collectors.toMap(ParamTag::getKey, s -> s));
+                Map<String, ParamTag> collect = paramTags.stream().collect(Collectors.toMap(ParamTag::getKey, s -> s));
                 ParamTag value = collect.get(ex);
                 if (value != null) {
 
@@ -168,7 +154,6 @@ public class FlowExecuteImpl implements FlowExecute {
                         Object argData = JSON.parseObject(valueValue, typeClass);
                         methodArgs.put(argName, argData);
                     } else {
-
                         methodArgs.put(argName, format1);
                     }
 
@@ -182,19 +167,13 @@ public class FlowExecuteImpl implements FlowExecute {
         actionTag.setMethodArg(methodArgs);
     }
 
-    private void wt(WorkTag workTag,
-                    Map<String, WatcherTag> watcherMap,
-                    Map<String, ExtractTag> exMap,
-                    Map<String, ActionTag> actionTagMap,
-                    Map<String, List<ParamTag>> paramsMap,
-                    Map<String, Object> actionResult)
-            throws Exception {
+    private void wt(WorkTag workTag, Map<String, WatcherTag> watcherMap, Map<String, ExtractTag> exMap, Map<String, ActionTag> actionTagMap, Map<String, List<ParamTag>> paramsMap, Map<String, Object> actionResult) throws Exception {
         // 获取类型做出不同操作
         String type = workTag.getType();
-
+        // 嵌套执行存在问题
         // 数据监控类型
         if ("watcher".equalsIgnoreCase(type)) {
-            runWithWatcher(workTag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+            wrapperRunWatcher(workTag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
         }
         // 执行器类型
         else if ("action".equalsIgnoreCase(type)) {
@@ -204,12 +183,25 @@ public class FlowExecuteImpl implements FlowExecute {
 
     }
 
-    private void runWithAction(WorkTag workTag,
-                               Map<String, WatcherTag> watcherMap,
-                               Map<String, ExtractTag> exMap,
-                               Map<String, ActionTag> actionTagMap,
-                               Map<String, List<ParamTag>> paramsMap,
-                               Map<String, Object> actionResult) throws Exception {
+    private void wrapperRunWatcher(WorkTag workTag, Map<String, WatcherTag> watcherMap, Map<String, ExtractTag> exMap, Map<String, ActionTag> actionTagMap, Map<String, List<ParamTag>> paramsMap, Map<String, Object> actionResult) throws Exception {
+        try {
+            runWithWatcher(workTag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+            List<WorkTag> then = workTag.getThen();
+            // 监控执行器正常的情况下执行
+            for (WorkTag tag : then) {
+                wt(tag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+            }
+        } catch (Exception e) {
+            logger.error("");
+            // 监控执行器执行异常的情况下执行
+            List<WorkTag> catchs = workTag.getCatchs();
+            for (WorkTag aCatch : catchs) {
+                wt(aCatch, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+            }
+        }
+    }
+
+    private void runWithAction(WorkTag workTag, Map<String, WatcherTag> watcherMap, Map<String, ExtractTag> exMap, Map<String, ActionTag> actionTagMap, Map<String, List<ParamTag>> paramsMap, Map<String, Object> actionResult) throws Exception {
         ActionTag actionTag = actionTagMap.get(workTag.getRefId());
         // 补充反射信息
         fillActionTag(paramsMap, actionTag);
@@ -218,38 +210,25 @@ public class FlowExecuteImpl implements FlowExecute {
 
             Object res = runAction(actionTag);
             actionResult.put(actionTag.getId(), res);
-
-
             List<WorkTag> then = workTag.getThen();
 
             for (WorkTag tag : then) {
-                wt(tag,
-                        watcherMap,
-                        exMap,
-                        actionTagMap,
-                        paramsMap, actionResult);
+                wt(tag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
             }
         } catch (Exception e) {
+            e.printStackTrace();
+
             actionResult.put(actionTag.getId(), e);
 
             List<WorkTag> catchs = workTag.getCatchs();
 
             for (WorkTag tag : catchs) {
-                wt(tag,
-                        watcherMap,
-                        exMap,
-                        actionTagMap,
-                        paramsMap, actionResult);
+                wt(tag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
             }
         }
     }
 
-    private void runWithWatcher(WorkTag workTag,
-                                Map<String, WatcherTag> watcherMap,
-                                Map<String, ExtractTag> exMap,
-                                Map<String, ActionTag> actionTagMap,
-                                Map<String, List<ParamTag>> paramsMap,
-                                Map<String, Object> actionResult) throws Exception {
+    private void runWithWatcher(WorkTag workTag, Map<String, WatcherTag> watcherMap, Map<String, ExtractTag> exMap, Map<String, ActionTag> actionTagMap, Map<String, List<ParamTag>> paramsMap, Map<String, Object> actionResult) throws Exception {
         WatcherTag watcherTag = watcherMap.get(workTag.getRefId());
 
         String exId = watcherTag.getExId();
@@ -275,18 +254,22 @@ public class FlowExecuteImpl implements FlowExecute {
         extract = this.extract.extract(rs, el);
 
 
-
         Expression expression = parser.parseExpression(extract + watcherTag.getCondition());
         EvaluationContext context = new StandardEvaluationContext();
         Boolean value = expression.getValue(context, Boolean.class);
         if (value) {
+            // 如果符合条件表达式执行then相关内容
             List<WatcherTag.Then> thens = watcherTag.getThens();
             for (WatcherTag.Then then : thens) {
                 String actionId = then.getActionId();
                 ActionTag actionTag = actionTagMap.get(actionId);
+
                 fillActionTag(paramsMap, actionTag);
                 runAction(actionTag);
             }
+
+        } else {
+            // 如果不符合条件表达式执行catch相关内容
             List<WatcherTag.Catch> catchs = watcherTag.getCatchs();
             for (WatcherTag.Catch aCatch : catchs) {
                 String actionId = aCatch.getActionId();

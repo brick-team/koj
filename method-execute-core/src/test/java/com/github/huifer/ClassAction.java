@@ -1,6 +1,7 @@
 package com.github.huifer;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
