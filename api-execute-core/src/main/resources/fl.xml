@@ -42,9 +42,9 @@
     </result>
 
     <extracts>
-        <extract id="e1" fromAction="login" el="${username}"/>
-        <extract id="e2" fromAction="login" el="${login_time}"/>
-        <extract id="e3" fromAction="login" el="${age}"/>
+        <extract id="e1" fromAction="login" el="$.username"/>
+        <extract id="e2" fromAction="login" el="$.login_time"/>
+        <extract id="e3" fromAction="login" el="$.age"/>
     </extracts>
 
     <flow>
