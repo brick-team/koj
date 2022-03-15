@@ -11,7 +11,7 @@ public class DocParse {
     private final ActionsParse actionsParse = new ActionsParse();
     private final WatchersParse watchersParse = new WatchersParse();
     private final ExtractsParse extractsParse = new ExtractsParse();
-    private final FlowParse flowParse = new FlowParse();
+    private final FlowsParse flowsParse = new FlowsParse();
 
     public DocTag parse(String file) throws Exception {
         String fileName = this.getClass().getClassLoader().getResource(file).getPath();//获取文件路径
@@ -36,8 +36,8 @@ public class DocParse {
         Element extracts = rootElement.element("extracts");
         ExtractsTag extractsTag = extractsParse.parse(extracts);
 
-        Element flow = rootElement.element("flow");
-        FlowTag flowTag = flowParse.parse(flow);
+        Element flow = rootElement.element("flows");
+        FlowsTag parse = flowsParse.parse(flow);
 
         DocTag docTag = new DocTag();
         docTag.setParams(paramsTag);
@@ -45,7 +45,7 @@ public class DocParse {
         docTag.setWatchers(watchersTag);
         docTag.setResult(resultTag);
         docTag.setExtracts(extractsTag);
-        docTag.setFlow(flowTag);
+        docTag.setFlows(parse);
 
         return docTag;
 

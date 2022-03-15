@@ -10,7 +10,7 @@ public class FlowExecuteImplTest {
 
     @Test
     public void execute() throws Exception {
-        Object execute = flowExecute.execute("fl.xml");
+        Object execute = flowExecute.execute("fl.xml", "1");
         logger.info("fl执行结果={}", execute);
     }
 }

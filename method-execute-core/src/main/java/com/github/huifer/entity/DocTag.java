@@ -11,6 +11,6 @@ public class DocTag {
 
     // 解析
     private ExtractsTag extracts;
-    private FlowTag flow;
+    private FlowsTag flows;
 
 }

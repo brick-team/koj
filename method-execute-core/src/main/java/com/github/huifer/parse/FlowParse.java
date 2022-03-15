@@ -13,9 +13,11 @@ public class FlowParse implements Parse<FlowTag> {
     @Override
     public FlowTag parse(Element element) throws Exception {
 
-
+        String id = element.attributeValue("id");
         List<Element> work = element.elements("work");
         FlowTag flowTag = new FlowTag();
+        flowTag.setId(id);
+
         ArrayList<WorkTag> workTags = new ArrayList<>();
 
         for (Element element1 : work) {

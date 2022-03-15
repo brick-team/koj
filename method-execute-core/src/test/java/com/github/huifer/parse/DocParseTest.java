@@ -12,5 +12,6 @@ public class DocParseTest {
     @Test
     public void parse() throws Exception {
         DocTag parse = docParse.parse("fl.xml");
+        System.out.println();
     }
 }

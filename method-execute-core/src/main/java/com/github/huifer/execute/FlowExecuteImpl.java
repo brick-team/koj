@@ -27,7 +27,7 @@ public class FlowExecuteImpl implements FlowExecute {
     Extract extract = new ExtractImpl();
 
     @Override
-    public Object execute(String file) throws Exception {
+    public Object execute(String file,String  flowId) throws Exception {
         DocTag parse = null;
         try {
             parse = docParse.parse(file);
@@ -36,13 +36,16 @@ public class FlowExecuteImpl implements FlowExecute {
             return null;
         }
         ParamsTag paramsTag = parse.getParams();
-        FlowTag flowTag = parse.getFlow();
+        FlowsTag flows = parse.getFlows();
         ActionsTag actionsTag = parse.getActions();
         ExtractsTag extractsTag = parse.getExtracts();
         WatchersTag watchersTag = parse.getWatchers();
 
         ResultTag resultTag = parse.getResult();
 
+        Map<String, FlowTag> collect =
+                flows.getFlowTags().stream().collect(Collectors.toMap(FlowTag::getId, x -> x));
+        FlowTag flowTag = collect.get(flowId);
         List<WatcherTag> list = watchersTag.getList();
         Map<String, WatcherTag> watcherMap = list.stream().collect(Collectors.toMap(
                 WatcherTag::getId, x -> x

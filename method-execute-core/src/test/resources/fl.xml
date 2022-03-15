@@ -31,6 +31,7 @@
     <watchers>
         <watcher id="w1" exid="e3" condition="> 10">
             <then actionId="sendPoint"/>
+            <then actionId="sendPoint"/>
             <catch actionId="sendPoint"/>
         </watcher>
     </watchers>
@@ -46,61 +47,69 @@
         <extract id="e3" fromAction="login" el="$.age"/>
     </extracts>
 
-    <flow>
-        <work id="work1" type="action" ref_id="login">
-            <catch>
-                <work id="work2" type="watcher" ref_id="w1">
-                </work>
-            </catch>
-            <then>
-                <work id="work2" type="watcher" ref_id="w1">
-                    <then>
-                        <work id="work3" type="watcher" ref_id="w1"/>
-                    </then>
-                </work>
-                <work id="work2" type="watcher" ref_id="w1">
-                    <then>
-                        <work id="work3" type="watcher" ref_id="w1"/>
-                    </then>
-                    <catch>
-                        <work id="work3" type="watcher" ref_id="w1"/>
-                    </catch>
+    <flows>
 
-                </work>
-            </then>
-            <!--            <then>-->
-            <!--                <work id="work2" type="watcher" ref_id="w1">-->
-            <!--                    <then>-->
-            <!--                        <work id="work3" type="watcher" ref_id="w1"/>-->
-            <!--                    </then>-->
-            <!--                </work>-->
-            <!--                <work id="work2" type="watcher" ref_id="w1">-->
-            <!--                    <then>-->
-            <!--                        <work id="work3" type="watcher" ref_id="w1"/>-->
-            <!--                    </then>-->
-            <!--                </work>-->
-            <!--            </then>-->
-
-        </work>
+        <flow id="1">
+            <work id="work1" type="action" ref_id="login">
+                <catch>
+                    <work id="work2" type="watcher" ref_id="w1">
+                    </work>
+                </catch>
+                <then>
+                    <work id="work2" type="watcher" ref_id="w1">
+                        <then>
+                            <work id="work3" type="watcher" ref_id="w1"/>
+                        </then>
+                    </work>
+                </then>
+            </work>
+        </flow>
 
 
-        <work id="22" type="action" ref_id="login">
-            <then>
-                <work id="work2" type="watcher" ref_id="w1">
-                    <then>
-                        <work id="work3" type="watcher" ref_id="w1"/>
-                    </then>
-                </work>
+        <flow id="2">
+            <work id="work1" type="action" ref_id="login">
+                <catch>
+                    <work id="work2" type="watcher" ref_id="w1">
+                    </work>
+                </catch>
+                <then>
+                    <work id="work2" type="watcher" ref_id="w1">
+                        <then>
+                            <work id="work3" type="watcher" ref_id="w1"/>
+                        </then>
+                    </work>
+                    <work id="work2" type="watcher" ref_id="w1">
+                        <then>
+                            <work id="work3" type="watcher" ref_id="w1"/>
+                        </then>
+                        <catch>
+                            <work id="work3" type="watcher" ref_id="w1"/>
+                        </catch>
 
-                <work id="work2" type="watcher" ref_id="w1">
-                    <then>
-                        <work id="work3" type="watcher" ref_id="w1"/>
-                    </then>
-                </work>
-            </then>
-        </work>
+                    </work>
+                </then>
+
+            </work>
 
 
-    </flow>
+            <work id="22" type="action" ref_id="login">
+                <then>
+                    <work id="work2" type="watcher" ref_id="w1">
+                        <then>
+                            <work id="work3" type="watcher" ref_id="w1"/>
+                        </then>
+                    </work>
+
+                    <work id="work2" type="watcher" ref_id="w1">
+                        <then>
+                            <work id="work3" type="watcher" ref_id="w1"/>
+                        </then>
+                    </work>
+                </then>
+            </work>
+
+
+        </flow>
+    </flows>
 
 </ae>
