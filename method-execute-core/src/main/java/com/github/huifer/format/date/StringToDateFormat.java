@@ -4,9 +4,9 @@ import com.github.huifer.format.Format;
 
 import java.util.Date;
 
-public class StringToDateFormat implements Format<String, Date> {
+public class StringToDateFormat implements Format<String> {
     @Override
-    public Date format(String s) {
+    public Date format(String s,Class<?> clazz) {
         return null;
     }
 }

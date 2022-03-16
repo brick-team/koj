@@ -1,7 +1,5 @@
 package com.github.huifer.execute;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.github.huifer.entity.*;
 import com.github.huifer.extract.Extract;
 import com.github.huifer.extract.ExtractImpl;
@@ -30,36 +28,50 @@ public class FlowExecuteImpl implements FlowExecute {
 
     @Override
     public Object execute(String file, String flowId) throws Exception {
-        DocTag parse = null;
+        AllEntity parse = null;
         try {
             parse = docParse.parse(file);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        ParamsTag paramsTag = parse.getParams();
-        FlowsTag flows = parse.getFlows();
-        ActionsTag actionsTag = parse.getActions();
-        ExtractsTag extractsTag = parse.getExtracts();
-        WatchersTag watchersTag = parse.getWatchers();
+        Map<String, Object> result = getStringObjectMap(flowId, parse);
+        return result;
+    }
 
-        ResultTag resultTag = parse.getResult();
+    private Map<String, Object> getStringObjectMap(String flowId, AllEntity parse)
+            throws Exception {
+        ParamsEntity paramsEntity = parse.getParams();
+        FlowsEntity flows = parse.getFlows();
+        ActionsEntity actionsEntity = parse.getActions();
+        ExtractsEntity extractsEntity = parse.getExtracts();
+        WatchersEntity watchersEntity = parse.getWatchers();
 
-        Map<String, FlowTag> collect = flows.getFlowTags().stream().collect(Collectors.toMap(FlowTag::getId, x -> x));
-        FlowTag flowTag = collect.get(flowId);
-        List<WatcherTag> list = watchersTag.getList();
-        Map<String, WatcherTag> watcherMap = list.stream().collect(Collectors.toMap(WatcherTag::getId, x -> x));
+        ResultEntity resultEntity = parse.getResult();
 
-        Map<String, ActionTag> actionTagMap = actionsTag.getList().stream().collect(Collectors.toMap(ActionTag::getId, s -> s));
+        Map<String, FlowEntity> collect = flows.getFlowEntities().stream().collect(Collectors.toMap(
+                FlowEntity::getId, x -> x));
+        FlowEntity flowEntity = collect.get(flowId);
+        List<WatcherEntity> list = watchersEntity.getList();
+        Map<String, WatcherEntity> watcherMap = list.stream().collect(Collectors.toMap(
+                WatcherEntity::getId, x -> x));
 
-        Map<String, ExtractTag> exMap = extractsTag.getExtractTags().stream().collect(Collectors.toMap(ExtractTag::getId, s -> s));
+        Map<String, ActionEntity> actionTagMap =
+                actionsEntity.getList().stream().collect(Collectors.toMap(
+                        ActionEntity::getId, s -> s));
+
+        Map<String, ExtractEntity> exMap =
+                extractsEntity.getExtractEntities().stream().collect(Collectors.toMap(
+                        ExtractEntity::getId, s -> s));
 
 
-        Map<String, List<ParamTag>> paramsMap = paramsTag.getList().stream().collect(Collectors.groupingBy(ParamTag::getGroup));
+        Map<String, List<ParamEntity>> paramsMap =
+                paramsEntity.getList().stream().collect(Collectors.groupingBy(
+                        ParamEntity::getGroup));
 
 
         // 执行
-        List<WorkTag> workTags = flowTag.getWorkTags();
+        List<WorkEntity> workEntities = flowEntity.getWorkEntities();
 
         // 用于存储执行器执行结果
         // key: 执行器id
@@ -67,21 +79,28 @@ public class FlowExecuteImpl implements FlowExecute {
         Map<String, Object> actionResult = new HashMap<>();
 
 
-        for (WorkTag workTag : workTags) {
-            wt(workTag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+        for (WorkEntity workEntity : workEntities) {
+            wt(workEntity, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
 
         }
 
 
+        Map<String, Object> result = genResult(resultEntity, exMap, actionResult);
+        return result;
+    }
+
+    private Map<String, Object> genResult(ResultEntity resultEntity,
+                                          Map<String, ExtractEntity> exMap,
+                                          Map<String, Object> actionResult) {
         // 组装结果信息
         Map<String, Object> result = new HashMap<>();
-        List<ResultTag.Key> keys = resultTag.getKeys();
-        for (ResultTag.Key key : keys) {
+        List<ResultEntity.Key> keys = resultEntity.getKeys();
+        for (ResultEntity.Key key : keys) {
             String exId = key.getExId();
             String name = key.getName();
-            ExtractTag extractTag = exMap.get(exId);
-            String el = extractTag.getEl();
-            String fromAction = extractTag.getFromAction();
+            ExtractEntity extractEntity = exMap.get(exId);
+            String el = extractEntity.getEl();
+            String fromAction = extractEntity.getFromAction();
             Object rs = actionResult.get(fromAction);
             Object extract = null;
             if (rs instanceof Throwable) {
@@ -94,42 +113,50 @@ public class FlowExecuteImpl implements FlowExecute {
         return result;
     }
 
-    private Object runAction(ActionTag actionTag) throws Exception {
-        Class<?> clazz = actionTag.getClazz();
-        Method method = actionTag.getMethod();
-        Map<String, Object> methodArg = actionTag.getMethodArg();
+    private Object runAction(ActionEntity actionEntity) throws Exception {
+        Class<?> clazz = actionEntity.getClazz();
+        Method method = actionEntity.getMethod();
+        Map<String, Object> methodArg = actionEntity.getMethodArg();
         Parameter[] parameters = method.getParameters();
         Object[] args = new Object[parameters.length];
-        List<ActionTag.Param> params = actionTag.getParams();
-        params.sort(Comparator.comparing(ActionTag.Param::getIndex));
+        List<ActionEntity.Param> params = actionEntity.getParams();
+        params.sort(Comparator.comparing(ActionEntity.Param::getIndex));
 
         // fixme: 值提取抽象
         for (int i = 0; i < params.size(); i++) {
-            ActionTag.Param param = params.get(i);
+            ActionEntity.Param param = params.get(i);
 
 
             String argName = param.getArgName();
             Object o = methodArg.get(argName);
             args[i] = o;
         }
-        return method.invoke(clazz.newInstance(), args);
+        try {
+
+            return method.invoke(clazz.newInstance(), args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    private void fillActionTag(Map<String, List<ParamTag>> paramsMap, ActionTag actionTag) throws Exception {
+    private void fillActionTag(Map<String, List<ParamEntity>> paramsMap, ActionEntity actionEntity)
+            throws Exception {
         // 解析param
-        List<ActionTag.Param> params = actionTag.getParams();
+        List<ActionEntity.Param> params = actionEntity.getParams();
         //
         Map<String, Object> methodArgs = new HashMap<>();
-        for (ActionTag.Param param : params) {
+        for (ActionEntity.Param param : params) {
             String argName = param.getArgName();
             String paramGroup = param.getParamGroup();
-            FormatTag formatTag = param.getFormatTag();
+            FormatEntity formatEntity = param.getFormatEntity();
             String valueValue = null;
             if (paramGroup != null) {
                 String ex = param.getEx();
-                List<ParamTag> paramTags = paramsMap.get(paramGroup);
-                Map<String, ParamTag> collect = paramTags.stream().collect(Collectors.toMap(ParamTag::getKey, s -> s));
-                ParamTag value = collect.get(ex);
+                List<ParamEntity> paramEntities = paramsMap.get(paramGroup);
+                Map<String, ParamEntity> collect = paramEntities.stream().collect(Collectors.toMap(
+                        ParamEntity::getKey, s -> s));
+                ParamEntity value = collect.get(ex);
                 if (value != null) {
 
                     valueValue = value.getValue();
@@ -142,20 +169,17 @@ public class FlowExecuteImpl implements FlowExecute {
             Class<?> typeClass = param.getTypeClass();
 
 
-            if (formatTag != null) {
+            if (formatEntity != null) {
                 // FIXME: 2022/3/15 编写Format搜索器
-                String classStr = formatTag.getClassStr();
+                String classStr = formatEntity.getClassStr();
                 Class<?> aClass1 = Class.forName(classStr);
                 if (Format.class.isAssignableFrom(aClass1)) {
                     Object o = aClass1.newInstance();
-                    Format<Object, Object> format = (Format<Object, Object>) o;
-                    Object format1 = format.format(valueValue);
-                    if (format1 instanceof JSONObject) {
-                        Object argData = JSON.parseObject(valueValue, typeClass);
-                        methodArgs.put(argName, argData);
-                    } else {
-                        methodArgs.put(argName, format1);
-                    }
+                    Format format = (Format) o;
+                    Object format1 = format.format(valueValue, typeClass);
+
+                    methodArgs.put(argName, format1);
+
 
                 }
 
@@ -164,89 +188,109 @@ public class FlowExecuteImpl implements FlowExecute {
 
         }
 
-        actionTag.setMethodArg(methodArgs);
+        actionEntity.setMethodArg(methodArgs);
     }
 
-    private void wt(WorkTag workTag, Map<String, WatcherTag> watcherMap, Map<String, ExtractTag> exMap, Map<String, ActionTag> actionTagMap, Map<String, List<ParamTag>> paramsMap, Map<String, Object> actionResult) throws Exception {
+    private void wt(WorkEntity workEntity,
+                    Map<String, WatcherEntity> watcherMap,
+                    Map<String, ExtractEntity> exMap,
+                    Map<String, ActionEntity> actionTagMap,
+                    Map<String, List<ParamEntity>> paramsMap,
+                    Map<String, Object> actionResult) throws Exception {
         // 获取类型做出不同操作
-        String type = workTag.getType();
+        String type = workEntity.getType();
         // 嵌套执行存在问题
         // 数据监控类型
         if ("watcher".equalsIgnoreCase(type)) {
-            wrapperRunWatcher(workTag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+            wrapperRunWatcher(workEntity, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
         }
         // 执行器类型
         else if ("action".equalsIgnoreCase(type)) {
-            runWithAction(workTag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+            runWithAction(workEntity, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
         }
 
 
     }
 
-    private void wrapperRunWatcher(WorkTag workTag, Map<String, WatcherTag> watcherMap, Map<String, ExtractTag> exMap, Map<String, ActionTag> actionTagMap, Map<String, List<ParamTag>> paramsMap, Map<String, Object> actionResult) throws Exception {
+    private void wrapperRunWatcher(WorkEntity workEntity,
+                                   Map<String, WatcherEntity> watcherMap,
+                                   Map<String, ExtractEntity> exMap,
+                                   Map<String, ActionEntity> actionTagMap,
+                                   Map<String, List<ParamEntity>> paramsMap,
+                                   Map<String, Object> actionResult) throws Exception {
         try {
-            runWithWatcher(workTag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
-            List<WorkTag> then = workTag.getThen();
+            runWithWatcher(workEntity, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+            List<WorkEntity> then = workEntity.getThen();
             // 监控执行器正常的情况下执行
-            for (WorkTag tag : then) {
+            for (WorkEntity tag : then) {
                 wt(tag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
             }
         } catch (Exception e) {
             logger.error("");
             // 监控执行器执行异常的情况下执行
-            List<WorkTag> catchs = workTag.getCatchs();
-            for (WorkTag aCatch : catchs) {
+            List<WorkEntity> catchs = workEntity.getCatchs();
+            for (WorkEntity aCatch : catchs) {
                 wt(aCatch, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
             }
         }
     }
 
-    private void runWithAction(WorkTag workTag, Map<String, WatcherTag> watcherMap, Map<String, ExtractTag> exMap, Map<String, ActionTag> actionTagMap, Map<String, List<ParamTag>> paramsMap, Map<String, Object> actionResult) throws Exception {
-        ActionTag actionTag = actionTagMap.get(workTag.getRefId());
+    private void runWithAction(WorkEntity workEntity,
+                               Map<String, WatcherEntity> watcherMap,
+                               Map<String, ExtractEntity> exMap,
+                               Map<String, ActionEntity> actionTagMap,
+                               Map<String, List<ParamEntity>> paramsMap,
+                               Map<String, Object> actionResult) throws Exception {
+        ActionEntity actionEntity = actionTagMap.get(workEntity.getRefId());
         // 补充反射信息
-        fillActionTag(paramsMap, actionTag);
+        fillActionTag(paramsMap, actionEntity);
         // 执行函数
         try {
 
-            Object res = runAction(actionTag);
-            actionResult.put(actionTag.getId(), res);
-            List<WorkTag> then = workTag.getThen();
+            Object res = runAction(actionEntity);
+            actionResult.put(actionEntity.getId(), res);
+            List<WorkEntity> then = workEntity.getThen();
 
-            for (WorkTag tag : then) {
+            for (WorkEntity tag : then) {
                 wt(tag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
             }
         } catch (Exception e) {
             e.printStackTrace();
 
-            actionResult.put(actionTag.getId(), e);
+            actionResult.put(actionEntity.getId(), e);
 
-            List<WorkTag> catchs = workTag.getCatchs();
+            List<WorkEntity> catchs = workEntity.getCatchs();
 
-            for (WorkTag tag : catchs) {
+            for (WorkEntity tag : catchs) {
                 wt(tag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
             }
         }
     }
 
-    private void runWithWatcher(WorkTag workTag, Map<String, WatcherTag> watcherMap, Map<String, ExtractTag> exMap, Map<String, ActionTag> actionTagMap, Map<String, List<ParamTag>> paramsMap, Map<String, Object> actionResult) throws Exception {
-        WatcherTag watcherTag = watcherMap.get(workTag.getRefId());
+    private void runWithWatcher(WorkEntity workEntity,
+                                Map<String, WatcherEntity> watcherMap,
+                                Map<String, ExtractEntity> exMap,
+                                Map<String, ActionEntity> actionTagMap,
+                                Map<String, List<ParamEntity>> paramsMap,
+                                Map<String, Object> actionResult) throws Exception {
+        WatcherEntity watcherEntity = watcherMap.get(workEntity.getRefId());
 
-        String exId = watcherTag.getExId();
-        ExtractTag extractTag = exMap.get(exId);
+        String exId = watcherEntity.getExId();
+        ExtractEntity extractEntity = exMap.get(exId);
 
-        String el = extractTag.getEl();
-        String fromAction = extractTag.getFromAction();
+        String el = extractEntity.getEl();
+        String fromAction = extractEntity.getFromAction();
 
 
         Object rs = actionResult.get(fromAction);
         Object extract = null;
         if (rs instanceof Throwable) {
-            List<WatcherTag.Catch> catchs = watcherTag.getCatchs();
-            for (WatcherTag.Catch aCatch : catchs) {
+            List<WatcherEntity.Catch> catchs = watcherEntity.getCatchs();
+            for (WatcherEntity.Catch aCatch : catchs) {
                 String actionId = aCatch.getActionId();
-                ActionTag actionTag = actionTagMap.get(actionId);
-                fillActionTag(paramsMap, actionTag);
-                runAction(actionTag);
+                ActionEntity actionEntity = actionTagMap.get(actionId);
+                fillActionTag(paramsMap, actionEntity);
+                runAction(actionEntity);
             }
             return;
 
@@ -254,28 +298,28 @@ public class FlowExecuteImpl implements FlowExecute {
         extract = this.extract.extract(rs, el);
 
 
-        Expression expression = parser.parseExpression(extract + watcherTag.getCondition());
+        Expression expression = parser.parseExpression(extract + watcherEntity.getCondition());
         EvaluationContext context = new StandardEvaluationContext();
         Boolean value = expression.getValue(context, Boolean.class);
         if (value) {
             // 如果符合条件表达式执行then相关内容
-            List<WatcherTag.Then> thens = watcherTag.getThens();
-            for (WatcherTag.Then then : thens) {
+            List<WatcherEntity.Then> thens = watcherEntity.getThens();
+            for (WatcherEntity.Then then : thens) {
                 String actionId = then.getActionId();
-                ActionTag actionTag = actionTagMap.get(actionId);
+                ActionEntity actionEntity = actionTagMap.get(actionId);
 
-                fillActionTag(paramsMap, actionTag);
-                runAction(actionTag);
+                fillActionTag(paramsMap, actionEntity);
+                runAction(actionEntity);
             }
 
         } else {
             // 如果不符合条件表达式执行catch相关内容
-            List<WatcherTag.Catch> catchs = watcherTag.getCatchs();
-            for (WatcherTag.Catch aCatch : catchs) {
+            List<WatcherEntity.Catch> catchs = watcherEntity.getCatchs();
+            for (WatcherEntity.Catch aCatch : catchs) {
                 String actionId = aCatch.getActionId();
-                ActionTag actionTag = actionTagMap.get(actionId);
-                fillActionTag(paramsMap, actionTag);
-                runAction(actionTag);
+                ActionEntity actionEntity = actionTagMap.get(actionId);
+                fillActionTag(paramsMap, actionEntity);
+                runAction(actionEntity);
             }
         }
     }

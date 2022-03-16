@@ -1,8 +1,8 @@
 package com.github.huifer.parse;
 
-import com.github.huifer.entity.ActionTag;
-import com.github.huifer.entity.ActionsTag;
-import com.github.huifer.entity.FormatTag;
+import com.github.huifer.entity.ActionEntity;
+import com.github.huifer.entity.ActionsEntity;
+import com.github.huifer.entity.FormatEntity;
 import org.dom4j.Element;
 
 import java.lang.reflect.Method;
@@ -10,69 +10,69 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class ActionsParse implements Parse<ActionsTag> {
+public class ActionsParse implements Parse<ActionsEntity> {
     ActionParse actionParse = new ActionParse();
     ActionParamParse actionParamParse = new ActionParamParse();
     FormatParse formatParse = new FormatParse();
 
     @Override
-    public ActionsTag parse(Element element) throws Exception {
-        ActionsTag actionsTag = new ActionsTag();
-        ArrayList<ActionTag> list = new ArrayList<>();
+    public ActionsEntity parse(Element element) throws Exception {
+        ActionsEntity actionsEntity = new ActionsEntity();
+        ArrayList<ActionEntity> list = new ArrayList<>();
 
         List<Element> action = element.elements("action");
         for (Element element1 : action) {
-            ActionTag parse = actionParse.parse(element1);
+            ActionEntity parse = actionParse.parse(element1);
             list.add(parse);
         }
 
-        actionsTag.setList(list);
-        return actionsTag;
+        actionsEntity.setList(list);
+        return actionsEntity;
     }
 
 
-    public class ActionParse implements Parse<ActionTag> {
+    public class ActionParse implements Parse<ActionEntity> {
         @Override
-        public ActionTag parse(Element element) throws Exception {
-            ActionTag actionTag = new ActionTag();
+        public ActionEntity parse(Element element) throws Exception {
+            ActionEntity actionEntity = new ActionEntity();
 
             String id = element.attributeValue("id");
             String clazzStr = element.attributeValue("class");
             String methodStr = element.attributeValue("method");
 
-            actionTag.setId(id);
-            actionTag.setClazzStr(clazzStr);
-            actionTag.setClazz(Class.forName(clazzStr));
-            actionTag.setMethodStr(methodStr);
+            actionEntity.setId(id);
+            actionEntity.setClazzStr(clazzStr);
+            actionEntity.setClazz(Class.forName(clazzStr));
+            actionEntity.setMethodStr(methodStr);
 
 
 
             List<Element> param = element.elements("param");
-            ArrayList<ActionTag.Param> params = new ArrayList<>();
+            ArrayList<ActionEntity.Param> params = new ArrayList<>();
 
             if (!param.isEmpty()) {
 
                 for (Element element1 : param) {
-                    ActionTag.Param parse = actionParamParse.parse(element1);
+                    ActionEntity.Param parse = actionParamParse.parse(element1);
                     params.add(parse);
                 }
-                actionTag.setParams(params);
+                actionEntity.setParams(params);
 
-                params.sort(Comparator.comparing(ActionTag.Param::getIndex));
+                params.sort(Comparator.comparing(ActionEntity.Param::getIndex));
                 List<Class<?>> classes = new ArrayList<>();
 
-                for (ActionTag.Param param1 : params) {
+                for (ActionEntity.Param param1 : params) {
                     classes.add(param1.getTypeClass());
                 }
 
 
-                Method method = findMethod(actionTag.getClazz(), actionTag.getMethodStr(),
+                Method method = findMethod(actionEntity.getClazz(), actionEntity.getMethodStr(),
                         classes.toArray(new Class<?>[] {}));
-                actionTag.setMethod(method);
+                actionEntity.setMethod(method);
             }
 
 
-            return actionTag;
+            return actionEntity;
         }
 
         private Method findMethod(Class<?> clazz, String methodName, Class<?>... args)
@@ -83,16 +83,16 @@ public class ActionsParse implements Parse<ActionsTag> {
 
 
 
-    public class ActionParamParse implements Parse<ActionTag.Param> {
+    public class ActionParamParse implements Parse<ActionEntity.Param> {
         @Override
-        public ActionTag.Param parse(Element element) throws Exception {
+        public ActionEntity.Param parse(Element element) throws Exception {
             String index = element.attributeValue("index");
             String arg_name = element.attributeValue("arg_name");
             String param_group = element.attributeValue("param_group");
             String ex = element.attributeValue("ex");
             String value = element.attributeValue("value");
             String type = element.attributeValue("type");
-            ActionTag.Param param = new ActionTag.Param();
+            ActionEntity.Param param = new ActionEntity.Param();
             param.setIndex(Integer.parseInt(index));
             param.setArgName(arg_name);
             param.setValue(value);
@@ -103,8 +103,8 @@ public class ActionsParse implements Parse<ActionsTag> {
 
             Element format = element.element("format");
             if (format != null) {
-                FormatTag parse = formatParse.parse(format);
-                param.setFormatTag(parse);
+                FormatEntity parse = formatParse.parse(format);
+                param.setFormatEntity(parse);
             }
 
             return param;

@@ -2,8 +2,8 @@ package com.github.huifer;
 
 import com.alibaba.fastjson.JSON;
 import com.github.huifer.entity.*;
-import com.github.huifer.entity.ActionTag.Param;
-import com.github.huifer.entity.ResultTag.Key;
+import com.github.huifer.entity.ActionEntity.Param;
+import com.github.huifer.entity.ResultEntity.Key;
 import com.github.huifer.format.Format;
 import org.junit.Test;
 import org.springframework.expression.EvaluationContext;
@@ -21,38 +21,38 @@ public class Demo {
 
     @Test
     public void init() throws Exception {
-        ParamsTag paramsTag = initParams();
-        ActionsTag actionsTag = initActions();
-        WatchersTag watchersTag = initWatchers();
-        ResultTag resultTag = initResult();
-        ExtractsTag extractsTag = initExtracts();
-        FlowTag flowTag = flowTag();
+        ParamsEntity paramsEntity = initParams();
+        ActionsEntity actionsEntity = initActions();
+        WatchersEntity watchersEntity = initWatchers();
+        ResultEntity resultEntity = initResult();
+        ExtractsEntity extractsEntity = initExtracts();
+        FlowEntity flowEntity = flowTag();
 
-        List<WatcherTag> list = watchersTag.getList();
-        Map<String, WatcherTag> watcherMap = list.stream().collect(Collectors.toMap(
-                WatcherTag::getId, x -> x
+        List<WatcherEntity> list = watchersEntity.getList();
+        Map<String, WatcherEntity> watcherMap = list.stream().collect(Collectors.toMap(
+                WatcherEntity::getId, x -> x
         ));
 
-        Map<String, ActionTag> actionTagMap =
-                actionsTag.getList().stream().collect(Collectors.toMap(ActionTag::getId, s -> s));
+        Map<String, ActionEntity> actionTagMap =
+                actionsEntity.getList().stream().collect(Collectors.toMap(ActionEntity::getId, s -> s));
 
-        Map<String, ExtractTag> exMap = extractsTag.getExtractTags().stream()
-                .collect(Collectors.toMap(ExtractTag::getId, s -> s));
+        Map<String, ExtractEntity> exMap = extractsEntity.getExtractEntities().stream()
+                .collect(Collectors.toMap(ExtractEntity::getId, s -> s));
 
 
-        Map<String, List<ParamTag>> paramsMap =
-                paramsTag.getList().stream().collect(Collectors.groupingBy(ParamTag::getGroup));
+        Map<String, List<ParamEntity>> paramsMap =
+                paramsEntity.getList().stream().collect(Collectors.groupingBy(ParamEntity::getGroup));
 
 
 
         // 执行
-        List<WorkTag> workTags = flowTag.getWorkTags();
+        List<WorkEntity> workEntities = flowEntity.getWorkEntities();
 
         Map<String, Object> actionResult = new HashMap<>();
 
 
-        for (WorkTag workTag : workTags) {
-            wt(workTag,
+        for (WorkEntity workEntity : workEntities) {
+            wt(workEntity,
                     watcherMap,
                     exMap,
                     actionTagMap,
@@ -61,14 +61,14 @@ public class Demo {
         }
 
         Map<String, Object> result = new HashMap<>();
-        List<Key> keys = resultTag.getKeys();
+        List<Key> keys = resultEntity.getKeys();
         for (Key key : keys) {
             String exId = key.getExId();
             String name = key.getName();
-            ExtractTag extractTag = exMap.get(exId);
+            ExtractEntity extractEntity = exMap.get(exId);
 
-            String el = extractTag.getEl();
-            String fromAction = extractTag.getFromAction();
+            String el = extractEntity.getEl();
+            String fromAction = extractEntity.getFromAction();
             Object rs = actionResult.get(fromAction);
 
             String s = JSON.toJSONString(rs);
@@ -81,24 +81,24 @@ public class Demo {
         System.out.println(result);
     }
 
-    private void wt(WorkTag workTag,
-                    Map<String, WatcherTag> watcherMap,
-                    Map<String, ExtractTag> exMap,
-                    Map<String, ActionTag> actionTagMap,
-                    Map<String, List<ParamTag>> paramsMap,
+    private void wt(WorkEntity workEntity,
+                    Map<String, WatcherEntity> watcherMap,
+                    Map<String, ExtractEntity> exMap,
+                    Map<String, ActionEntity> actionTagMap,
+                    Map<String, List<ParamEntity>> paramsMap,
                     Map<String, Object> actionResult)
             throws Exception {
-        String type = workTag.getType();
+        String type = workEntity.getType();
 
 
         if (type.equalsIgnoreCase("watcher")) {
-            WatcherTag watcherTag = watcherMap.get(workTag.getRefId());
+            WatcherEntity watcherEntity = watcherMap.get(workEntity.getRefId());
 
-            String exId = watcherTag.getExId();
-            ExtractTag extractTag = exMap.get(exId);
+            String exId = watcherEntity.getExId();
+            ExtractEntity extractEntity = exMap.get(exId);
 
-            String el = extractTag.getEl();
-            String fromAction = extractTag.getFromAction();
+            String el = extractEntity.getEl();
+            String fromAction = extractEntity.getFromAction();
             Object rs = actionResult.get(fromAction);
 
             String s = JSON.toJSONString(rs);
@@ -106,32 +106,32 @@ public class Demo {
             Object o = map.get(el);
 
 
-            Expression expression = parser.parseExpression(o + watcherTag.getCondition());
+            Expression expression = parser.parseExpression(o + watcherEntity.getCondition());
             EvaluationContext context = new StandardEvaluationContext();
             Boolean value = expression.getValue(context, Boolean.class);
             if (value) {
-                List<WatcherTag.Then> thens = watcherTag.getThens();
-                for (WatcherTag.Then then : thens) {
+                List<WatcherEntity.Then> thens = watcherEntity.getThens();
+                for (WatcherEntity.Then then : thens) {
                     String actionId = then.getActionId();
-                    ActionTag actionTag = actionTagMap.get(actionId);
-                    fillActionTag(paramsMap, actionTag);
-                    runAction(actionTag);
+                    ActionEntity actionEntity = actionTagMap.get(actionId);
+                    fillActionTag(paramsMap, actionEntity);
+                    runAction(actionEntity);
                 }
             }
 
 
         } else if (type.equalsIgnoreCase("action")) {
-            ActionTag actionTag = actionTagMap.get(workTag.getRefId());
+            ActionEntity actionEntity = actionTagMap.get(workEntity.getRefId());
             // 补充反射信息
-            fillActionTag(paramsMap, actionTag);
+            fillActionTag(paramsMap, actionEntity);
             // 执行函数
-            Object res = runAction(actionTag);
-            actionResult.put(actionTag.getId(), res);
+            Object res = runAction(actionEntity);
+            actionResult.put(actionEntity.getId(), res);
 
 
-            List<WorkTag> then = workTag.getThen();
+            List<WorkEntity> then = workEntity.getThen();
 
-            for (WorkTag tag : then) {
+            for (WorkEntity tag : then) {
                 wt(tag,
                         watcherMap,
                         exMap,
@@ -142,15 +142,15 @@ public class Demo {
         }
     }
 
-    private Object runAction(ActionTag actionTag) throws Exception {
-        Class<?> clazz = actionTag.getClazz();
-        Method method = actionTag.getMethod();
-        Map<String, Object> methodArg = actionTag.getMethodArg();
+    private Object runAction(ActionEntity actionEntity) throws Exception {
+        Class<?> clazz = actionEntity.getClazz();
+        Method method = actionEntity.getMethod();
+        Map<String, Object> methodArg = actionEntity.getMethodArg();
         Parameter[] parameters = method.getParameters();
 
         Object[] args = new Object[parameters.length];
 
-        List<Param> params = actionTag.getParams();
+        List<Param> params = actionEntity.getParams();
 
         params.sort(Comparator.comparing(Param::getIndex));
 
@@ -168,12 +168,12 @@ public class Demo {
         return o;
     }
 
-    private void fillActionTag(Map<String, List<ParamTag>> paramsMap, ActionTag actionTag)
+    private void fillActionTag(Map<String, List<ParamEntity>> paramsMap, ActionEntity actionEntity)
             throws Exception {
-        String clazzStr = actionTag.getClazzStr();
+        String clazzStr = actionEntity.getClazzStr();
         Class<?> aClass = Class.forName(clazzStr);
-        actionTag.setClazz(aClass);
-        String methodStr = actionTag.getMethodStr();
+        actionEntity.setClazz(aClass);
+        String methodStr = actionEntity.getMethodStr();
         Method[] methods = aClass.getMethods();
         Method method = null;
         for (Method m1 : methods) {
@@ -183,24 +183,24 @@ public class Demo {
             }
         }
 
-        actionTag.setMethod(method);
+        actionEntity.setMethod(method);
 
         // 解析param节点
-        List<Param> params = actionTag.getParams();
+        List<Param> params = actionEntity.getParams();
         Map<String, Object> oo = new HashMap<>();
         for (Param param : params) {
             String argName = param.getArgName();
             String paramGroup = param.getParamGroup();
-            FormatTag formatTag = param.getFormatTag();
+            FormatEntity formatEntity = param.getFormatEntity();
             String valueValue = null;
             if (paramGroup != null) {
 
                 String ex = param.getEx();
-                List<ParamTag> paramTags = paramsMap.get(paramGroup);
-                Map<String, ParamTag> collect =
-                        paramTags.stream()
+                List<ParamEntity> paramEntities = paramsMap.get(paramGroup);
+                Map<String, ParamEntity> collect =
+                        paramEntities.stream()
                                 .collect(Collectors.toMap(s -> s.getKey(), s -> s));
-                ParamTag value = collect.get(ex);
+                ParamEntity value = collect.get(ex);
                 valueValue = value.getValue();
 
                 oo.put(argName, valueValue);
@@ -211,13 +211,13 @@ public class Demo {
             }
 
 
-            if (formatTag != null) {
-                String classStr = formatTag.getClassStr();
+            if (formatEntity != null) {
+                String classStr = formatEntity.getClassStr();
                 Class<?> aClass1 = Class.forName(classStr);
                 if (Format.class.isAssignableFrom(aClass1)) {
                     Object o = aClass1.newInstance();
                     Format format = (Format) o;
-                    Object format1 = format.format(valueValue);
+                    Object format1 = format.format(valueValue,aClass1);
                     oo.put(argName, format1);
 
                 }
@@ -227,18 +227,18 @@ public class Demo {
 
         }
 
-        actionTag.setMethodArg(oo);
+        actionEntity.setMethodArg(oo);
     }
 
-    public FlowTag flowTag() {
-        FlowTag flowTag = new FlowTag();
-        ArrayList<WorkTag> workTags = new ArrayList<>();
-        WorkTag e1 = new WorkTag();
+    public FlowEntity flowTag() {
+        FlowEntity flowEntity = new FlowEntity();
+        ArrayList<WorkEntity> workEntities = new ArrayList<>();
+        WorkEntity e1 = new WorkEntity();
         e1.setType("action");
         e1.setRefId("login");
         e1.setId("work1");
-        ArrayList<WorkTag> workTags1 = new ArrayList<>();
-        WorkTag e = new WorkTag();
+        ArrayList<WorkEntity> workTags1 = new ArrayList<>();
+        WorkEntity e = new WorkEntity();
         e.setType("watcher");
         e.setRefId("w1");
         e.setId("work2");
@@ -246,42 +246,42 @@ public class Demo {
         workTags1.add(e);
         e1.setThen(workTags1);
 
-        workTags.add(e1);
-        flowTag.setWorkTags(workTags);
+        workEntities.add(e1);
+        flowEntity.setWorkEntities(workEntities);
 
-        return flowTag;
+        return flowEntity;
     }
 
-    private ExtractsTag initExtracts() {
-        ExtractsTag extractsTag = new ExtractsTag();
-        ArrayList<ExtractTag> extractTags = new ArrayList<>();
-        ExtractTag e1 = new ExtractTag();
+    private ExtractsEntity initExtracts() {
+        ExtractsEntity extractsEntity = new ExtractsEntity();
+        ArrayList<ExtractEntity> extractEntities = new ArrayList<>();
+        ExtractEntity e1 = new ExtractEntity();
         e1.setId("e1");
         e1.setFromAction("login");
         e1.setEl("username");
-        extractTags.add(e1);
+        extractEntities.add(e1);
 
-        ExtractTag e2 = new ExtractTag();
+        ExtractEntity e2 = new ExtractEntity();
         e2.setId("e2");
         e2.setFromAction("login");
         e2.setEl("login_time");
-        extractTags.add(e2);
+        extractEntities.add(e2);
 
-        ExtractTag e3 = new ExtractTag();
+        ExtractEntity e3 = new ExtractEntity();
         e3.setId("e3");
         e3.setFromAction("login");
         e3.setEl("age");
-        extractTags.add(e3);
+        extractEntities.add(e3);
 
 
-        extractsTag.setExtractTags(extractTags);
+        extractsEntity.setExtractEntities(extractEntities);
 
 
-        return extractsTag;
+        return extractsEntity;
     }
 
-    private ResultTag initResult() {
-        ResultTag resultTag = new ResultTag();
+    private ResultEntity initResult() {
+        ResultEntity resultEntity = new ResultEntity();
         ArrayList<Key> keys = new ArrayList<>();
         Key r1 = new Key();
         r1.setName("r1");
@@ -293,40 +293,40 @@ public class Demo {
         r2.setExId("e2");
 
         keys.add(r2);
-        resultTag.setKeys(keys);
+        resultEntity.setKeys(keys);
 
 
-        return resultTag;
+        return resultEntity;
     }
 
-    private WatchersTag initWatchers() {
-        WatchersTag watchersTag = new WatchersTag();
-        ArrayList<WatcherTag> list = new ArrayList<>();
+    private WatchersEntity initWatchers() {
+        WatchersEntity watchersEntity = new WatchersEntity();
+        ArrayList<WatcherEntity> list = new ArrayList<>();
 
-        WatcherTag w1 = new WatcherTag();
+        WatcherEntity w1 = new WatcherEntity();
         w1.setId("w1");
         w1.setExId("e3");
         w1.setCondition("> 10");
 
 
-        ArrayList<WatcherTag.Then> thens = new ArrayList<>();
-        WatcherTag.Then e = new WatcherTag.Then();
+        ArrayList<WatcherEntity.Then> thens = new ArrayList<>();
+        WatcherEntity.Then e = new WatcherEntity.Then();
         e.setActionId("sendPoint");
         thens.add(e);
         w1.setThens(thens);
         list.add(w1);
-        watchersTag.setList(list);
+        watchersEntity.setList(list);
 
 
-        return watchersTag;
+        return watchersEntity;
     }
 
-    private ActionsTag initActions() {
-        ActionsTag actionsTag = new ActionsTag();
-        ArrayList<ActionTag> list1 = new ArrayList<>();
+    private ActionsEntity initActions() {
+        ActionsEntity actionsEntity = new ActionsEntity();
+        ArrayList<ActionEntity> list1 = new ArrayList<>();
 
 
-        ActionTag login = new ActionTag();
+        ActionEntity login = new ActionEntity();
         login.setId("login");
         login.setClazzStr("com.github.huifer.LoginAction");
         login.setMethodStr("login");
@@ -348,7 +348,7 @@ public class Demo {
         login.setParams(params);
         list1.add(login);
 
-        ActionTag sendPoint = new ActionTag();
+        ActionEntity sendPoint = new ActionEntity();
         sendPoint.setId("sendPoint");
         sendPoint.setClazzStr("com.github.huifer.SendPointAction");
         sendPoint.setMethodStr("sendPoint");
@@ -367,34 +367,34 @@ public class Demo {
         e3.setIndex(1);
 
 
-        FormatTag formatTag = new FormatTag();
-        formatTag.setId("f1");
-        formatTag.setClassStr("com.github.huifer.format.num.StringToIntegerFormat");
-        e3.setFormatTag(formatTag);
+        FormatEntity formatEntity = new FormatEntity();
+        formatEntity.setId("f1");
+        formatEntity.setClassStr("com.github.huifer.format.num.StringToIntegerFormat");
+        e3.setFormatEntity(formatEntity);
 
         params1.add(e3);
 
         sendPoint.setParams(params1);
-        actionsTag.setList(list1);
+        actionsEntity.setList(list1);
         list1.add(sendPoint);
-        return actionsTag;
+        return actionsEntity;
     }
 
-    private ParamsTag initParams() {
-        ParamsTag paramsTag = new ParamsTag();
-        ArrayList<ParamTag> list = new ArrayList<>();
-        ParamTag username = new ParamTag();
+    private ParamsEntity initParams() {
+        ParamsEntity paramsEntity = new ParamsEntity();
+        ArrayList<ParamEntity> list = new ArrayList<>();
+        ParamEntity username = new ParamEntity();
         username.setGroup("a");
         username.setKey("username");
         username.setValue("username");
         list.add(username);
 
-        ParamTag password = new ParamTag();
+        ParamEntity password = new ParamEntity();
         password.setGroup("a");
         password.setKey("password");
         password.setValue("password");
         list.add(password);
-        paramsTag.setList(list);
-        return paramsTag;
+        paramsEntity.setList(list);
+        return paramsEntity;
     }
 }

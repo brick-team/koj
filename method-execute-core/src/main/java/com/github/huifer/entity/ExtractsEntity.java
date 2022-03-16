@@ -5,7 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class FlowTag {
-    private String id;
-    private List<WorkTag> workTags;
+public class ExtractsEntity {
+    private List<ExtractEntity> extractEntities;
 }

@@ -1,11 +1,12 @@
 package com.github.huifer.format;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 
-public class StringToClass implements Format<String, JSONObject> {
+public class StringToClass implements Format<String> {
+    Gson gson = new Gson();
+
     @Override
-    public JSONObject format(String s) {
-        return JSON.parseObject(s,JSONObject.class);
+    public Object format(String s ,Class<?> clazz) {
+        return gson.fromJson(s, clazz);
     }
 }

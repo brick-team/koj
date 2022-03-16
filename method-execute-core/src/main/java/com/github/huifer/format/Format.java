@@ -1,5 +1,5 @@
 package com.github.huifer.format;
 
-public interface Format<S,T> {
-    T format(S s);
+public interface Format<S> {
+    Object format(S s, Class<?> clazz);
 }

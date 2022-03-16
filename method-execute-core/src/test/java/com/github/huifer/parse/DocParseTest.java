@@ -1,6 +1,6 @@
 package com.github.huifer.parse;
 
-import com.github.huifer.entity.DocTag;
+import com.github.huifer.entity.AllEntity;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ public class DocParseTest {
 
     @Test
     public void parse() throws Exception {
-        DocTag parse = docParse.parse("fl.xml");
+        AllEntity parse = docParse.parse("fl.xml");
         System.out.println();
     }
 }

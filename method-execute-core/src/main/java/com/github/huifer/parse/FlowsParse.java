@@ -1,25 +1,25 @@
 package com.github.huifer.parse;
 
-import com.github.huifer.entity.FlowTag;
-import com.github.huifer.entity.FlowsTag;
+import com.github.huifer.entity.FlowEntity;
+import com.github.huifer.entity.FlowsEntity;
 import org.dom4j.Element;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlowsParse implements Parse<FlowsTag> {
+public class FlowsParse implements Parse<FlowsEntity> {
     FlowParse flowParse = new FlowParse();
 
     @Override
-    public FlowsTag parse(Element element) throws Exception {
-        FlowsTag flowsTag = new FlowsTag();
-        ArrayList<FlowTag> flowTags = new ArrayList<>();
-        flowsTag.setFlowTags(flowTags);
+    public FlowsEntity parse(Element element) throws Exception {
+        FlowsEntity flowsEntity = new FlowsEntity();
+        ArrayList<FlowEntity> flowEntities = new ArrayList<>();
+        flowsEntity.setFlowEntities(flowEntities);
         List<Element> flow = element.elements("flow");
         for (Element element1 : flow) {
-            FlowTag parse = flowParse.parse(element1);
-            flowTags.add(parse);
+            FlowEntity parse = flowParse.parse(element1);
+            flowEntities.add(parse);
         }
-        return flowsTag;
+        return flowsEntity;
     }
 }

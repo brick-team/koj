@@ -5,6 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ParamsTag {
-    private List<ParamTag> list;
+public class FlowsEntity {
+    private List<FlowEntity> flowEntities;
 }

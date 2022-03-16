@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class WatcherTag {
+public class WatcherEntity {
     private String id;
     private String exId;
     private String condition;

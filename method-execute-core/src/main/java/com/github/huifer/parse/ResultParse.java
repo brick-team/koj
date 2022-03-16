@@ -1,41 +1,41 @@
 package com.github.huifer.parse;
 
-import com.github.huifer.entity.ResultTag;
+import com.github.huifer.entity.ResultEntity;
 import org.dom4j.Element;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResultParse implements Parse<ResultTag> {
+public class ResultParse implements Parse<ResultEntity> {
 
     ResultKeyParse resultKeyParse = new ResultKeyParse();
 
     @Override
-    public ResultTag parse(Element element) {
-        ResultTag resultTag = new ResultTag();
+    public ResultEntity parse(Element element) {
+        ResultEntity resultEntity = new ResultEntity();
 
-        ArrayList<ResultTag.Key> keys = new ArrayList<>();
+        ArrayList<ResultEntity.Key> keys = new ArrayList<>();
 
         List<Element> key = element.elements("key");
         for (Element keyElement : key) {
-            ResultTag.Key parse = resultKeyParse.parse(keyElement);
+            ResultEntity.Key parse = resultKeyParse.parse(keyElement);
             keys.add(parse);
         }
 
 
 
-        resultTag.setKeys(keys);
+        resultEntity.setKeys(keys);
 
-        return resultTag;
+        return resultEntity;
     }
 
 
-    public class ResultKeyParse implements Parse<ResultTag.Key> {
+    public class ResultKeyParse implements Parse<ResultEntity.Key> {
         @Override
-        public ResultTag.Key parse(Element element) {
+        public ResultEntity.Key parse(Element element) {
             String name = element.attributeValue("name");
             String exid = element.attributeValue("exid");
-            ResultTag.Key key = new ResultTag.Key();
+            ResultEntity.Key key = new ResultEntity.Key();
             key.setName(name);
             key.setExId(exid);
             return key;

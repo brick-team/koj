@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class ActionTag {
+public class ActionEntity {
     private String id;
     private String clazzStr;
     private Class<?> clazz;
@@ -31,6 +31,6 @@ public class ActionTag {
         private String type;
         private Class<?> typeClass;
 
-        private FormatTag formatTag;
+        private FormatEntity formatEntity;
     }
 }

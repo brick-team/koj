@@ -1,87 +1,87 @@
 package com.github.huifer.parse;
 
-import com.github.huifer.entity.WatcherTag;
-import com.github.huifer.entity.WatchersTag;
+import com.github.huifer.entity.WatcherEntity;
+import com.github.huifer.entity.WatchersEntity;
 import org.dom4j.Element;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WatchersParse implements Parse<WatchersTag> {
+public class WatchersParse implements Parse<WatchersEntity> {
     WatcherParse watcherParse = new WatcherParse();
     WatcherThenParse watcherThenParse = new WatcherThenParse();
     WatcherCatchParse watcherCatchParse = new WatcherCatchParse();
 
     @Override
-    public WatchersTag parse(Element element) {
-        WatchersTag watchersTag = new WatchersTag();
-        ArrayList<WatcherTag> list = new ArrayList<>();
+    public WatchersEntity parse(Element element) {
+        WatchersEntity watchersEntity = new WatchersEntity();
+        ArrayList<WatcherEntity> list = new ArrayList<>();
 
         List<Element> watcher = element.elements("watcher");
         for (Element element1 : watcher) {
-            WatcherTag parse = watcherParse.parse(element1);
+            WatcherEntity parse = watcherParse.parse(element1);
             list.add(parse);
         }
 
-        watchersTag.setList(list);
-        return watchersTag;
+        watchersEntity.setList(list);
+        return watchersEntity;
     }
 
 
-    public class WatcherParse implements Parse<WatcherTag> {
+    public class WatcherParse implements Parse<WatcherEntity> {
         @Override
-        public WatcherTag parse(Element element) {
+        public WatcherEntity parse(Element element) {
             String id = element.attributeValue("id");
             String exid = element.attributeValue("exid");
             String condition = element.attributeValue("condition");
 
-            WatcherTag watcherTag = new WatcherTag();
-            watcherTag.setId(id);
-            watcherTag.setExId(exid);
-            watcherTag.setCondition(condition);
+            WatcherEntity watcherEntity = new WatcherEntity();
+            watcherEntity.setId(id);
+            watcherEntity.setExId(exid);
+            watcherEntity.setCondition(condition);
 
             List<Element> then = element.elements("then");
-            List<WatcherTag.Then> thens = new ArrayList<>();
+            List<WatcherEntity.Then> thens = new ArrayList<>();
 
 
             if (!then.isEmpty()) {
                 for (Element element1 : then) {
-                    WatcherTag.Then parse = watcherThenParse.parse(element1);
+                    WatcherEntity.Then parse = watcherThenParse.parse(element1);
                     thens.add(parse);
                 }
             }
             List<Element> catchs = element.elements("catch");
-            List<WatcherTag.Catch> caches = new ArrayList<>();
+            List<WatcherEntity.Catch> caches = new ArrayList<>();
             if (!catchs.isEmpty()) {
                 for (Element aCatch : catchs) {
-                    WatcherTag.Catch parse = watcherCatchParse.parse(aCatch);
+                    WatcherEntity.Catch parse = watcherCatchParse.parse(aCatch);
                     caches.add(parse);
                 }
             }
-            watcherTag.setCatchs(caches);
-            watcherTag.setThens(thens);
+            watcherEntity.setCatchs(caches);
+            watcherEntity.setThens(thens);
 
-            return watcherTag;
+            return watcherEntity;
         }
     }
 
 
-    public class WatcherThenParse implements Parse<WatcherTag.Then> {
+    public class WatcherThenParse implements Parse<WatcherEntity.Then> {
         @Override
-        public WatcherTag.Then parse(Element element) {
+        public WatcherEntity.Then parse(Element element) {
             String actionId = element.attributeValue("actionId");
-            WatcherTag.Then then = new WatcherTag.Then();
+            WatcherEntity.Then then = new WatcherEntity.Then();
             then.setActionId(actionId);
             return then;
         }
     }
 
 
-    public class WatcherCatchParse implements Parse<WatcherTag.Catch> {
+    public class WatcherCatchParse implements Parse<WatcherEntity.Catch> {
         @Override
-        public WatcherTag.Catch parse(Element element) {
+        public WatcherEntity.Catch parse(Element element) {
             String actionId = element.attributeValue("actionId");
-            WatcherTag.Catch aCatch = new WatcherTag.Catch();
+            WatcherEntity.Catch aCatch = new WatcherEntity.Catch();
             aCatch.setActionId(actionId);
 
             return aCatch;

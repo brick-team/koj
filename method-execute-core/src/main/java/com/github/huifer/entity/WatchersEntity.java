@@ -5,7 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-
-public class ActionsTag {
-    private List<ActionTag> list;
+public class WatchersEntity {
+    private List<WatcherEntity> list;
 }

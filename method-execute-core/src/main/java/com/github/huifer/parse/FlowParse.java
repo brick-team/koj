@@ -1,76 +1,76 @@
 package com.github.huifer.parse;
 
-import com.github.huifer.entity.FlowTag;
-import com.github.huifer.entity.WorkTag;
+import com.github.huifer.entity.FlowEntity;
+import com.github.huifer.entity.WorkEntity;
 import org.dom4j.Element;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlowParse implements Parse<FlowTag> {
+public class FlowParse implements Parse<FlowEntity> {
     WorkParse workParse = new WorkParse();
 
     @Override
-    public FlowTag parse(Element element) throws Exception {
+    public FlowEntity parse(Element element) throws Exception {
 
         String id = element.attributeValue("id");
         List<Element> work = element.elements("work");
-        FlowTag flowTag = new FlowTag();
-        flowTag.setId(id);
+        FlowEntity flowEntity = new FlowEntity();
+        flowEntity.setId(id);
 
-        ArrayList<WorkTag> workTags = new ArrayList<>();
+        ArrayList<WorkEntity> workEntities = new ArrayList<>();
 
         for (Element element1 : work) {
 
 
-            WorkTag workTag = workParse.parse(element1);
-            workTags.add(workTag);
+            WorkEntity workEntity = workParse.parse(element1);
+            workEntities.add(workEntity);
         }
-        flowTag.setWorkTags(workTags);
+        flowEntity.setWorkEntities(workEntities);
 
-        return flowTag;
+        return flowEntity;
     }
 
 
-    public class WorkParse implements Parse<WorkTag> {
+    public class WorkParse implements Parse<WorkEntity> {
         @Override
-        public WorkTag parse(Element element) throws Exception {
-            WorkTag workTag = new WorkTag();
+        public WorkEntity parse(Element element) throws Exception {
+            WorkEntity workEntity = new WorkEntity();
 
             String id = element.attributeValue("id");
             String type = element.attributeValue("type");
             String refId = element.attributeValue("ref_id");
 
-            workTag.setType(type);
-            workTag.setRefId(refId);
-            workTag.setId(id);
+            workEntity.setType(type);
+            workEntity.setRefId(refId);
+            workEntity.setId(id);
 
 
-            ArrayList<WorkTag> then1 = new ArrayList<>();
+            ArrayList<WorkEntity> then1 = new ArrayList<>();
             List<Element> then = element.elements("then");
             for (Element element1 : then) {
                 List<Element> work = element1.elements("work");
                 for (Element element2 : work) {
 
-                    WorkTag workTag1 = parse(element2);
-                    then1.add(workTag1);
+                    WorkEntity workEntity1 = parse(element2);
+                    then1.add(workEntity1);
                 }
             }
-            workTag.setThen(then1);
+            workEntity.setThen(then1);
 
 
-            ArrayList<WorkTag> catchls = new ArrayList<>();
+            ArrayList<WorkEntity> catchls = new ArrayList<>();
             List<Element> catchs = element.elements("catch");
             for (Element element1 : catchs) {
                 List<Element> work = element1.elements("work");
                 for (Element element2 : work) {
 
-                    WorkTag workTag1 = parse(element2);
-                    catchls.add(workTag1);
+                    WorkEntity workEntity1 = parse(element2);
+                    catchls.add(workEntity1);
                 }
             }
-            workTag.setCatchs(catchls);
-            return workTag;
+            workEntity.setCatchs(catchls);
+            return workEntity;
         }
 
 

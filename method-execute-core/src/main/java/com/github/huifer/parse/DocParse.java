@@ -13,7 +13,7 @@ public class DocParse {
     private final ExtractsParse extractsParse = new ExtractsParse();
     private final FlowsParse flowsParse = new FlowsParse();
 
-    public DocTag parse(String file) throws Exception {
+    public AllEntity parse(String file) throws Exception {
         String fileName = this.getClass().getClassLoader().getResource(file).getPath();//获取文件路径
 
         SAXReader reader = new SAXReader();
@@ -22,32 +22,32 @@ public class DocParse {
         Element rootElement = document.getRootElement();
 
         Element params = rootElement.element("params");
-        ParamsTag paramsTag = paramsParse.parse(params);
+        ParamsEntity paramsEntity = paramsParse.parse(params);
 
         Element result = rootElement.element("result");
-        ResultTag resultTag = resultParse.parse(result);
+        ResultEntity resultEntity = resultParse.parse(result);
 
         Element actions = rootElement.element("actions");
-        ActionsTag actionsTag = actionsParse.parse(actions);
+        ActionsEntity actionsEntity = actionsParse.parse(actions);
 
         Element watchers = rootElement.element("watchers");
-        WatchersTag watchersTag = watchersParse.parse(watchers);
+        WatchersEntity watchersEntity = watchersParse.parse(watchers);
 
         Element extracts = rootElement.element("extracts");
-        ExtractsTag extractsTag = extractsParse.parse(extracts);
+        ExtractsEntity extractsEntity = extractsParse.parse(extracts);
 
         Element flow = rootElement.element("flows");
-        FlowsTag parse = flowsParse.parse(flow);
+        FlowsEntity parse = flowsParse.parse(flow);
 
-        DocTag docTag = new DocTag();
-        docTag.setParams(paramsTag);
-        docTag.setActions(actionsTag);
-        docTag.setWatchers(watchersTag);
-        docTag.setResult(resultTag);
-        docTag.setExtracts(extractsTag);
-        docTag.setFlows(parse);
+        AllEntity allEntity = new AllEntity();
+        allEntity.setParams(paramsEntity);
+        allEntity.setActions(actionsEntity);
+        allEntity.setWatchers(watchersEntity);
+        allEntity.setResult(resultEntity);
+        allEntity.setExtracts(extractsEntity);
+        allEntity.setFlows(parse);
 
-        return docTag;
+        return allEntity;
 
     }
 }
