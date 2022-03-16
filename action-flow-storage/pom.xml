@@ -2,20 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>action-flow</artifactId>
+        <groupId>com.github.brick</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.brick</groupId>
-    <artifactId>action-flow</artifactId>
+    <artifactId>action-flow-storage</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>action-flow-core</module>
-        <module>action-flow-parse</module>
-        <module>action-flow-model</module>
-        <module>action-flow-sample</module>
-        <module>action-flow-test</module>
-        <module>action-flow-storage</module>
-        <module>action-flow-metrics</module>
+        <module>action-flow-storage-api</module>
+        <module>action-flow-redis-storage</module>
+        <module>action-flow-mysql-storage</module>
     </modules>
 
     <properties>
