@@ -34,14 +34,16 @@ public class Demo {
         ));
 
         Map<String, ActionEntity> actionTagMap =
-                actionsEntity.getList().stream().collect(Collectors.toMap(ActionEntity::getId, s -> s));
+                actionsEntity.getList().stream()
+                        .collect(Collectors.toMap(ActionEntity::getId, s -> s));
 
         Map<String, ExtractEntity> exMap = extractsEntity.getExtractEntities().stream()
                 .collect(Collectors.toMap(ExtractEntity::getId, s -> s));
 
 
         Map<String, List<ParamEntity>> paramsMap =
-                paramsEntity.getList().stream().collect(Collectors.groupingBy(ParamEntity::getGroup));
+                paramsEntity.getList().stream()
+                        .collect(Collectors.groupingBy(ParamEntity::getGroup));
 
 
 
@@ -217,7 +219,7 @@ public class Demo {
                 if (Format.class.isAssignableFrom(aClass1)) {
                     Object o = aClass1.newInstance();
                     Format format = (Format) o;
-                    Object format1 = format.format(valueValue,aClass1);
+                    Object format1 = format.format(valueValue, aClass1);
                     oo.put(argName, format1);
 
                 }

@@ -12,11 +12,13 @@
         <module>action-flow-core</module>
         <module>action-flow-parse</module>
         <module>action-flow-model</module>
+        <module>action-flow-sample</module>
+        <module>action-flow-test</module>
     </modules>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
 </project>

@@ -10,11 +10,13 @@ public class ExtractFactory<Type extends com.github.brick.enums.Type, T>
     public Extract gen(ExtractModel type) {
         Extract extract = null;
         switch (type) {
-            case JSON_PATH -> extract = new ExtractImpl();
-            default -> {
+            case JSON_PATH:
+                extract = new ExtractImpl();
+                break;
+            default:
                 throw new IllegalArgumentException("参数异常，无法生成数据提取器");
 
-            }
+
         }
         return extract;
     }

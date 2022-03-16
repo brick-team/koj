@@ -70,6 +70,9 @@ public class ActionsParse implements Parse<ActionsEntity> {
                 Method method = findMethod(actionEntity.getClazz(), actionEntity.getMethodStr(),
                         classes.toArray(new Class<?>[] {}));
                 actionEntity.setMethod(method);
+            } else {
+                Method method = findMethod(actionEntity.getClazz(), actionEntity.getMethodStr());
+                actionEntity.setMethod(method);
             }
 
 

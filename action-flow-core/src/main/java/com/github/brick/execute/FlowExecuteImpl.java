@@ -144,17 +144,23 @@ public class FlowExecuteImpl implements FlowExecute {
         Map<String, Object> methodArg = actionEntity.getMethodArg();
         Parameter[] parameters = method.getParameters();
         Object[] args = new Object[parameters.length];
-        List<ActionEntity.Param> params = actionEntity.getParams();
-        params.sort(Comparator.comparing(ActionEntity.Param::getIndex));
+        if (methodArg != null) {
 
-        // fixme: 值提取抽象
-        for (int i = 0; i < params.size(); i++) {
-            ActionEntity.Param param = params.get(i);
-            String argName = param.getArgName();
-            Object o = methodArg.get(argName);
-            args[i] = o;
+
+            List<ActionEntity.Param> params = actionEntity.getParams();
+            params.sort(Comparator.comparing(ActionEntity.Param::getIndex));
+
+            // fixme: 值提取抽象
+            for (int i = 0; i < params.size(); i++) {
+                ActionEntity.Param param = params.get(i);
+                String argName = param.getArgName();
+                Object o = methodArg.get(argName);
+                args[i] = o;
+            }
         }
+
         return method.invoke(clazz.newInstance(), args);
+
     }
 
     /**
@@ -165,48 +171,54 @@ public class FlowExecuteImpl implements FlowExecute {
         // 解析param
         List<ActionEntity.Param> params = actionEntity.getParams();
 
-        Map<String, Object> methodArgs = new HashMap<>();
-        for (ActionEntity.Param param : params) {
-            String argName = param.getArgName();
-            String paramGroup = param.getParamGroup();
-            FormatEntity formatEntity = param.getFormatEntity();
-            String valueValue = null;
-            if (paramGroup != null) {
-                String ex = param.getEx();
-                List<ParamEntity> paramEntities = paramsMap.get(paramGroup);
-                Map<String, ParamEntity> collect = paramEntities.stream().collect(Collectors.toMap(
-                        ParamEntity::getKey, s -> s));
-                ParamEntity value = collect.get(ex);
-                if (value != null) {
+        if (params != null) {
 
-                    valueValue = value.getValue();
+            Map<String, Object> methodArgs = new HashMap<>();
+            for (ActionEntity.Param param : params) {
+                String argName = param.getArgName();
+                String paramGroup = param.getParamGroup();
+                FormatEntity formatEntity = param.getFormatEntity();
+                String valueValue = null;
+                if (paramGroup != null) {
+                    String ex = param.getEx();
+                    List<ParamEntity> paramEntities = paramsMap.get(paramGroup);
+                    Map<String, ParamEntity> collect =
+                            paramEntities.stream().collect(Collectors.toMap(
+                                    ParamEntity::getKey, s -> s));
+                    ParamEntity value = collect.get(ex);
+                    if (value != null) {
+
+                        valueValue = value.getValue();
+                        methodArgs.put(argName, valueValue);
+                    }
+                } else {
+                    valueValue = param.getValue();
                     methodArgs.put(argName, valueValue);
                 }
-            } else {
-                valueValue = param.getValue();
-                methodArgs.put(argName, valueValue);
-            }
-            Class<?> typeClass = param.getTypeClass();
+                Class<?> typeClass = param.getTypeClass();
 
 
-            if (formatEntity != null) {
-                // FIXME: 2022/3/15 编写Format搜索器
-                String classStr = formatEntity.getClassStr();
-                Class<?> formatClass = Class.forName(classStr);
-                if (Format.class.isAssignableFrom(formatClass)) {
-                    Object o = formatClass.newInstance();
-                    Format format = (Format) o;
-                    Object format1 = format.format(valueValue, typeClass);
-                    methodArgs.put(argName, format1);
+                if (formatEntity != null) {
+                    // FIXME: 2022/3/15 编写Format搜索器
+                    String classStr = formatEntity.getClassStr();
+                    Class<?> formatClass = Class.forName(classStr);
+                    if (Format.class.isAssignableFrom(formatClass)) {
+                        Object o = formatClass.newInstance();
+                        Format format = (Format) o;
+                        Object format1 = format.format(valueValue, typeClass);
+                        methodArgs.put(argName, format1);
+
+                    }
 
                 }
 
+
             }
 
+            actionEntity.setMethodArg(methodArgs);
+        } else {
 
         }
-
-        actionEntity.setMethodArg(methodArgs);
     }
 
     private void run(WorkEntity workEntity,
@@ -353,8 +365,8 @@ public class FlowExecuteImpl implements FlowExecute {
      * @param actionTagMap action实体集合
      * @param actionId     actionId
      * @param paramsMap    参数集合
-     * @see com.github.brick.execute.FlowExecuteImpl#fillActionTag(java.util.Map, com.github.brick.entity.ActionEntity)}
-     * @see FlowExecuteImpl#runAction(com.github.brick.entity.ActionEntity)}
+     * @see FlowExecuteImpl#fillActionTag(java.util.Map, ActionEntity)}
+     * @see FlowExecuteImpl#runAction(ActionEntity)}
      */
     private void commonRunAction(Map<String, ActionEntity> actionTagMap,
                                  String actionId,

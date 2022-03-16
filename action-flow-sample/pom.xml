@@ -3,25 +3,33 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>action-flow-parse</artifactId>
+        <artifactId>action-flow</artifactId>
         <groupId>com.github.brick</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>action-flow-parse-api</artifactId>
+    <artifactId>action-flow-sample</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.github.brick</groupId>
-            <artifactId>action-flow-model</artifactId>
+            <artifactId>action-flow-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.30</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.30</version>
+        </dependency>
     </dependencies>
 </project>
