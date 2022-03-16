@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema attributeFormDefault="unqualified"
-           elementFormDefault="qualified"
-           xmlns="http://test/" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://test/"
-
->
-    <xs:element name="ae" type="aeType"/>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           targetNamespace="http://github.hufer/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="ae" type="git:aeType" xmlns:git="http://github.hufer/"/>
     <xs:complexType name="paramType" mixed="true">
         <xs:sequence>
             <xs:element name="key" minOccurs="0">
                 <xs:simpleType>
-                    <xs:restriction base="xs:string"></xs:restriction>
+                    <xs:restriction base="xs:string">
+                    </xs:restriction>
                 </xs:simpleType>
             </xs:element>
             <xs:element name="value" minOccurs="0">
                 <xs:simpleType>
-                    <xs:restriction base="xs:string"></xs:restriction>
+                    <xs:restriction base="xs:string">
+
+                    </xs:restriction>
                 </xs:simpleType>
             </xs:element>
-            <xs:element type="formatType" name="format" minOccurs="0"/>
+            <xs:element type="git:formatType" name="format" minOccurs="0"
+                        xmlns:git="http://github.hufer/"/>
         </xs:sequence>
         <xs:attribute type="xs:string" name="group" use="optional"/>
         <xs:attribute type="xs:string" name="index" use="optional"/>
@@ -29,12 +30,14 @@
     </xs:complexType>
     <xs:complexType name="paramsType">
         <xs:sequence>
-            <xs:element type="paramType" name="param" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="git:paramType" name="param" maxOccurs="unbounded" minOccurs="0"
+                        xmlns:git="http://github.hufer/"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="actionType">
         <xs:sequence>
-            <xs:element type="paramType" name="param" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="git:paramType" name="param" maxOccurs="unbounded" minOccurs="0"
+                        xmlns:git="http://github.hufer/"/>
         </xs:sequence>
         <xs:attribute type="xs:string" name="id" use="optional"/>
         <xs:attribute type="xs:string" name="class" use="optional"/>
@@ -50,25 +53,29 @@
     </xs:complexType>
     <xs:complexType name="actionsType">
         <xs:sequence>
-            <xs:element type="actionType" name="action" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="git:actionType" name="action" maxOccurs="unbounded" minOccurs="0"
+                        xmlns:git="http://github.hufer/"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="thenType" mixed="true">
         <xs:sequence>
-            <xs:element type="workType" name="work" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="git:workType" name="work" maxOccurs="unbounded" minOccurs="0"
+                        xmlns:git="http://github.hufer/"/>
         </xs:sequence>
         <xs:attribute type="xs:string" name="actionId" use="optional"/>
     </xs:complexType>
     <xs:complexType name="catchType" mixed="true">
         <xs:sequence>
-            <xs:element type="workType" name="work" minOccurs="0"/>
+            <xs:element type="git:workType" name="work" minOccurs="0"
+                        xmlns:git="http://github.hufer/"/>
         </xs:sequence>
         <xs:attribute type="xs:string" name="actionId" use="optional"/>
     </xs:complexType>
     <xs:complexType name="watcherType">
         <xs:sequence>
-            <xs:element type="thenType" name="then" maxOccurs="unbounded" minOccurs="0"/>
-            <xs:element type="catchType" name="catch"/>
+            <xs:element type="git:thenType" name="then" maxOccurs="unbounded"
+                        xmlns:git="http://github.hufer/"/>
+            <xs:element type="git:catchType" name="catch" xmlns:git="http://github.hufer/"/>
         </xs:sequence>
         <xs:attribute type="xs:string" name="id"/>
         <xs:attribute type="xs:string" name="exid"/>
@@ -76,7 +83,7 @@
     </xs:complexType>
     <xs:complexType name="watchersType">
         <xs:sequence>
-            <xs:element type="watcherType" name="watcher"/>
+            <xs:element type="git:watcherType" name="watcher" xmlns:git="http://github.hufer/"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="keyType">
@@ -89,7 +96,8 @@
     </xs:complexType>
     <xs:complexType name="resultType">
         <xs:sequence>
-            <xs:element type="keyType" name="key" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="git:keyType" name="key" maxOccurs="unbounded" minOccurs="0"
+                        xmlns:git="http://github.hufer/"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="extractType">
@@ -103,37 +111,47 @@
     </xs:complexType>
     <xs:complexType name="extractsType">
         <xs:sequence>
-            <xs:element type="extractType" name="extract" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="git:extractType" name="extract" maxOccurs="unbounded" minOccurs="0"
+                        xmlns:git="http://github.hufer/"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="workType" mixed="true">
         <xs:choice maxOccurs="unbounded" minOccurs="0">
-            <xs:element type="catchType" name="catch"/>
-            <xs:element type="thenType" name="then"/>
+            <xs:element type="git:catchType" name="catch" xmlns:git="http://github.hufer/"/>
+            <xs:element type="git:thenType" name="then" xmlns:git="http://github.hufer/"/>
         </xs:choice>
         <xs:attribute type="xs:string" name="id" use="optional"/>
-        <xs:attribute type="xs:string" name="type" use="optional"/>
+        <xs:attribute  name="type" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="action"/>
+                    <xs:enumeration value="watcher"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
         <xs:attribute type="xs:string" name="ref_id" use="optional"/>
     </xs:complexType>
     <xs:complexType name="flowType">
         <xs:sequence>
-            <xs:element type="workType" name="work" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="git:workType" name="work" maxOccurs="unbounded" minOccurs="0"
+                        xmlns:git="http://github.hufer/"/>
         </xs:sequence>
         <xs:attribute type="xs:string" name="id" use="optional"/>
     </xs:complexType>
     <xs:complexType name="flowsType">
         <xs:sequence>
-            <xs:element type="flowType" name="flow" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="git:flowType" name="flow" maxOccurs="unbounded" minOccurs="0"
+                        xmlns:git="http://github.hufer/"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="aeType">
         <xs:sequence>
-            <xs:element type="paramsType" name="params"/>
-            <xs:element type="actionsType" name="actions"/>
-            <xs:element type="watchersType" name="watchers"/>
-            <xs:element type="resultType" name="result"/>
-            <xs:element type="extractsType" name="extracts"/>
-            <xs:element type="flowsType" name="flows"/>
+            <xs:element type="git:paramsType" name="params" xmlns:git="http://github.hufer/"/>
+            <xs:element type="git:actionsType" name="actions" xmlns:git="http://github.hufer/"/>
+            <xs:element type="git:watchersType" name="watchers" xmlns:git="http://github.hufer/"/>
+            <xs:element type="git:resultType" name="result" xmlns:git="http://github.hufer/"/>
+            <xs:element type="git:extractsType" name="extracts" xmlns:git="http://github.hufer/"/>
+            <xs:element type="git:flowsType" name="flows" xmlns:git="http://github.hufer/"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

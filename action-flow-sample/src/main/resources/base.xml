@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ae xmlns="http://test/">
-    <params></params>
+<ae>
     <actions>
         <action id="helloPoint" class="com.github.brick.sample.HelloPrint"
                 method="hello">
-
         </action>
     </actions>
-    <watchers>
-        <watcher>
-            <catch></catch>
-        </watcher>
-    </watchers>
-    <result></result>
-    <extracts></extracts>
+
     <flows>
         <flow id="1">
             <work id="w1" type="action" ref_id="helloPoint"/>

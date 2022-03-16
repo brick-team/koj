@@ -8,6 +8,6 @@ public class ActionFlowDemo {
 
     public static void main(String[] args) throws Exception {
         FlowExecute flowExecute = new FlowExecuteImpl();
-        flowExecute.execute("base.xml", "1", FLowModel.XML);
+        flowExecute.execute("condition.xml", "1", FLowModel.XML);
     }
 }

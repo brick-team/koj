@@ -3,6 +3,8 @@ package com.github.brick.entity;
 import lombok.Data;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,10 +17,10 @@ public class ActionEntity {
     private String methodStr;
     private Method method;
 
-    private List<Param> params;
+    private List<Param> params = new ArrayList<>();
 
 
-    private Map<String, Object> methodArg;
+    private Map<String, Object> methodArg = new HashMap<>();
 
 
     @Data

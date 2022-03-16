@@ -9,4 +9,32 @@ Action Flow是一个轻量，快速的流程引擎框架。
 
 
 ## 使用
-现阶段 Action Flow 基于XML文件进行流程配置，下方为 Action Flow 的基础配置。
+现阶段 Action Flow 基于XML文件进行流程配置，下方为 Action Flow 的基础配置，文件名:`base.xml`
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<ae>
+    <actions>
+        <action id="helloPoint" class="com.github.brick.sample.HelloPrint"
+                method="hello">
+        </action>
+    </actions>
+
+    <flows>
+        <flow id="1">
+            <work id="w1" type="action" ref_id="helloPoint"/>
+        </flow>
+    </flows>
+</ae>
+```
+完成上述 Action Flow 配置文件编写后调用执行器将其执行。
+
+```java
+public class ActionFlowDemo {
+
+    public static void main(String[] args) throws Exception {
+        FlowExecute flowExecute = new FlowExecuteImpl();
+        flowExecute.execute("base.xml", "1", FLowModel.XML);
+    }
+}
+
+```

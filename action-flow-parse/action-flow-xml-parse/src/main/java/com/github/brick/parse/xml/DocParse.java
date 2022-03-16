@@ -14,38 +14,49 @@ public class DocParse {
     private final FlowsParse flowsParse = new FlowsParse();
 
     public AllEntity parse(String file) throws Exception {
-        String fileName = this.getClass().getClassLoader().getResource(file).getPath();//获取文件路径
+        AllEntity allEntity = new AllEntity();
 
+        String fileName = this.getClass().getClassLoader().getResource(file).getPath();//获取文件路径
         SAXReader reader = new SAXReader();
         Document document = reader.read(fileName);
-
         Element rootElement = document.getRootElement();
 
         Element params = rootElement.element("params");
-        ParamsEntity paramsEntity = paramsParse.parse(params);
+        if (params != null) {
+            ParamsEntity paramsEntity = paramsParse.parse(params);
+            allEntity.setParams(paramsEntity);
+        }
 
         Element result = rootElement.element("result");
-        ResultEntity resultEntity = resultParse.parse(result);
+        if (result != null) {
+            ResultEntity resultEntity = resultParse.parse(result);
+            allEntity.setResult(resultEntity);
+        }
 
         Element actions = rootElement.element("actions");
-        ActionsEntity actionsEntity = actionsParse.parse(actions);
+        if (actions != null) {
+            ActionsEntity actionsEntity = actionsParse.parse(actions);
+            allEntity.setActions(actionsEntity);
+        }
 
         Element watchers = rootElement.element("watchers");
-        WatchersEntity watchersEntity = watchersParse.parse(watchers);
+        if (watchers != null) {
+            WatchersEntity watchersEntity = watchersParse.parse(watchers);
+            allEntity.setWatchers(watchersEntity);
+        }
 
         Element extracts = rootElement.element("extracts");
-        ExtractsEntity extractsEntity = extractsParse.parse(extracts);
+        if (extracts != null) {
+            ExtractsEntity extractsEntity = extractsParse.parse(extracts);
+            allEntity.setExtracts(extractsEntity);
+        }
 
         Element flow = rootElement.element("flows");
-        FlowsEntity parse = flowsParse.parse(flow);
+        if (flow != null) {
+            FlowsEntity parse = flowsParse.parse(flow);
+            allEntity.setFlows(parse);
+        }
 
-        AllEntity allEntity = new AllEntity();
-        allEntity.setParams(paramsEntity);
-        allEntity.setActions(actionsEntity);
-        allEntity.setWatchers(watchersEntity);
-        allEntity.setResult(resultEntity);
-        allEntity.setExtracts(extractsEntity);
-        allEntity.setFlows(parse);
 
         return allEntity;
 

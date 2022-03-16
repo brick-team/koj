@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ae xmlns="http://github.hufer/">
+    <params>
+
+    </params>
+    <actions>
+        <action id="startPoint" class="com.github.brick.sample.StartAction"
+                method="start">
+        </action>
+
+        <action id="ErrorAction" class="com.github.brick.sample.ErrorAction"
+                method="work">
+        </action>
+
+        <action id="OkAction" class="com.github.brick.sample.OkAction"
+                method="work">
+        </action>
+
+    </actions>
+    <watchers>
+        <watcher id="w1" exid="e1" condition=">10">
+            <then actionId="OkAction"></then>
+            <catch actionId="ErrorAction"></catch>
+        </watcher>
+    </watchers>
+    <result></result>
+    <extracts>
+        <extract id="e1" fromAction="startPoint" el="$.age"></extract>
+    </extracts>
+    <flows>
+        <flow id="1">
+            <work id="work1" ref_id="startPoint" type="action">
+                <then>
+                    <work id="work2" ref_id="w1" type="watcher">
+
+                    </work>
+                </then>
+            </work>
+        </flow>
+    </flows>
+</ae>
