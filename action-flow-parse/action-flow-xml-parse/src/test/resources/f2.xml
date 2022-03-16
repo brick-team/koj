@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<ae xmlns="http://test/">
+
+
+    <params>
+        <param group="a">
+            <key>map</key>
+            <value>{"name":"b"}</value>
+        </param>
+    </params>
+    <actions>
+        <action id="a1" method="hh" class="com.github.brick.ClassAction">
+            <param index="0" arg_name="mc" param_group="a" ex="map" type="com.github.brick.ClassAction$Mc">
+                <format id="a" class="com.github.brick.format.StringToClass"/>
+            </param>
+        </action>
+
+    </actions>
+
+    <watchers>
+        <watcher>
+            <catch></catch>
+        </watcher>
+    </watchers>
+    <result>
+
+    </result>
+    <extracts>
+
+    </extracts>
+    <flows>
+        <flow id="1">
+            <work id="w1" type="action" ref_id="a1"/>
+        </flow>
+
+    </flows>
+
+
+</ae>
