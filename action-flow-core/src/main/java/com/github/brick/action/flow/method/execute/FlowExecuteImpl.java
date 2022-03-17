@@ -21,7 +21,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -51,6 +51,7 @@ public class FlowExecuteImpl implements FlowExecute {
             return null;
         }
         Map<String, Object> result = getStringObjectMap(flowId, parse);
+        fixedThreadPool.shutdown();
         return result;
     }
 
@@ -118,7 +119,7 @@ public class FlowExecuteImpl implements FlowExecute {
      */
     private Map<String, Object> handlerResult(ResultEntity resultEntity,
                                               Map<String, ExtractEntity> exMap,
-                                              Map<String, Object> actionResult) {
+                                              Map<String, Object> actionResult) throws ExecutionException, InterruptedException {
         // 组装结果信息
         Map<String, Object> result = new HashMap<>();
         List<ResultEntity.Key> keys = resultEntity.getKeys();
@@ -133,6 +134,9 @@ public class FlowExecuteImpl implements FlowExecute {
             // 异常组装异常信息
             if (rs instanceof Throwable) {
                 extract = ((Throwable) rs).getMessage();
+            } else if (rs instanceof Future) {
+                rs = ((Future<?>) rs).get();
+                extract = this.extract.extract(rs, el);
             }
             // 正常情况下走提取策略
             else {
@@ -169,7 +173,8 @@ public class FlowExecuteImpl implements FlowExecute {
                 Object invoke = method.invoke(clazz.newInstance(), args);
                 return invoke;
             });
-            return submit.get();
+//            return submit.get();
+            return submit;
         } else {
             return method.invoke(clazz.newInstance(), args);
         }

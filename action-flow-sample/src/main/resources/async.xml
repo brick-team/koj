@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ae xmlns="http://github.hufer/">
+    <actions>
+        <action id="startPoint1" class="com.github.brick.action.flow.sample.StartAction"
+                method="start" async="true">
+        </action>
+
+        <action id="startPoint2" class="com.github.brick.action.flow.sample.StartAction"
+                method="start" async="true">
+        </action>
+
+
+    </actions>
+
+    <result>
+        <key exid="e1" name="k1"></key>
+        <key exid="e2" name="k2"></key>
+    </result>
+
+    <extracts>
+        <extract id="e1" fromAction="startPoint1" el="$.age"></extract>
+        <extract id="e2" fromAction="startPoint2" el="$.age"></extract>
+    </extracts>
+
+    <flows>
+        <flow id="1">
+            <work id="w1" type="action" ref_id="startPoint1"/>
+            <work id="w2" type="action" ref_id="startPoint2"/>
+        </flow>
+    </flows>
+</ae>
