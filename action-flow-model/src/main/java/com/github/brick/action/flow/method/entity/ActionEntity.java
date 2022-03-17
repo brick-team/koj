@@ -30,6 +30,7 @@ public class ActionEntity {
         private String value;
         private String paramGroup;
         private String ex;
+        private String exId;
         private Integer index;
         private String type;
         private Class<?> typeClass;

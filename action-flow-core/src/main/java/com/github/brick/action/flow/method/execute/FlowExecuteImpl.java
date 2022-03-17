@@ -147,7 +147,7 @@ public class FlowExecuteImpl implements FlowExecute {
         return result;
     }
 
-    private Object runAction(ActionEntity actionEntity) throws Exception {
+    private Object runAction(Map<String, ActionEntity> actionTagMap, Map<String, List<ParamEntity>> paramsMap, ActionEntity actionEntity, Map<String, ExtractEntity> exMap, Map<String, Object> actionResult) throws Exception {
 
         Class<?> clazz = actionEntity.getClazz();
         Method method = actionEntity.getMethod();
@@ -155,19 +155,58 @@ public class FlowExecuteImpl implements FlowExecute {
         Parameter[] parameters = method.getParameters();
         Object[] args = new Object[parameters.length];
         if (methodArg != null) {
-
-
             List<ActionEntity.Param> params = actionEntity.getParams();
             params.sort(Comparator.comparing(ActionEntity.Param::getIndex));
 
-            // fixme: 值提取抽象
+            // fixme: 值提取抽象，多线程使用
             for (int i = 0; i < params.size(); i++) {
+
                 ActionEntity.Param param = params.get(i);
-                String argName = param.getArgName();
-                Object o = methodArg.get(argName);
-                args[i] = o;
+                // 支持提取器转换为参数
+                if (param.getExId() != null) {
+                    if (exMap != null) {
+                        ExtractEntity extractEntity = exMap.get(param.getExId());
+                        String el = extractEntity.getEl();
+                        String fromAction = extractEntity.getFromAction();
+                        Object rs = actionResult.get(fromAction);
+                        Object extract = null;
+
+
+                        if (rs instanceof Throwable) {
+                            extract = ((Throwable) rs).getMessage();
+                        } else if (rs instanceof Future) {
+                            rs = ((Future<?>) rs).get();
+                            extract = this.extract.extract(rs, el);
+                        } else if (rs == null) {
+                            Object o = commonRunAction(actionTagMap,
+                                    fromAction,
+                                    paramsMap,
+                                    exMap,
+                                    actionResult);
+                            if (o instanceof Future) {
+                                extract = ((Future<?>) o).get();
+                            } else {
+                                extract = o;
+                            }
+
+                        }
+                        // 正常情况下走提取策略
+                        else {
+                            extract = this.extract.extract(rs, el);
+                        }
+                        args[i] = extract;
+                    }
+
+
+                } else {
+                    String argName = param.getArgName();
+                    Object o = methodArg.get(argName);
+                    args[i] = o;
+                }
             }
         }
+
+
         if (actionEntity.isAsync()) {
             Future<Object> submit = this.fixedThreadPool.submit(() -> {
                 Object invoke = method.invoke(clazz.newInstance(), args);
@@ -300,7 +339,7 @@ public class FlowExecuteImpl implements FlowExecute {
         fillActionTag(paramsMap, actionEntity);
         // 执行函数
         try {
-            Object res = runAction(actionEntity);
+            Object res = runAction(actionTagMap, paramsMap, actionEntity, exMap, actionResult);
             actionResult.put(actionEntity.getId(), res);
             List<WorkEntity> then = workEntity.getThen();
 
@@ -328,14 +367,12 @@ public class FlowExecuteImpl implements FlowExecute {
                                 Map<String, Object> actionResult) throws Exception {
         // 从监控集合中找到对应的详细数据
         WatcherEntity watcherEntity = watcherMap.get(workEntity.getRefId());
+        // 从action执行结果集合中获取数据
 
         String exId = watcherEntity.getExId();
         ExtractEntity extractEntity = exMap.get(exId);
         String el = extractEntity.getEl();
         String fromAction = extractEntity.getFromAction();
-
-
-        // 从action执行结果集合中获取数据
         Object rs = actionResult.get(fromAction);
         // 提取结果如果是异常
         if (rs instanceof Throwable) {
@@ -363,14 +400,14 @@ public class FlowExecuteImpl implements FlowExecute {
                 List<WatcherEntity.Then> thens = watcherEntity.getThens();
                 for (WatcherEntity.Then then : thens) {
                     String actionId = then.getActionId();
-                    commonRunAction(actionTagMap, actionId, paramsMap);
+                    commonRunAction(actionTagMap, actionId, paramsMap, exMap, actionResult);
                 }
             } else {
                 // 如果不符合条件表达式执行catch相关内容
                 List<WatcherEntity.Catch> catchs = watcherEntity.getCatchs();
                 for (WatcherEntity.Catch aCatch : catchs) {
                     String actionId = aCatch.getActionId();
-                    commonRunAction(actionTagMap, actionId, paramsMap);
+                    commonRunAction(actionTagMap, actionId, paramsMap, exMap, actionResult);
                 }
             }
         }
@@ -383,15 +420,21 @@ public class FlowExecuteImpl implements FlowExecute {
      * @param actionTagMap action实体集合
      * @param actionId     actionId
      * @param paramsMap    参数集合
+     * @param exMap
+     * @param actionResult
      * @see FlowExecuteImpl#fillActionTag(java.util.Map, ActionEntity)}
-     * @see FlowExecuteImpl#runAction(ActionEntity)}
+     * @see FlowExecuteImpl#runAction(Map, Map, ActionEntity, Map, Map) }
      */
-    private void commonRunAction(Map<String, ActionEntity> actionTagMap,
-                                 String actionId,
-                                 Map<String, List<ParamEntity>> paramsMap) throws Exception {
+    private Object commonRunAction(Map<String, ActionEntity> actionTagMap,
+                                   String actionId,
+                                   Map<String, List<ParamEntity>> paramsMap, Map<String, ExtractEntity> exMap, Map<String, Object> actionResult) throws Exception {
         ActionEntity actionEntity = actionTagMap.get(actionId);
         fillActionTag(paramsMap, actionEntity);
-        runAction(actionEntity);
+        Object o = runAction(
+                actionTagMap,
+                paramsMap,
+                actionEntity, exMap, actionResult);
+        return o;
     }
 
 }

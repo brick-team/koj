@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<api-flow>
+    <params>
+        <param group="a">
+            <key>username</key>
+            <value>zhangsan</value>
+        </param>
+
+        <param group="a">
+            <key>password</key>
+            <value>lisi</value>
+        </param>
+    </params>
+    <apis>
+        <api id="startPoint1" domain="" uri="/{id}" http-method="GET">
+            <param arg_name="username" param_group="a" ex="username"></param>
+        </api>
+        <api id="startPoint2" domain="" uri="/{id}" http-method="POST"></api>
+    </apis>
+
+    <extracts>
+        <extract id="e1" fromApi="startPoint1" el="$.age"></extract>
+        <extract id="e2" fromApi="startPoint2" el="$.age"></extract>
+    </extracts>
+
+    <watchers>
+        <watcher id="w1" exid="e3" condition="> 10">
+            <then actionId="startPoint1"/>
+            <catch actionId="startPoint1"/>
+        </watcher>
+    </watchers>
+
+    <result>
+        <key name="r1" exid="e1"/>
+        <key name="r2" exid="e2"/>
+    </result>
+
+
+    <flows>
+        <flow id="1">
+            <work id="w1" type="api" ref_id="startPoint1"/>
+        </flow>
+    </flows>
+
+
+</api-flow>

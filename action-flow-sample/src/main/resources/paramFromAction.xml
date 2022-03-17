@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ae>
+    <actions>
+        <action id="startPoint1" class="com.github.brick.action.flow.sample.StartAction"
+                method="start" async="true">
+        </action>
+
+        <action id="ParamAction" class="com.github.brick.action.flow.sample.ParamAction"
+                method="ac">
+
+            <param index="0" arg_name="data" ex_id="e1"
+                   type="java.lang.Object"/>
+        </action>
+    </actions>
+
+
+    <extracts>
+        <extract id="e1" fromAction="startPoint1" el="$.age"></extract>
+    </extracts>
+
+
+    <flows>
+        <flow id="1">
+            <work id="w1" type="action" ref_id="ParamAction"></work>
+        </flow>
+    </flows>
+</ae>

@@ -96,6 +96,9 @@ public class ActionsParse implements Parse<ActionsEntity> {
             String ex = element.attributeValue("ex");
             String value = element.attributeValue("value");
             String type = element.attributeValue("type");
+            String ex_id = element.attributeValue("ex_id");
+
+
             ActionEntity.Param param = new ActionEntity.Param();
             param.setIndex(Integer.parseInt(index));
             param.setArgName(arg_name);
@@ -103,6 +106,7 @@ public class ActionsParse implements Parse<ActionsEntity> {
             param.setParamGroup(param_group);
             param.setEx(ex);
             param.setType(type);
+            param.setExId(ex_id);
             param.setTypeClass(Class.forName(type));
 
             Element format = element.element("format");
