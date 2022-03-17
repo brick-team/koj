@@ -13,18 +13,18 @@
         </param>
     </params>
     <actions>
-        <action id="login" class="com.github.brick.LoginAction" method="login">
+        <action id="login" class="com.github.brick.action.flow.LoginAction" method="login">
             <param index="0" arg_name="username" param_group="a" ex="username"
                    type="java.lang.String"/>
             <param index="1" arg_name="password" param_group="a" ex="password"
                    type="java.lang.String"></param>
         </action>
-        <action id="sendPoint" class="com.github.brick.SendPointAction"
+        <action id="sendPoint" class="com.github.brick.action.flow.SendPointAction"
                 method="sendPoint" async="true">
             <param index="0" arg_name="uid" param_group="a" ex="username" type="java.lang.String">
             </param>
             <param index="1" arg_name="point" value="10" type="java.lang.Integer">
-                <format id="f1" class="com.github.brick.format.num.StringToIntegerFormat"></format>
+                <format id="f1" class="com.github.brick.action.flow.method.format.num.StringToIntegerFormat"></format>
             </param>
         </action>
     </actions>

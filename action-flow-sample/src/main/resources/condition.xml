@@ -4,15 +4,15 @@
 
     </params>
     <actions>
-        <action id="startPoint" class="com.github.brick.sample.StartAction"
+        <action id="startPoint" class="com.github.brick.action.flow.sample.StartAction"
                 method="start">
         </action>
 
-        <action id="ErrorAction" class="com.github.brick.sample.ErrorAction"
+        <action id="ErrorAction" class="com.github.brick.action.flow.sample.ErrorAction"
                 method="work">
         </action>
 
-        <action id="OkAction" class="com.github.brick.sample.OkAction"
+        <action id="OkAction" class="com.github.brick.action.flow.sample.OkAction"
                 method="work">
         </action>
 

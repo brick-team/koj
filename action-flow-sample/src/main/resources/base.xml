@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ae>
     <actions>
-        <action id="helloPoint" class="com.github.brick.sample.HelloPrint"
+        <action id="helloPoint" class="com.github.brick.action.flow.sample.HelloPrint"
                 method="hello">
         </action>
     </actions>

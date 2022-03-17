@@ -10,9 +10,9 @@
         </param>
     </params>
     <actions>
-        <action id="a1" method="hh" class="com.github.brick.ClassAction" async="true">
-            <param index="0" arg_name="mc" param_group="a" ex="map" type="com.github.brick.ClassAction$Mc">
-                <format id="a" class="com.github.brick.format.StringToClass"/>
+        <action id="a1" method="hh" class="com.github.brick.action.flow.ClassAction" async="true">
+            <param index="0" arg_name="mc" param_group="a" ex="map" type="com.github.brick.action.flow.ClassAction$Mc">
+                <format id="a" class="com.github.brick.action.flow.method.format.StringToClass"/>
             </param>
         </action>
 
