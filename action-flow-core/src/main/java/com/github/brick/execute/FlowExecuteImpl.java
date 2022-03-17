@@ -15,12 +15,17 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 public class FlowExecuteImpl implements FlowExecute {
@@ -34,6 +39,7 @@ public class FlowExecuteImpl implements FlowExecute {
      */
     Factory<FLowModel, ActionFlowParseApi> actionFlowParseApiFactory =
             new ActionFlowParseApiFactory<>();
+    ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
 
     @Override
     public Object execute(String file, String flowId, FLowModel module) throws Exception {
@@ -139,6 +145,7 @@ public class FlowExecuteImpl implements FlowExecute {
     }
 
     private Object runAction(ActionEntity actionEntity) throws Exception {
+
         Class<?> clazz = actionEntity.getClazz();
         Method method = actionEntity.getMethod();
         Map<String, Object> methodArg = actionEntity.getMethodArg();
@@ -158,8 +165,15 @@ public class FlowExecuteImpl implements FlowExecute {
                 args[i] = o;
             }
         }
-
-        return method.invoke(clazz.newInstance(), args);
+        if (actionEntity.isAsync()) {
+            Future<Object> submit = this.fixedThreadPool.submit((Callable<Object>) () -> {
+                Object invoke = method.invoke(clazz.newInstance(), args);
+                return invoke;
+            });
+            return submit.get();
+        } else {
+            return method.invoke(clazz.newInstance(), args);
+        }
 
     }
 

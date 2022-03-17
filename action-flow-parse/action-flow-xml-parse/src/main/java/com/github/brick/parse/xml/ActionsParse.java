@@ -40,12 +40,13 @@ public class ActionsParse implements Parse<ActionsEntity> {
             String id = element.attributeValue("id");
             String clazzStr = element.attributeValue("class");
             String methodStr = element.attributeValue("method");
+            String async = element.attributeValue("async");
 
             actionEntity.setId(id);
             actionEntity.setClazzStr(clazzStr);
             actionEntity.setClazz(Class.forName(clazzStr));
             actionEntity.setMethodStr(methodStr);
-
+            actionEntity.setAsync(Boolean.parseBoolean(async));
 
 
             List<Element> param = element.elements("param");
@@ -68,7 +69,7 @@ public class ActionsParse implements Parse<ActionsEntity> {
 
 
                 Method method = findMethod(actionEntity.getClazz(), actionEntity.getMethodStr(),
-                        classes.toArray(new Class<?>[] {}));
+                        classes.toArray(new Class<?>[]{}));
                 actionEntity.setMethod(method);
             } else {
                 Method method = findMethod(actionEntity.getClazz(), actionEntity.getMethodStr());
@@ -84,7 +85,6 @@ public class ActionsParse implements Parse<ActionsEntity> {
             return clazz.getMethod(methodName, args);
         }
     }
-
 
 
     public class ActionParamParse implements Parse<ActionEntity.Param> {
@@ -114,7 +114,6 @@ public class ActionsParse implements Parse<ActionsEntity> {
             return param;
         }
     }
-
 
 
 }

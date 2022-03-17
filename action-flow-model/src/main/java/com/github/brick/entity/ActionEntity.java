@@ -17,6 +17,7 @@ public class ActionEntity {
     private String methodStr;
     private Method method;
 
+    private boolean async = false;
     private List<Param> params = new ArrayList<>();
 
 
