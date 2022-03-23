@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class StringToDateFormat implements Format<String> {
     @Override
-    public Date format(String s,Class<?> clazz) {
+    public Date format(String s, Class<?> clazz) {
         return null;
     }
 }

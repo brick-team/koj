@@ -17,7 +17,6 @@ public class FormatParse implements Parse<FormatEntity> {
         formatEntity.setClazz(Class.forName(clazz));
 
 
-
         return formatEntity;
     }
 }

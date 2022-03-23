@@ -24,7 +24,6 @@ public class ResultParse implements Parse<ResultEntity> {
         }
 
 
-
         resultEntity.setKeys(keys);
 
         return resultEntity;

@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 
 public class ActionsEntity {
-    private List<ActionEntity> list =new ArrayList<>();
+    private List<ActionEntity> list = new ArrayList<>();
 }

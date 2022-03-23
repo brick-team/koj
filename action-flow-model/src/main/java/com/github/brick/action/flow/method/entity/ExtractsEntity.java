@@ -7,5 +7,5 @@ import java.util.List;
 
 @Data
 public class ExtractsEntity {
-    private List<ExtractEntity> extractEntities =new ArrayList<>();
+    private List<ExtractEntity> extractEntities = new ArrayList<>();
 }

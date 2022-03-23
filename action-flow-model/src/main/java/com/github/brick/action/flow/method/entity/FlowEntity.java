@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 public class FlowEntity {
     private String id;
-    private List<WorkEntity> workEntities =new ArrayList<>();
+    private List<WorkEntity> workEntities = new ArrayList<>();
 }

@@ -6,7 +6,7 @@ public class StringToClass implements Format<String> {
     Gson gson = new Gson();
 
     @Override
-    public Object format(String s ,Class<?> clazz) {
+    public Object format(String s, Class<?> clazz) {
         return gson.fromJson(s, clazz);
     }
 }

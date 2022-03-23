@@ -7,5 +7,5 @@ import java.util.List;
 
 @Data
 public class FlowsEntity {
-    private List<FlowEntity> flowEntities =new ArrayList<>();
+    private List<FlowEntity> flowEntities = new ArrayList<>();
 }
