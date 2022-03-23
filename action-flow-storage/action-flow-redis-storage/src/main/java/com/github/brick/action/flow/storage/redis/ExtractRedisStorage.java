@@ -29,7 +29,7 @@ public class ExtractRedisStorage implements ExtractStorage {
         List<String> range = stringRedisTemplate.opsForList().range(EXTRACT_KEY_PRE + uid, 0, -1);
         List<ExtractEntity> res = new ArrayList<>();
         for (String s : range) {
-            ExtractsEntity extractsEntity = gson.fromJson(s, ExtractsEntity.class);
+            ExtractEntity extractsEntity = gson.fromJson(s, ExtractEntity.class);
             res.add(extractsEntity);
         }
         return res;
