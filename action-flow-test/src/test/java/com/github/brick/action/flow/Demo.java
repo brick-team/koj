@@ -3,6 +3,7 @@ package com.github.brick.action.flow;
 import com.alibaba.fastjson.JSON;
 import com.github.brick.action.flow.method.entity.*;
 import com.github.brick.action.flow.method.format.Format;
+import com.github.brick.action.flow.method.format.num.StringToIntegerFormat;
 import org.junit.Test;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
@@ -326,7 +327,7 @@ public class Demo {
 
         ActionEntity login = new ActionEntity();
         login.setId("login");
-        login.setClazzStr("com.github.huifer.LoginAction");
+        login.setClazzStr(LoginAction.class.getName());
         login.setMethodStr("login");
         ArrayList<ActionEntity.Param> params = new ArrayList<>();
         ActionEntity.Param e = new ActionEntity.Param();
@@ -348,7 +349,7 @@ public class Demo {
 
         ActionEntity sendPoint = new ActionEntity();
         sendPoint.setId("sendPoint");
-        sendPoint.setClazzStr("com.github.huifer.SendPointAction");
+        sendPoint.setClazzStr(SendPointAction.class.getName());
         sendPoint.setMethodStr("sendPoint");
         ArrayList<ActionEntity.Param> params1 = new ArrayList<>();
         ActionEntity.Param e2 = new ActionEntity.Param();
@@ -367,7 +368,7 @@ public class Demo {
 
         FormatEntity formatEntity = new FormatEntity();
         formatEntity.setId("f1");
-        formatEntity.setClassStr("com.github.huifer.format.num.StringToIntegerFormat");
+        formatEntity.setClassStr(StringToIntegerFormat.class.getName());
         e3.setFormatEntity(formatEntity);
 
         params1.add(e3);
