@@ -16,11 +16,13 @@
         <module>action-flow-test</module>
         <module>action-flow-storage</module>
         <module>action-flow-metrics</module>
+        <module>action-flow-spring</module>
     </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
 
 </project>
