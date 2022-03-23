@@ -76,6 +76,10 @@
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.brick</groupId>
+            <artifactId>action-flow-spring</artifactId>
+        </dependency>
 
     </dependencies>
 </project>
