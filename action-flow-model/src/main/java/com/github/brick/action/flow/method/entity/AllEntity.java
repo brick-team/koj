@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class AllEntity {
+    private String uid;
     private ParamsEntity params = new ParamsEntity();
     private ActionsEntity actions = new ActionsEntity();
     private WatchersEntity watchers = new WatchersEntity();
