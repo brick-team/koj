@@ -22,6 +22,8 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <spring.version>5.3.16</spring.version>
+        <jackson.version>2.13.2</jackson.version>
     </properties>
 
     <dependencyManagement>
@@ -45,7 +47,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-expression</artifactId>
-                <version>5.3.16</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.dom4j</groupId>
@@ -120,12 +122,12 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
-                <version>5.3.16</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
-                <version>5.3.16</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.brick</groupId>
@@ -148,18 +150,18 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
-                <version>2.13.2</version>
+                <version>${jackson.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>2.13.2</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
-                <version>2.13.2</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.brick</groupId>
@@ -169,12 +171,12 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aop</artifactId>
-                <version>5.3.16</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aspects</artifactId>
-                <version>5.3.16</version>
+                <version>${spring.version}</version>
             </dependency>
 
             <dependency>
@@ -182,7 +184,30 @@
                 <artifactId>swagger-parser</artifactId>
                 <version>2.0.31</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.brick</groupId>
+                <artifactId>action-flow-swagger-parse</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>8.0.28</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
 
+            <!-- https://mvnrepository.com/artifact/org.springframework/spring-framework-bom -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
         </dependencies>
 
