@@ -13,5 +13,5 @@ public class ApiEntity {
      * key: http method
      * value: http method param
      */
-    private Map<String, List<ParamEntity>> params;
+    private Map<String, List<ApiParamEntity>> params;
 }
