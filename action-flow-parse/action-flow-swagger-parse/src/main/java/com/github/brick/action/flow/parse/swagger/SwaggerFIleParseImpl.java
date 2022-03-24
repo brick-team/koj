@@ -13,7 +13,6 @@ import io.swagger.models.properties.RefProperty;
 import io.swagger.parser.SwaggerParser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -132,9 +131,7 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
 
         paths.forEach(
                 (k, v) -> {
-                    ApiEntity swaggerApiEntity = genSwaggerApiEntity(k, v, definitions);
-                    res.add(swaggerApiEntity);
-
+                    res.addAll(genSwaggerApiEntity(k, v, definitions));
                 }
         );
 
@@ -142,10 +139,8 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
         return res;
     }
 
-    private ApiEntity genSwaggerApiEntity(String k, Path v, Map<String, Model> modelMap) {
+    private List<ApiEntity> genSwaggerApiEntity(String k, Path v, Map<String, Model> modelMap) {
 
-        ApiEntity swaggerApiEntity = new ApiEntity();
-        swaggerApiEntity.setUrl(k);
 
         Operation get = v.getGet();
         Operation post = v.getPost();
@@ -158,7 +153,6 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
                 put != null ? "put" : null,
                 delete != null ? "delete" : null
         };
-        swaggerApiEntity.setMethod(httpMethodSupport);
 
 
         List<ApiParamEntity> getParamList = handlerParamEntity(get, modelMap);
@@ -166,13 +160,55 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
         List<ApiParamEntity> putParamList = handlerParamEntity(put, modelMap);
         List<ApiParamEntity> deleteParamList = handlerParamEntity(delete, modelMap);
 
-        Map<String, List<ApiParamEntity>> map = new HashMap<>(4);
-        map.put("get", getParamList);
-        map.put("post", postParamList);
-        map.put("put", putParamList);
-        map.put("delete", deleteParamList);
-        swaggerApiEntity.setParams(map);
-        return swaggerApiEntity;
+
+        ApiEntity getApi = new ApiEntity();
+        getApi.setUrl(k);
+        getApi.setDesc(get != null ? get.getSummary() : null);
+        getApi.setMethod("get");
+        getApi.setParams(getParamList);
+
+
+        ApiEntity postApi = new ApiEntity();
+        postApi.setUrl(k);
+        postApi.setDesc(post != null ? post.getSummary() : null);
+        postApi.setMethod("post");
+        postApi.setParams(postParamList);
+
+
+        ApiEntity putApi = new ApiEntity();
+        putApi.setUrl(k);
+        putApi.setDesc(put != null ? put.getSummary() : null);
+        putApi.setMethod("put");
+        putApi.setParams(putParamList);
+
+
+        ApiEntity deleteApi = new ApiEntity();
+        deleteApi.setUrl(k);
+        deleteApi.setDesc(delete != null ? delete.getSummary() : null);
+        deleteApi.setMethod("delete");
+        deleteApi.setParams(deleteParamList);
+
+
+        List<ApiEntity> res = new ArrayList<>();
+
+        if (get != null) {
+
+            res.add(getApi);
+        }
+        if (post != null) {
+
+            res.add(postApi);
+        }
+        if (put != null) {
+
+            res.add(putApi);
+        }
+        if (delete != null) {
+
+            res.add(deleteApi);
+        }
+
+        return res;
     }
 
 }
