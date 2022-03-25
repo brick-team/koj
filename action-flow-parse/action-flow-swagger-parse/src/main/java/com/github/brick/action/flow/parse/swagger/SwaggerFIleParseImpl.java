@@ -104,6 +104,7 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
                     String simpleRef1 = ((RefProperty) v).getSimpleRef();
 
                     List<ApiParamEntity> extracted = handlerParamEntity(modelMap, simpleRef1);
+                    p.setName(k);
                     p.setParamEntities(extracted);
 
                     res.add(p);
