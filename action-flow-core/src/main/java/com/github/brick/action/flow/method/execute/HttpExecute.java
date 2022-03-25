@@ -24,6 +24,7 @@ import com.github.brick.action.flow.method.factory.HttpWorkerFactory;
 import com.github.brick.action.flow.method.http.HttpWorker;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class HttpExecute {
         httpWorker = httpWorkerFactory.gen(HttpClientType.OKHTTP);
     }
 
-    public String execute(ApiEntity api, Map<String, String> data) {
+    public String execute(ApiEntity api, Map<String, String> data) throws IOException {
 
         String method = api.getMethod();
         String url = api.getUrl();

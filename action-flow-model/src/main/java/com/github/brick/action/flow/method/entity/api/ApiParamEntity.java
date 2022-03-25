@@ -28,4 +28,5 @@ public class ApiParamEntity {
     private boolean require;
     private String type;
     private List<ApiParamEntity> paramEntities;
+    private String el;
 }

@@ -1,0 +1,91 @@
+[
+  {
+    "in": "body",
+    "name": "body",
+    "require": true,
+    "paramEntities": [
+      {
+        "flag": "Pet.id",
+        "name": "id",
+        "require": false,
+        "type": "integer",
+        "el": "$.id"
+      },
+      {
+        "flag": "Pet.category",
+        "name": "category",
+        "require": false,
+        "type": "object",
+        "paramEntities": [
+          {
+            "flag": "Category.id",
+            "name": "id",
+            "require": false,
+            "type": "integer",
+            "el": "$.category.id"
+          },
+          {
+            "flag": "Category.name",
+            "name": "name",
+            "require": false,
+            "type": "string",
+            "el": "$.category.name"
+          }
+        ]
+      },
+      {
+        "flag": "Pet.name",
+        "name": "name",
+        "require": true,
+        "type": "string",
+        "el": "$.name"
+      },
+      {
+        "flag": "Pet.photoUrls",
+        "name": "photoUrls",
+        "require": true,
+        "type": "array",
+        "el": "$.id"
+
+      },
+      {
+        "flag": "Pet.tags",
+        "name": "tags",
+        "require": false,
+        "type": "array",
+        "el": "$.tags",
+        "paramEntities": [
+          {
+            "flag": "Pet.tags",
+            "name": "tags",
+            "require": false,
+            "type": "object",
+            "paramEntities": [
+              {
+                "flag": "Tag.id",
+                "name": "id",
+                "require": false,
+                "type": "integer",
+                "el": "$.tags[*].id"
+              },
+              {
+                "flag": "Tag.name",
+                "name": "name",
+                "require": false,
+                "type": "string",
+                "el": "$.tags[*].name"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "flag": "Pet.status",
+        "name": "status",
+        "require": false,
+        "type": "string",
+        "el": "$.status"
+      }
+    ]
+  }
+]

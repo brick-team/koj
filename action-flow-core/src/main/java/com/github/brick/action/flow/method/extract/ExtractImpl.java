@@ -25,7 +25,12 @@ public class ExtractImpl implements Extract {
     public Object extract(Object o, String el) {
         String json = JSON.toJSONString(o);
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
+        try {
 
-        return JsonPath.read(document, el);
+            return JsonPath.read(document, el);
+        } catch (Exception e) {
+            return null;
+
+        }
     }
 }

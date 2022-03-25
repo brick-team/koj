@@ -14,67 +14,37 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.parse.swagger;
+package com.github.brick.action.flow.method.execute;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
 import com.github.brick.action.flow.method.entity.api.ParamIn;
+import com.github.brick.action.flow.method.extract.Extract;
+import com.github.brick.action.flow.method.extract.ExtractImpl;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import org.junit.Before;
-import org.junit.Test;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import net.minidev.json.JSONArray;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class ParamJsonToMap {
-
-
-    String paramJson;
+public class HandlerApiParamEntity {
     Gson gson = new Gson();
+    Extract extract = new ExtractImpl();
 
-    List<ApiParamEntity> apiParamEntities;
-    private Map<String, Object> data;
-
-    @Before
-    public void readJson() throws Exception {
-        ClassLoader cl
-                = Thread.currentThread().getContextClassLoader();
-        URL resource = cl.getResource("api_param_entity.json");
-        StringBuffer buffer = new StringBuffer();
-        BufferedReader bf = new BufferedReader(new FileReader(resource.getPath()));
-
-        String s = null;
-        while ((s = bf.readLine()) != null) {//使用readLine方法，一次读一行
-            buffer.append(s.trim());
-        }
-
-        paramJson = buffer.toString();
-        List<ApiParamEntity> o1 = gson.fromJson(paramJson, new TypeToken<List<ApiParamEntity>>() {
-        }.getType());
-        apiParamEntities = o1;
-    }
-
-    @Test
-    public void test() {
-
+    public void handler(List<ApiParamEntity> apiParamEntities, Map data) {
         for (ApiParamEntity apiParamEntity : apiParamEntities) {
             ParamIn in = apiParamEntity.getIn();
             if (in == ParamIn.body) {
                 List<ApiParamEntity> paramEntities = apiParamEntity.getParamEntities();
-                Map<String, Object> ss = extracted(paramEntities);
+                Map<String, Object> ss = extracted(paramEntities, data);
                 System.out.println(gson.toJson(ss));
             }
         }
 
     }
 
-
-    private Map<String, Object> extracted(List<ApiParamEntity> paramEntities) {
+    private Map<String, Object> extracted(List<ApiParamEntity> paramEntities, Object input) {
         Map<String, Object> data = new HashMap<>();
 
         // 处理body下的数据
@@ -82,31 +52,49 @@ public class ParamJsonToMap {
             String type = paramEntity.getType();
             String name = paramEntity.getName();
             String flag = paramEntity.getFlag();
-
+            String el = paramEntity.getEl();
             List<ApiParamEntity> pp = paramEntity.getParamEntities();
             // 判断是否是 object
             if (type.equals("object")) {
-
-                Map<String, Object> extracted = extracted(pp);
+                Map<String, Object> extracted = extracted(pp, input);
                 data.put(name, extracted);
-
             }
             else if (type.equals("array")) {
                 if (pp != null && !pp.isEmpty()) {
 
-                    Map<String, Object> extracted = extracted(pp);
+
+                    Object extract = this.extract.extract(input, el);
+                    Map<String, Object> extracted = extracted(pp, extract);
+
                     data.put(name, extracted.values());
                 }
                 else {
-                    ArrayList<Object> value = new ArrayList<>();
-
-                    data.put(name, value);
+                    Object extract = this.extract.extract(input, el);
+                    data.put(name, extract);
                 }
-
             }
             else {
 
-                data.put(name, name);
+
+                Object extract = this.extract.extract(input, el);
+                // 解决 list 取值
+                if (el.contains("[*]")) {
+                    JSONArray jsonArray = (JSONArray) input;
+                    Object extract1 = null;
+
+                    for (Object o : jsonArray) {
+                        String[] split = el.split("\\[\\*]");
+
+                        extract1 = this.extract.extract(o, "$" + split[split.length - 1]);
+                    }
+                    data.put(name, extract1);
+
+                }
+                else {
+                    data.put(name, extract);
+
+                }
+
 
             }
         }
