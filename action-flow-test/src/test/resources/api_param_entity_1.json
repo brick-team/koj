@@ -45,7 +45,7 @@
         "name": "photoUrls",
         "require": true,
         "type": "array",
-        "el": "$.id"
+        "el": "$.photoUrls"
 
       },
       {
