@@ -8,6 +8,7 @@ import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.FormParameter;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.parameters.PathParameter;
+import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
 import io.swagger.parser.SwaggerParser;
@@ -36,6 +37,7 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
                         String simpleRef = ((RefModel) schema).getSimpleRef();
                         List<ApiParamEntity> extracted = handlerParamEntity(modelMap, simpleRef);
                         ApiParamEntity apiParamEntity = new ApiParamEntity();
+                        apiParamEntity.setIn(paramIn);
                         apiParamEntity.setName(bodyParameter.getName());
                         apiParamEntity.setRequire(bodyParameter.getRequired());
                         apiParamEntity.setParamEntities(extracted);
@@ -91,7 +93,7 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
                 String k = entry.getKey();
                 Property v = entry.getValue();
                 String type = v.getType();
-                p.setType(type.equals("ref") ? "object" : type);
+                p.setType(type);
 
                 String name = k;
                 p.setFlag(simpleRef + "." + name);
@@ -106,8 +108,14 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
                     List<ApiParamEntity> extracted = handlerParamEntity(modelMap, simpleRef1);
                     p.setName(k);
                     p.setParamEntities(extracted);
-
+                    p.setType("object");
                     res.add(p);
+                } else if (v instanceof ArrayProperty) {
+                    p.setName(name);
+                    p.setRequire(require);
+                    p.setType("array");
+                    res.add(p);
+                    System.out.println();
                 } else {
                     p.setName(name);
                     p.setRequire(require);
