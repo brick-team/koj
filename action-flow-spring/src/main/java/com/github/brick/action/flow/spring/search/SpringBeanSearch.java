@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @Component
 public class SpringBeanSearch implements ApplicationContextAware, BeanPostProcessor {
     private final List<SearchResult> searchResultAll = new ArrayList<>();
-    Map<Class, Object> classMapObj = new HashMap<>();
+    private final Map<Class<?>, SearchResult> searchResultMap = new HashMap<>(128);
     private ApplicationContext applicationContext;
     private ConfigurableApplicationContext cac;
 
@@ -67,7 +67,8 @@ public class SpringBeanSearch implements ApplicationContextAware, BeanPostProces
                     if (AopUtils.isAopProxy(bean)) {
                         Class<?> targetClass = AopUtils.getTargetClass(bean);
                         methods = ReflectUtil.getMethods(targetClass);
-                    } else {
+                    }
+                    else {
                         methods = ReflectUtil.getMethods(bean.getClass());
                     }
 
@@ -83,7 +84,8 @@ public class SpringBeanSearch implements ApplicationContextAware, BeanPostProces
 
                     searchResultAll.add(searchResult);
                 }
-            } else {
+            }
+            else {
                 for (String beanDefinitionName : beanDefinitionNames) {
                     Object bean = applicationContext.getBean(beanDefinitionName);
 
@@ -108,7 +110,12 @@ public class SpringBeanSearch implements ApplicationContextAware, BeanPostProces
             }
 
         }
+        searchResultAll.forEach(searchResult -> {
+            searchResultMap.put(searchResult.getClass(), searchResult);
+        });
 
         return searchResultAll;
     }
+
+
 }
