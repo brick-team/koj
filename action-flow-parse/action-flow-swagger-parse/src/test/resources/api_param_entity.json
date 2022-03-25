@@ -26,15 +26,7 @@
             "flag": "Category.name",
             "name": "name",
             "require": false,
-            "type": "object",
-            "paramEntities": [
-              {
-                "flag": "Category.id",
-                "name": "inner",
-                "require": false,
-                "type": "integer"
-              }
-            ]
+            "type": "string"
           }
         ]
       },
@@ -54,7 +46,29 @@
         "flag": "Pet.tags",
         "name": "tags",
         "require": false,
-        "type": "array"
+        "type": "array",
+        "paramEntities": [
+          {
+            "flag": "Pet.tags",
+            "name": "tags",
+            "require": false,
+            "type": "object",
+            "paramEntities": [
+              {
+                "flag": "Tag.id",
+                "name": "id",
+                "require": false,
+                "type": "integer"
+              },
+              {
+                "flag": "Tag.name",
+                "name": "name",
+                "require": false,
+                "type": "string"
+              }
+            ]
+          }
+        ]
       },
       {
         "flag": "Pet.status",

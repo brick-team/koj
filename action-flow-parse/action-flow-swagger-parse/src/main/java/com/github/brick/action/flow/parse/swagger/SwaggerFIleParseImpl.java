@@ -27,9 +27,11 @@ import io.swagger.models.parameters.PathParameter;
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
+import io.swagger.models.properties.StringProperty;
 import io.swagger.parser.SwaggerParser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -58,14 +60,16 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
                         apiParamEntity.setRequire(bodyParameter.getRequired());
                         apiParamEntity.setParamEntities(extracted);
                         res.add(apiParamEntity);
-                    } else {
+                    }
+                    else {
                         ApiParamEntity apiParamEntity = new ApiParamEntity();
                         apiParamEntity.setIn(paramIn);
                         apiParamEntity.setName(bodyParameter.getName());
                         apiParamEntity.setRequire(bodyParameter.getRequired());
                         res.add(apiParamEntity);
                     }
-                } else if (paramIn == ParamIn.path) {
+                }
+                else if (paramIn == ParamIn.path) {
                     ApiParamEntity apiParamEntity = new ApiParamEntity();
                     apiParamEntity.setIn(paramIn);
                     PathParameter pathParameter = (PathParameter) parameter;
@@ -75,7 +79,8 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
                     apiParamEntity.setRequire(required);
                     apiParamEntity.setType(pathParameter.getType());
                     res.add(apiParamEntity);
-                } else if (paramIn == ParamIn.formData) {
+                }
+                else if (paramIn == ParamIn.formData) {
                     ApiParamEntity apiParamEntity = new ApiParamEntity();
                     apiParamEntity.setIn(paramIn);
                     FormParameter formParameter = (FormParameter) parameter;
@@ -105,43 +110,55 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
             List<String> required = ((ModelImpl) model).getRequired();
 
             for (Map.Entry<String, Property> entry : properties.entrySet()) {
-                ApiParamEntity p = new ApiParamEntity();
                 String k = entry.getKey();
                 Property v = entry.getValue();
-                String type = v.getType();
-                p.setType(type);
-
-                String name = k;
-                p.setFlag(simpleRef + "." + name);
-                boolean require = false;
-                if (required != null) {
-                    require = required.contains(name);
-                }
-
-                if (v instanceof RefProperty) {
-                    String simpleRef1 = ((RefProperty) v).getSimpleRef();
-
-                    List<ApiParamEntity> extracted = handlerParamEntity(modelMap, simpleRef1);
-                    p.setName(k);
-                    p.setParamEntities(extracted);
-                    p.setType("object");
-                    res.add(p);
-                } else if (v instanceof ArrayProperty) {
-                    p.setName(name);
-                    p.setRequire(require);
-                    p.setType("array");
-                    res.add(p);
-                    System.out.println();
-                } else {
-                    p.setName(name);
-                    p.setRequire(require);
-                    res.add(p);
-                }
+                ApiParamEntity apiParamEntity = handlerPropery(modelMap, simpleRef, required, k, v);
+                res.add(apiParamEntity);
 
             }
 
         }
         return res;
+    }
+
+    private ApiParamEntity handlerPropery(Map<String, Model> modelMap, String simpleRef, List<String> required, String k, Property v) {
+        ApiParamEntity p = new ApiParamEntity();
+        String type = v.getType();
+        p.setType(type);
+
+        String name = k;
+        p.setFlag(simpleRef + "." + name);
+        boolean require = false;
+        if (required != null) {
+            require = required.contains(name);
+        }
+
+        if (v instanceof RefProperty) {
+            String simpleRef1 = ((RefProperty) v).getSimpleRef();
+
+            List<ApiParamEntity> extracted = handlerParamEntity(modelMap, simpleRef1);
+            p.setName(k);
+            p.setParamEntities(extracted);
+            p.setType("object");
+        }
+        else if (v instanceof ArrayProperty) {
+            p.setName(name);
+            p.setRequire(require);
+            p.setType("array");
+            Property items = ((ArrayProperty) v).getItems();
+            if (items instanceof StringProperty) {
+
+            }
+            else if (items instanceof RefProperty) {
+                ApiParamEntity apiParamEntity = handlerPropery(modelMap, simpleRef, required, k, items);
+                p.setParamEntities(Arrays.asList(apiParamEntity));
+            }
+        }
+        else {
+            p.setName(name);
+            p.setRequire(require);
+        }
+        return p;
     }
 
     @Override

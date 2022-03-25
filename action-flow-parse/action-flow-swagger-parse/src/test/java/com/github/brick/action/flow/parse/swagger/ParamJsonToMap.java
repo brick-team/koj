@@ -24,6 +24,7 @@ import com.google.gson.reflect.TypeToken;
 import org.ietf.jgss.GSSContext;
 import org.junit.Before;
 import org.junit.Test;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -92,7 +93,16 @@ public class ParamJsonToMap {
 
             }
             else if (type.equals("array")) {
-                data.put(name, new ArrayList<>());
+                if (pp != null && !pp.isEmpty()) {
+
+                    Map<String, Object> extracted = extracted(pp);
+                    data.put(name, extracted.values());
+                }
+                else {
+                    data.put(name, new ArrayList<>());
+
+                }
+
             }
             else {
                 data.put(name, name);
