@@ -30,6 +30,7 @@
     <modules>
         <module>action-flow-embedded-web</module>
         <module>action-flow-independent-web</module>
+        <module>action-flow-common-web</module>
     </modules>
 
     <properties>
