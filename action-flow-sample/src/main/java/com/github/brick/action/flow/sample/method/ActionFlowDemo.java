@@ -14,16 +14,16 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.sample;
+package com.github.brick.action.flow.sample.method;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.brick.action.flow.method.execute.FlowExecute;
+import com.github.brick.action.flow.method.enums.FLowModel;
+import com.github.brick.action.flow.method.execute.FlowExecuteImpl;
 
-public class ParamAction {
-    private static final Logger logger = LoggerFactory.getLogger(ParamAction.class);
+public class ActionFlowDemo {
 
-
-    public void ac(Object data) {
-        logger.info("data = {}", data);
+    public static void main(String[] args) throws Exception {
+        FlowExecute flowExecute = new FlowExecuteImpl();
+        flowExecute.execute("paramFromAction.xml", "1", FLowModel.XML);
     }
 }

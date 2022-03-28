@@ -16,13 +16,14 @@
 
 package com.github.brick.action.flow.method.entity.api;
 
+import com.github.brick.action.flow.method.entity.ExecuteObject;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
-public class ApiEntity {
+public class ApiEntity implements ExecuteObject {
+    private String id;
     private String url;
     private String method;
     private String desc;

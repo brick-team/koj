@@ -18,4 +18,6 @@ package com.github.brick.action.flow.method.extract;
 
 public interface Extract {
     Object extract(Object o, String el);
+
+    Object extract(String json, String el);
 }

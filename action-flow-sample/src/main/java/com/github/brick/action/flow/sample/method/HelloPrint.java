@@ -14,12 +14,15 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.http;
+package com.github.brick.action.flow.sample.method;
 
-import java.io.IOException;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public interface HttpWorker {
-    String work(String url, String method, Map<String, String> headers, Map<String, String> formatData, Map<String, String> body) throws IOException;
+public class HelloPrint {
+    private static final Logger logger = LoggerFactory.getLogger(HelloPrint.class);
 
+    public void hello() {
+        logger.info("hello");
+    }
 }

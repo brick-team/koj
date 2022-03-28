@@ -14,14 +14,10 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.entity;
+package com.github.brick.action.flow.execute;
 
-import lombok.Data;
+import com.github.brick.action.flow.method.entity.ExecuteObject;
 
-@Data
-public class ExtractEntity {
-    private String id;
-    private String fromAction;
-    private String fromApi;
-    private String el;
+public interface ExecuteServer {
+    String execute(ExecuteObject entity);
 }

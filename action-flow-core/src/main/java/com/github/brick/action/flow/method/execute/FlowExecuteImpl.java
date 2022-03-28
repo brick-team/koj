@@ -16,14 +16,22 @@
 
 package com.github.brick.action.flow.method.execute;
 
+import com.github.brick.action.flow.execute.http.HttpWorker;
 import com.github.brick.action.flow.method.entity.*;
+import com.github.brick.action.flow.method.entity.api.ApiEntity;
+import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
+import com.github.brick.action.flow.method.entity.api.ApisEntity;
+import com.github.brick.action.flow.method.entity.api.ParamIn;
 import com.github.brick.action.flow.method.enums.FLowModel;
+import com.github.brick.action.flow.method.enums.HttpClientType;
 import com.github.brick.action.flow.method.extract.Extract;
 import com.github.brick.action.flow.method.extract.ExtractImpl;
 import com.github.brick.action.flow.method.factory.ActionFlowParseApiFactory;
 import com.github.brick.action.flow.method.factory.Factory;
+import com.github.brick.action.flow.method.factory.HttpWorkerFactory;
 import com.github.brick.action.flow.method.format.Format;
 import com.github.brick.action.flow.parse.api.ActionFlowMethodParseApi;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.expression.EvaluationContext;
@@ -31,6 +39,7 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Comparator;
@@ -54,11 +63,21 @@ public class FlowExecuteImpl implements FlowExecute {
      */
     Factory<FLowModel, ActionFlowMethodParseApi> actionFlowParseApiFactory =
             new ActionFlowParseApiFactory<>();
+
+
+    Factory<HttpClientType, HttpWorker> httpWorkerFactory =
+            new HttpWorkerFactory();
     ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
+    HttpWorker httpWorker = null;
+    HttpExecute httpExecute = new HttpExecute();
+    Gson gson = new Gson();
+
 
     @Override
     public Object execute(String file, String flowId, FLowModel module) throws Exception {
-        init(module);
+        // FIXME: 2022/3/28 第二个参数隐藏
+        init(module, HttpClientType.OKHTTP);
+
         AllEntity parse = null;
         try {
             parse = actionFlowMethodParseApi.parse(file);
@@ -71,8 +90,9 @@ public class FlowExecuteImpl implements FlowExecute {
         return result;
     }
 
-    private void init(FLowModel module) {
+    private void init(FLowModel module, HttpClientType type) {
         this.actionFlowMethodParseApi = actionFlowParseApiFactory.gen(module);
+        this.httpWorker = httpWorkerFactory.gen(type);
     }
 
     private Map<String, Object> getStringObjectMap(String flowId, AllEntity parse)
@@ -84,6 +104,7 @@ public class FlowExecuteImpl implements FlowExecute {
         WatchersEntity watchersEntity = parse.getWatchers();
 
         ResultEntity resultEntity = parse.getResult();
+        ApisEntity apisEntity = parse.getApisEntity();
 
         Map<String, FlowEntity> collect = flows.getFlowEntities().stream().collect(Collectors.toMap(
                 FlowEntity::getId, x -> x));
@@ -106,6 +127,10 @@ public class FlowExecuteImpl implements FlowExecute {
                         ParamEntity::getGroup));
 
 
+        Map<String, ApiEntity> apiEntityMap = apisEntity.getList().stream().collect(Collectors.toMap(
+                ApiEntity::getId, s -> s));
+
+
         // 执行
         List<WorkEntity> workEntities = flowEntity.getWorkEntities();
 
@@ -116,12 +141,14 @@ public class FlowExecuteImpl implements FlowExecute {
 
 
         for (WorkEntity workEntity : workEntities) {
-            run(workEntity, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+            run(workEntity, watcherMap, exMap, actionTagMap, paramsMap, actionResult, apiEntityMap);
 
         }
 
+        logger.info("action/api execute result = {}", actionResult);
 
         Map<String, Object> result = handlerResult(resultEntity, exMap, actionResult);
+
         return result;
     }
 
@@ -150,7 +177,8 @@ public class FlowExecuteImpl implements FlowExecute {
             // 异常组装异常信息
             if (rs instanceof Throwable) {
                 extract = ((Throwable) rs).getMessage();
-            } else if (rs instanceof Future) {
+            }
+            else if (rs instanceof Future) {
                 rs = ((Future<?>) rs).get();
                 extract = this.extract.extract(rs, el);
             }
@@ -190,10 +218,12 @@ public class FlowExecuteImpl implements FlowExecute {
 
                         if (rs instanceof Throwable) {
                             extract = ((Throwable) rs).getMessage();
-                        } else if (rs instanceof Future) {
+                        }
+                        else if (rs instanceof Future) {
                             rs = ((Future<?>) rs).get();
                             extract = this.extract.extract(rs, el);
-                        } else if (rs == null) {
+                        }
+                        else if (rs == null) {
                             Object o = commonRunAction(actionTagMap,
                                     fromAction,
                                     paramsMap,
@@ -201,7 +231,8 @@ public class FlowExecuteImpl implements FlowExecute {
                                     actionResult);
                             if (o instanceof Future) {
                                 extract = ((Future<?>) o).get();
-                            } else {
+                            }
+                            else {
                                 extract = o;
                             }
 
@@ -214,7 +245,8 @@ public class FlowExecuteImpl implements FlowExecute {
                     }
 
 
-                } else {
+                }
+                else {
                     String argName = param.getArgName();
                     Object o = methodArg.get(argName);
                     args[i] = o;
@@ -230,7 +262,8 @@ public class FlowExecuteImpl implements FlowExecute {
             });
 //            return submit.get();
             return submit;
-        } else {
+        }
+        else {
             return method.invoke(clazz.newInstance(), args);
         }
 
@@ -264,7 +297,8 @@ public class FlowExecuteImpl implements FlowExecute {
                         valueValue = value.getValue();
                         methodArgs.put(argName, valueValue);
                     }
-                } else {
+                }
+                else {
                     valueValue = param.getValue();
                     methodArgs.put(argName, valueValue);
                 }
@@ -289,7 +323,8 @@ public class FlowExecuteImpl implements FlowExecute {
             }
 
             actionEntity.setMethodArg(methodArgs);
-        } else {
+        }
+        else {
 
         }
     }
@@ -299,17 +334,20 @@ public class FlowExecuteImpl implements FlowExecute {
                      Map<String, ExtractEntity> exMap,
                      Map<String, ActionEntity> actionTagMap,
                      Map<String, List<ParamEntity>> paramsMap,
-                     Map<String, Object> actionResult) throws Exception {
+                     Map<String, Object> actionResult, Map<String, ApiEntity> apisEntity) throws Exception {
         // 获取类型做出不同操作
         String type = workEntity.getType();
         // 嵌套执行存在问题
         // 数据监控类型
         if ("watcher".equalsIgnoreCase(type)) {
-            wrapperRunWatcher(workEntity, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+            wrapperRunWatcher(workEntity, watcherMap, exMap, actionTagMap, paramsMap, actionResult, apisEntity);
         }
         // 执行器类型
         else if ("action".equalsIgnoreCase(type)) {
-            runWithAction(workEntity, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+            runWithAction(workEntity, watcherMap, exMap, actionTagMap, paramsMap, actionResult, apisEntity);
+        }
+        else if ("api".equalsIgnoreCase(type)) {
+            runWithApi(workEntity, watcherMap, exMap, apisEntity, paramsMap, actionResult);
         }
 
 
@@ -323,20 +361,22 @@ public class FlowExecuteImpl implements FlowExecute {
                                    Map<String, ExtractEntity> exMap,
                                    Map<String, ActionEntity> actionTagMap,
                                    Map<String, List<ParamEntity>> paramsMap,
-                                   Map<String, Object> actionResult) throws Exception {
+                                   Map<String, Object> actionResult,
+                                   Map<String, ApiEntity> apisEntity
+    ) throws Exception {
         try {
             runWithWatcher(workEntity, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
             List<WorkEntity> then = workEntity.getThen();
             // 监控执行器正常的情况下执行
             for (WorkEntity tag : then) {
-                run(tag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+                run(tag, watcherMap, exMap, actionTagMap, paramsMap, actionResult, apisEntity);
             }
         } catch (Exception e) {
             logger.error("e", e);
             // 监控执行器执行异常的情况下执行
             List<WorkEntity> catchs = workEntity.getCatchs();
             for (WorkEntity aCatch : catchs) {
-                run(aCatch, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+                run(aCatch, watcherMap, exMap, actionTagMap, paramsMap, actionResult, apisEntity);
             }
         }
     }
@@ -349,7 +389,9 @@ public class FlowExecuteImpl implements FlowExecute {
                                Map<String, ExtractEntity> exMap,
                                Map<String, ActionEntity> actionTagMap,
                                Map<String, List<ParamEntity>> paramsMap,
-                               Map<String, Object> actionResult) throws Exception {
+                               Map<String, Object> actionResult,
+                               Map<String, ApiEntity> apisEntity
+    ) throws Exception {
         ActionEntity actionEntity = actionTagMap.get(workEntity.getRefId());
         // 补充反射信息
         fillActionTag(paramsMap, actionEntity);
@@ -360,15 +402,128 @@ public class FlowExecuteImpl implements FlowExecute {
             List<WorkEntity> then = workEntity.getThen();
 
             for (WorkEntity tag : then) {
-                run(tag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+                run(tag, watcherMap, exMap, actionTagMap, paramsMap, actionResult, apisEntity);
             }
         } catch (Exception e) {
             e.printStackTrace();
             actionResult.put(actionEntity.getId(), e);
             List<WorkEntity> catchs = workEntity.getCatchs();
             for (WorkEntity tag : catchs) {
-                run(tag, watcherMap, exMap, actionTagMap, paramsMap, actionResult);
+                run(tag, watcherMap, exMap, actionTagMap, paramsMap, actionResult, apisEntity);
             }
+        }
+    }
+
+    // 执行 类型为 api的调用器
+    private String runWithApi(WorkEntity workEntity,
+                              Map<String, WatcherEntity> watcherMap,
+                              Map<String, ExtractEntity> exMap,
+                              Map<String, ApiEntity> apisEntity,
+                              Map<String, List<ParamEntity>> paramsMap,
+                              Map<String, Object> actionResult
+    ) throws IOException {
+        String s = runApi(workEntity, exMap, apisEntity, actionResult, paramsMap);
+
+        return s;
+    }
+
+    private String runApi(WorkEntity workEntity, Map<String, ExtractEntity> exMap, Map<String, ApiEntity> apisEntity, Map<String, Object> actionResult, Map<String, List<ParamEntity>> paramsMap) throws IOException {
+        String refId = workEntity.getRefId();
+        ApiEntity apiEntity = apisEntity.get(refId);
+
+        return handlerOneApiEntity(exMap, apisEntity, actionResult, refId, apiEntity, paramsMap);
+
+    }
+
+    private String handlerOneApiEntity(Map<String, ExtractEntity> exMap, Map<String, ApiEntity> apisEntity, Map<String, Object> actionResult, String refId, ApiEntity apiEntity, Map<String, List<ParamEntity>> paramsMap) throws IOException {
+        String url = apiEntity.getUrl();
+        String method = apiEntity.getMethod();
+        List<ApiParamEntity> params = apiEntity.getParams();
+
+
+        Map<String, String> queryParam = new HashMap<>(8);
+        Map<String, String> headers = new HashMap<>(8);
+        Map<String, String> formatData = new HashMap<>(8);
+        Map<String, String> body = new HashMap<>(8);
+        Map<String, String> path = new HashMap<>(8);
+
+        for (ApiParamEntity param : params) {
+            String paramGroup = param.getParamGroup();
+            String ex = param.getEx();
+            String name = param.getName();
+            String exId = param.getExId();
+            ParamIn in = param.getIn();
+            if (in == ParamIn.body) {
+                handlerExId(exMap, apisEntity, actionResult, body, name, exId, paramsMap);
+                handlerEx(paramsMap, body, paramGroup, ex, name);
+
+
+            }
+            else if (in == ParamIn.path) {
+                handlerExId(exMap, apisEntity, actionResult, path, name, exId, paramsMap);
+                handlerEx(paramsMap, path, paramGroup, ex, name);
+
+            }
+            else if (in == ParamIn.formData) {
+                handlerExId(exMap, apisEntity, actionResult, formatData, name, exId, paramsMap);
+                handlerEx(paramsMap, formatData, paramGroup, ex, name);
+            }
+            else if (in == ParamIn.query) {
+                handlerExId(exMap, apisEntity, actionResult, queryParam, name, exId, paramsMap);
+                handlerEx(paramsMap, queryParam, paramGroup, ex, name);
+
+            }
+            else if (in == ParamIn.header) {
+                handlerExId(exMap, apisEntity, actionResult, headers, name, exId, paramsMap);
+                handlerEx(paramsMap, headers, paramGroup, ex, name);
+
+            }
+
+        }
+
+        String work = this.httpWorker.work(url, method, queryParam, headers, formatData, body);
+        // 设置结果
+        actionResult.put(refId, work);
+        return work;
+    }
+
+    private void handlerEx(Map<String, List<ParamEntity>> paramsMap, Map<String, String> formatData, String paramGroup, String ex, String name) {
+        if (ex != null && !"".equals(ex)) {
+            List<ParamEntity> paramEntities = paramsMap.get(paramGroup);
+            for (ParamEntity paramEntity : paramEntities) {
+                String key = paramEntity.getKey();
+                if (key.equals(ex)) {
+                    String value = paramEntity.getValue();
+                    formatData.put(name, value);
+                }
+            }
+        }
+    }
+
+
+    private void handlerExId(Map<String, ExtractEntity> exMap, Map<String, ApiEntity> apisEntity, Map<String, Object> actionResult, Map<String, String> formatData, String name, String exId, Map<String, List<ParamEntity>> paramsMap) throws IOException {
+        if (exId != null && !"".equals(exId)) {
+            ExtractEntity extractEntity = exMap.get(exId);
+            // todo: 增加 fromAction 处理
+            String fromApi = extractEntity.getFromApi();
+
+            String el = extractEntity.getEl();
+
+
+            ApiEntity apiEntity1 = apisEntity.get(fromApi);
+            String fromApiResult = handlerOneApiEntity(
+                    exMap,
+                    apisEntity,
+                    actionResult,
+                    fromApi, apiEntity1,
+                    paramsMap);
+            // 解析处理
+            Object extract = this.extract.extract(fromApiResult, el);
+            if (extract instanceof String) {
+                formatData.put(name, (String) extract);
+            }
+
+
         }
     }
 
@@ -388,6 +543,7 @@ public class FlowExecuteImpl implements FlowExecute {
         String exId = watcherEntity.getExId();
         ExtractEntity extractEntity = exMap.get(exId);
         String el = extractEntity.getEl();
+        // todo: 增加fromApi处理
         String fromAction = extractEntity.getFromAction();
         Object rs = actionResult.get(fromAction);
         // 提取结果如果是异常
@@ -418,7 +574,8 @@ public class FlowExecuteImpl implements FlowExecute {
                     String actionId = then.getActionId();
                     commonRunAction(actionTagMap, actionId, paramsMap, exMap, actionResult);
                 }
-            } else {
+            }
+            else {
                 // 如果不符合条件表达式执行catch相关内容
                 List<WatcherEntity.Catch> catchs = watcherEntity.getCatchs();
                 for (WatcherEntity.Catch aCatch : catchs) {

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class ActionEntity {
+public class ActionEntity implements ExecuteObject {
     private String id;
     private String clazzStr;
     private Class<?> clazz;

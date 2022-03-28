@@ -14,14 +14,21 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.entity;
+package com.github.brick.action.flow.parse;
 
-import lombok.Data;
+import com.github.brick.action.flow.method.entity.AllEntity;
+import com.github.brick.action.flow.method.parse.xml.DocParse;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Data
-public class ExtractEntity {
-    private String id;
-    private String fromAction;
-    private String fromApi;
-    private String el;
+public class DocParseTest {
+    private static final Logger logger = LoggerFactory.getLogger(DocParseTest.class);
+    DocParse docParse = new DocParse();
+
+    @Test
+    public void parse() throws Exception {
+        AllEntity parse = docParse.parse("api-flow.xml");
+        System.out.println();
+    }
 }

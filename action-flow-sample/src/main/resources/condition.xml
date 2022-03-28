@@ -20,15 +20,15 @@
 
     </params>
     <actions>
-        <action id="startPoint" class="com.github.brick.action.flow.sample.StartAction"
+        <action id="startPoint" class="com.github.brick.action.flow.sample.method.StartAction"
                 method="start">
         </action>
 
-        <action id="ErrorAction" class="com.github.brick.action.flow.sample.ErrorAction"
+        <action id="ErrorAction" class="com.github.brick.action.flow.sample.method.ErrorAction"
                 method="work">
         </action>
 
-        <action id="OkAction" class="com.github.brick.action.flow.sample.OkAction"
+        <action id="OkAction" class="com.github.brick.action.flow.sample.method.OkAction"
                 method="work">
         </action>
 

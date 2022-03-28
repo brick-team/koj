@@ -16,12 +16,12 @@
 
 package com.github.brick.action.flow.method.execute;
 
+import com.github.brick.action.flow.execute.http.HttpWorker;
 import com.github.brick.action.flow.method.entity.api.ApiEntity;
 import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
 import com.github.brick.action.flow.method.entity.api.ParamIn;
 import com.github.brick.action.flow.method.enums.HttpClientType;
 import com.github.brick.action.flow.method.factory.HttpWorkerFactory;
-import com.github.brick.action.flow.method.http.HttpWorker;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -72,9 +72,11 @@ public class HttpExecute {
             else if (in == ParamIn.query) {
                 handlerQueryParam(urlQuery, name, value);
 
-            } else if (in == ParamIn.header) {
+            }
+            else if (in == ParamIn.header) {
                 handlerHeaderParam(headers, name, value);
-            } else {
+            }
+            else {
                 throw new IllegalStateException("Unexpected value: " + in);
             }
         }
@@ -82,7 +84,7 @@ public class HttpExecute {
         String urlQueryStr = urlQuery.substring(0, urlQuery.length() - 1);
 
         // 发送消息
-        return httpWorker.work(url + urlQueryStr, method, headers, formData, body);
+        return httpWorker.work(url + urlQueryStr, method, new HashMap<>(), headers, formData, body);
     }
 
     private void handlerQueryParam(StringBuffer urlQuery, String name, String value) {

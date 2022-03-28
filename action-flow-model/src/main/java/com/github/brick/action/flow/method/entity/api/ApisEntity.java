@@ -14,14 +14,15 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.entity;
+package com.github.brick.action.flow.method.entity.api;
 
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
-public class ExtractEntity {
-    private String id;
-    private String fromAction;
-    private String fromApi;
-    private String el;
+public class ApisEntity {
+    private List<ApiEntity> list = new ArrayList<>();
+
 }

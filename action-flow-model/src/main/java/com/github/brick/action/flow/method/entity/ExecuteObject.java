@@ -16,12 +16,8 @@
 
 package com.github.brick.action.flow.method.entity;
 
-import lombok.Data;
-
-@Data
-public class ExtractEntity {
-    private String id;
-    private String fromAction;
-    private String fromApi;
-    private String el;
+/**
+ * 执行器标记接口
+ */
+public interface ExecuteObject {
 }

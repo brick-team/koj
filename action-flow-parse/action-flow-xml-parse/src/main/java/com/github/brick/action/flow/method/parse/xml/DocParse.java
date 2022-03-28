@@ -17,6 +17,7 @@
 package com.github.brick.action.flow.method.parse.xml;
 
 import com.github.brick.action.flow.method.entity.*;
+import com.github.brick.action.flow.method.entity.api.ApisEntity;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -28,6 +29,7 @@ public class DocParse {
     private final WatchersParse watchersParse = new WatchersParse();
     private final ExtractsParse extractsParse = new ExtractsParse();
     private final FlowsParse flowsParse = new FlowsParse();
+    private final ApisParse apisParse = new ApisParse();
 
     public AllEntity parse(String file) throws Exception {
         AllEntity allEntity = new AllEntity();
@@ -54,6 +56,13 @@ public class DocParse {
             ActionsEntity actionsEntity = actionsParse.parse(actions);
             allEntity.setActions(actionsEntity);
         }
+
+        Element apis = rootElement.element("apis");
+        if (apis != null) {
+            ApisEntity apisEntity = apisParse.parse(apis);
+            allEntity.setApisEntity(apisEntity);
+        }
+
 
         Element watchers = rootElement.element("watchers");
         if (watchers != null) {

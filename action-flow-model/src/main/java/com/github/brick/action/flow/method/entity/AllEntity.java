@@ -16,6 +16,7 @@
 
 package com.github.brick.action.flow.method.entity;
 
+import com.github.brick.action.flow.method.entity.api.ApisEntity;
 import lombok.Data;
 
 @Data
@@ -30,5 +31,6 @@ public class AllEntity {
     private ExtractsEntity extracts = new ExtractsEntity();
     private FlowsEntity flows = new FlowsEntity();
 
+    private ApisEntity apisEntity = new ApisEntity();
 
 }

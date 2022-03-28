@@ -38,4 +38,9 @@ public class FlowExecuteImplTest {
     public void execute2() throws Exception {
         flowExecute.execute("f2.xml", "1", FLowModel.XML);
     }
+    @Test
+    public void execute3() throws Exception{
+        flowExecute.execute("api-flow.xml", "1", FLowModel.XML);
+
+    }
 }

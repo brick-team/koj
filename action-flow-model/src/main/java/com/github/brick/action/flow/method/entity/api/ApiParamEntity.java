@@ -27,6 +27,17 @@ public class ApiParamEntity {
     private String name;
     private boolean require;
     private String type;
+
+
     private List<ApiParamEntity> paramEntities;
     private String el;
+
+
+    /**
+     * 取值用
+     **/
+    private String paramGroup;
+    private String ex;
+    private String exId;
+
 }

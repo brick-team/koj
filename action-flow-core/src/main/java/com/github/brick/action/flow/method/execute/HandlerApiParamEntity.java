@@ -61,11 +61,8 @@ public class HandlerApiParamEntity {
             }
             else if (type.equals("array")) {
                 if (pp != null && !pp.isEmpty()) {
-
-
                     Object extract = this.extract.extract(input, el);
                     Map<String, Object> extracted = extracted(pp, extract);
-
                     data.put(name, extracted.values());
                 }
                 else {
@@ -74,14 +71,14 @@ public class HandlerApiParamEntity {
                 }
             }
             else {
-
-
                 Object extract = this.extract.extract(input, el);
                 // 解决 list 取值
+                // 1. 判断是否有 [*]
+                // 2. 有直接取最后一段
                 if (el.contains("[*]")) {
+                    // todo: 如何与 gson 中的序列化解耦
                     JSONArray jsonArray = (JSONArray) input;
                     Object extract1 = null;
-
                     for (Object o : jsonArray) {
                         String[] split = el.split("\\[\\*]");
 

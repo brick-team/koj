@@ -14,15 +14,16 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.sample;
+package com.github.brick.action.flow.sample.method;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HelloPrint {
-    private static final Logger logger = LoggerFactory.getLogger(HelloPrint.class);
+public class ParamAction {
+    private static final Logger logger = LoggerFactory.getLogger(ParamAction.class);
 
-    public void hello() {
-        logger.info("hello");
+
+    public void ac(Object data) {
+        logger.info("data = {}", data);
     }
 }

@@ -48,6 +48,7 @@ public class ExtractsParse implements Parse<ExtractsEntity> {
             ExtractEntity extractEntity = new ExtractEntity();
             extractEntity.setId(element.attributeValue("id"));
             extractEntity.setFromAction(element.attributeValue("fromAction"));
+            extractEntity.setFromApi(element.attributeValue("fromApi"));
             extractEntity.setEl(element.attributeValue("el"));
             return extractEntity;
         }

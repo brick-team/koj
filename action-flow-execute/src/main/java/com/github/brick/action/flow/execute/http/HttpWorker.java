@@ -14,16 +14,14 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.sample;
+package com.github.brick.action.flow.execute.http;
 
-import com.github.brick.action.flow.method.execute.FlowExecute;
-import com.github.brick.action.flow.method.enums.FLowModel;
-import com.github.brick.action.flow.method.execute.FlowExecuteImpl;
+import java.io.IOException;
+import java.util.Map;
 
-public class ActionFlowDemo {
+public interface HttpWorker {
+    String work(String url, String method,
+                Map<String, String> queryParam,
+                Map<String, String> headers, Map<String, String> formatData, Map<String, String> body) throws IOException;
 
-    public static void main(String[] args) throws Exception {
-        FlowExecute flowExecute = new FlowExecuteImpl();
-        flowExecute.execute("paramFromAction.xml", "1", FLowModel.XML);
-    }
 }

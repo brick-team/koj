@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.http;
+package com.github.brick.action.flow.execute.http;
 
 import com.google.gson.Gson;
 import okhttp3.*;
@@ -34,9 +34,12 @@ public class OkHttpWorkerImpl implements HttpWorker {
     Gson gson = new Gson();
 
     @Override
-    public String work(String url, String method, Map<String, String> headers, Map<String, String> formatData, Map<String, String> body) throws IOException {
-        FormBody formBody = buildFormBody(formatData);
+    public String work(String url, String method, Map<String, String> queryParam, Map<String, String> headers, Map<String, String> formatData, Map<String, String> body) throws IOException {
 
+        url = handlerUrl(url, queryParam);
+
+
+        FormBody formBody = buildFormBody(formatData);
         Headers reqHead = buildHeaders(headers);
 
 
@@ -45,7 +48,8 @@ public class OkHttpWorkerImpl implements HttpWorker {
             Request request = builder.build();
             return getHttpResponse(request);
 
-        } else if ("post".equalsIgnoreCase(method)) {
+        }
+        else if ("post".equalsIgnoreCase(method)) {
             if (!formatData.isEmpty()) {
                 Request request = new Request.Builder().url(url).post(formBody).headers(reqHead).build();
                 return getHttpResponse(request);
@@ -61,7 +65,8 @@ public class OkHttpWorkerImpl implements HttpWorker {
             }
             throw new IllegalArgumentException("post 请求异常");
 
-        } else if ("put".equalsIgnoreCase(method)) {
+        }
+        else if ("put".equalsIgnoreCase(method)) {
             if (!formatData.isEmpty()) {
                 Request request = new Request.Builder().url(url).put(formBody).headers(reqHead).build();
                 return getHttpResponse(request);
@@ -77,7 +82,8 @@ public class OkHttpWorkerImpl implements HttpWorker {
             }
             throw new IllegalArgumentException("put 请求异常");
 
-        } else if ("delete".equalsIgnoreCase(method)) {
+        }
+        else if ("delete".equalsIgnoreCase(method)) {
             if (!formatData.isEmpty()) {
                 Request request = new Request.Builder().url(url).delete(formBody).headers(reqHead).build();
                 return getHttpResponse(request);
@@ -92,10 +98,26 @@ public class OkHttpWorkerImpl implements HttpWorker {
                 return getHttpResponse(request);
             }
             throw new IllegalArgumentException("put 请求异常");
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("无法发送非 get post put delete 以外的请求");
         }
 
+    }
+
+    private String handlerUrl(String url, Map<String, String> queryParam) {
+        StringBuffer urlQuery = new StringBuffer("?");
+
+        queryParam.forEach((k, v) -> {
+            handlerQueryParam(urlQuery, k, v);
+        });
+        String urlQueryStr = urlQuery.substring(0, urlQuery.length() - 1);
+
+        return url + urlQueryStr;
+    }
+
+    private void handlerQueryParam(StringBuffer urlQuery, String name, String value) {
+        urlQuery.append(name).append("=").append(value).append("&");
     }
 
     private String getHttpResponse(Request request) throws IOException {

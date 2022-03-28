@@ -17,6 +17,7 @@
 package com.github.brick.action.flow.method.parse;
 
 import com.github.brick.action.flow.method.entity.*;
+import com.github.brick.action.flow.method.entity.api.ApisEntity;
 import com.github.brick.action.flow.method.parse.xml.*;
 import com.github.brick.action.flow.parse.api.ActionFlowMethodParseApi;
 import org.dom4j.Document;
@@ -30,6 +31,7 @@ public class XMLActionFlowMethodParseApi implements ActionFlowMethodParseApi {
     private final WatchersParse watchersParse = new WatchersParse();
     private final ExtractsParse extractsParse = new ExtractsParse();
     private final FlowsParse flowsParse = new FlowsParse();
+    private final ApisParse apisParse = new ApisParse();
 
     @Override
     public AllEntity parse(String file) throws Exception {
@@ -77,8 +79,16 @@ public class XMLActionFlowMethodParseApi implements ActionFlowMethodParseApi {
         }
 
 
+        Element apis = rootElement.element("apis");
+        if (apis != null) {
+            ApisEntity parse = apisParse.parse(apis);
+            allEntity.setApisEntity(parse);
+        }
+
+
         return allEntity;
 
 
     }
+
 }

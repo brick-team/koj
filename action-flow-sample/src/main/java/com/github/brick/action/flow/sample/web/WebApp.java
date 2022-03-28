@@ -14,10 +14,15 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.sample;
+package com.github.brick.action.flow.sample.web;
 
-public class OkAction {
-    public void work() {
-        System.out.println("条件符合");
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication(scanBasePackages = "com.github.brick.action.flow.sample.web")
+public class WebApp {
+    public static void main(String[] args) {
+        SpringApplication.run(WebApp.class, args);
     }
+
 }

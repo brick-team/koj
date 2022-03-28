@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.sample;
+package com.github.brick.action.flow.sample.method;
 
 import com.github.brick.action.flow.method.enums.FLowModel;
 import com.github.brick.action.flow.method.execute.FlowExecute;

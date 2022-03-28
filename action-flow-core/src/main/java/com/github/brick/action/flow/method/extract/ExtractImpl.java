@@ -26,11 +26,20 @@ public class ExtractImpl implements Extract {
         String json = JSON.toJSONString(o);
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
         try {
-
             return JsonPath.read(document, el);
         } catch (Exception e) {
             return null;
 
+        }
+    }
+
+    @Override
+    public Object extract(String json, String el) {
+        Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
+        try {
+            return JsonPath.read(document, el);
+        } catch (Exception e) {
+            return null;
         }
     }
 }

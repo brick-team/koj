@@ -33,6 +33,7 @@
         <module>action-flow-storage</module>
         <module>action-flow-metrics</module>
         <module>action-flow-spring</module>
+        <module>action-flow-execute</module>
     </modules>
 
     <properties>
@@ -40,6 +41,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <spring.version>5.3.16</spring.version>
         <jackson.version>2.13.2</jackson.version>
+        <spring-boot.version>2.6.5</spring-boot.version>
     </properties>
 
     <dependencyManagement>
@@ -79,11 +81,6 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.30</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-simple</artifactId>
                 <version>1.7.30</version>
             </dependency>
 
@@ -221,6 +218,14 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
                 <version>${spring.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>2.6.5</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

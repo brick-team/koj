@@ -14,22 +14,12 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.sample;
+package com.github.brick.action.flow.method.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.brick.action.flow.method.enums.HttpClientType;
+import lombok.Data;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class StartAction {
-    private static final Logger logger = LoggerFactory.getLogger(StartAction.class);
-
-    public Map<String, Object> start() throws InterruptedException {
-        HashMap<String, Object> stringObjectHashMap = new HashMap<>();
-        stringObjectHashMap.put("age", 18);
-        logger.info("start-action");
-        Thread.sleep(1000);
-        return stringObjectHashMap;
-    }
+@Data
+public class ActionFlowConfig {
+    private HttpClientType httpClientType;
 }

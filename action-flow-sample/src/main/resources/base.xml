@@ -17,7 +17,7 @@
 
 <ae>
     <actions>
-        <action id="helloPoint" class="com.github.brick.action.flow.sample.HelloPrint"
+        <action id="helloPoint" class="com.github.brick.action.flow.sample.method.HelloPrint"
                 method="hello">
         </action>
     </actions>

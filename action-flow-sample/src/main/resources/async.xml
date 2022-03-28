@@ -17,11 +17,11 @@
 
 <ae xmlns="http://github.hufer/">
     <actions>
-        <action id="startPoint1" class="com.github.brick.action.flow.sample.StartAction"
+        <action id="startPoint1" class="com.github.brick.action.flow.sample.method.StartAction"
                 method="start" async="true">
         </action>
 
-        <action id="startPoint2" class="com.github.brick.action.flow.sample.StartAction"
+        <action id="startPoint2" class="com.github.brick.action.flow.sample.method.StartAction"
                 method="start" async="true">
         </action>
 
