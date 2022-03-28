@@ -34,6 +34,7 @@
         <module>action-flow-metrics</module>
         <module>action-flow-spring</module>
         <module>action-flow-execute</module>
+        <module>action-flow-web</module>
     </modules>
 
     <properties>
