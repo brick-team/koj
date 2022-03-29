@@ -3,7 +3,6 @@ CREATE TABLE `af_action`  (
   `clazz_str` varchar(255) NOT NULL,
   `method_str` varchar(255) NOT NULL,
   `async` bit NOT NULL DEFAULT 0,
-  `group_id` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -68,7 +67,8 @@ CREATE TABLE `af_extract`  (
 CREATE TABLE `af_flow`  (
   `id` varchar(255) NOT NULL,
   `name` varchar(255) NULL COMMENT '流程名称',
-  `works` varchar(255) NOT NULL COMMENT '需要执行的顶层工作id'
+  `works` varchar(255) NOT NULL COMMENT '需要执行的顶层工作id',
+  PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `af_format`  (
@@ -96,8 +96,16 @@ CREATE TABLE `af_watcher`  (
   `id` varchar(255) NOT NULL,
   `ex_id` varchar(255) NOT NULL COMMENT '取值器id',
   `condition` varchar(255) NOT NULL COMMENT '表达式',
-  `thens` varchar(255) NULL COMMENT '表达式通过执行的action_id集合',
-  `catchs` varchar(255) NULL COMMENT '表达式不通过执行的action_id集合',
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `af_watcher_rs`  (
+  `id` varchar(255) NOT NULL,
+  `watcher_id` varchar(255) NULL,
+  `then_action_ids` varchar(255) NULL,
+  `then_api_ids` varchar(255) NULL,
+  `catch_action_ids` varchar(255) NULL,
+  `catch_api_ids` varchar(255) NULL,
   PRIMARY KEY (`id`)
 );
 

@@ -14,39 +14,16 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.entity;
+package com.github.brick.action.flow.storage.api;
 
-import lombok.Data;
+import com.github.brick.action.flow.method.entity.ActionEntity;
+import com.github.brick.action.flow.method.entity.ActionsEntity;
 
 import java.util.List;
 
-@Data
-public class WatcherEntity {
-    private String id;
-    private String exId;
-    private String condition;
-    private List<Then> thens;
-    private List<Catch> catchs;
-    private List<Error> errors;
+public interface ActionStorage {
 
 
-    @Data
-    public static class Then {
-        private String actionId;
-        private String apiId;
-    }
+    void save(String classStr, String methodStr, boolean async);
 
-
-    @Data
-    public static class Catch {
-        private String actionId;
-        private String apiId;
-    }
-
-
-    @Data
-    public static class Error {
-        private String actionId;
-        private String apiId;
-    }
 }

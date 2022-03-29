@@ -14,39 +14,26 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.entity;
+package com.github.brick.action.flow.storage.api;
 
-import lombok.Data;
+import com.github.brick.action.flow.method.entity.*;
 
-import java.util.List;
+public interface AllStorage {
 
-@Data
-public class WatcherEntity {
-    private String id;
-    private String exId;
-    private String condition;
-    private List<Then> thens;
-    private List<Catch> catchs;
-    private List<Error> errors;
+    boolean add(AllEntity allEntity);
 
 
-    @Data
-    public static class Then {
-        private String actionId;
-        private String apiId;
-    }
+    AllEntity findByUid(String groupId);
 
+    ParamsEntity findParamsByUid(String groupId);
 
-    @Data
-    public static class Catch {
-        private String actionId;
-        private String apiId;
-    }
+    ActionsEntity findActionsByUid(String groupId);
 
+    WatchersEntity findWatchersByUid(String groupId);
 
-    @Data
-    public static class Error {
-        private String actionId;
-        private String apiId;
-    }
+    ResultEntity findResultByUid(String groupId);
+
+    ExtractsEntity findExtractsByUid(String groupId);
+
+    FlowsEntity findFlowsByUid(String groupId);
 }
