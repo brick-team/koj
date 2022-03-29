@@ -32,19 +32,19 @@ public class ParamRedisStorage implements ParamStorage {
     Gson gson = new Gson();
 
     @Override
-    public void save(String uid, ParamsEntity params) {
+    public void save(String groupId, ParamsEntity params) {
         StringRedisTemplate redisTemplate = RedisSinglet.redisTemplate();
         List<ParamEntity> list = params.getList();
         for (ParamEntity paramEntity : list) {
-            redisTemplate.opsForList().rightPushAll(PARAM_KEY_PRE + uid, gson.toJson(paramEntity));
+            redisTemplate.opsForList().rightPushAll(PARAM_KEY_PRE + groupId, gson.toJson(paramEntity));
 
         }
     }
 
     @Override
-    public List<ParamEntity> list(String uid) {
+    public List<ParamEntity> list(String groupId) {
         StringRedisTemplate redisTemplate = RedisSinglet.redisTemplate();
-        List<String> range = redisTemplate.opsForList().range(PARAM_KEY_PRE + uid, 0, -1);
+        List<String> range = redisTemplate.opsForList().range(PARAM_KEY_PRE + groupId, 0, -1);
         List<ParamEntity> res = new ArrayList<>();
         for (String s : range) {
             ParamEntity paramEntity = gson.fromJson(s, ParamEntity.class);

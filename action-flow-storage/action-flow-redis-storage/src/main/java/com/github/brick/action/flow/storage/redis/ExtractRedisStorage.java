@@ -30,19 +30,19 @@ public class ExtractRedisStorage implements ExtractStorage {
     Gson gson = new Gson();
 
     @Override
-    public void save(String uid, ExtractsEntity extracts) {
+    public void save(String groupId, ExtractsEntity extracts) {
         StringRedisTemplate stringRedisTemplate = RedisSinglet.redisTemplate();
         List<ExtractEntity> extractEntities = extracts.getExtractEntities();
         for (ExtractEntity extractEntity : extractEntities) {
-            stringRedisTemplate.opsForList().rightPush(EXTRACT_KEY_PRE + uid, gson.toJson(extractEntity));
+            stringRedisTemplate.opsForList().rightPush(EXTRACT_KEY_PRE + groupId, gson.toJson(extractEntity));
         }
 
     }
 
     @Override
-    public List<ExtractEntity> list(String uid) {
+    public List<ExtractEntity> list(String groupId) {
         StringRedisTemplate stringRedisTemplate = RedisSinglet.redisTemplate();
-        List<String> range = stringRedisTemplate.opsForList().range(EXTRACT_KEY_PRE + uid, 0, -1);
+        List<String> range = stringRedisTemplate.opsForList().range(EXTRACT_KEY_PRE + groupId, 0, -1);
         List<ExtractEntity> res = new ArrayList<>();
         for (String s : range) {
             ExtractEntity extractsEntity = gson.fromJson(s, ExtractEntity.class);

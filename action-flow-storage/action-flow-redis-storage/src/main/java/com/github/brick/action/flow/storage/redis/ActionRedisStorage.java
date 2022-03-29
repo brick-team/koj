@@ -37,25 +37,25 @@ public class ActionRedisStorage implements ActionStorage {
     Gson gson = new Gson();
 
     @Override
-    public void save(String uid, ActionsEntity actions) {
+    public void save(String groupId, ActionsEntity actions) {
         StringRedisTemplate stringRedisTemplate = RedisSinglet.redisTemplate();
 
         List<ActionEntity> list = actions.getList();
         for (ActionEntity actionEntity : list) {
-            stringRedisTemplate.opsForHash().put(ACTION_KEY_PRE + uid, actionEntity.getId(), gson.toJson(actionEntity));
+            stringRedisTemplate.opsForHash().put(ACTION_KEY_PRE + groupId, actionEntity.getId(), gson.toJson(actionEntity));
         }
 
     }
 
     @Override
-    public List<ActionEntity> list(String uid) {
+    public List<ActionEntity> list(String groupId) {
         StringRedisTemplate stringRedisTemplate = RedisSinglet.redisTemplate();
 
-        Set<Object> keys = stringRedisTemplate.opsForHash().keys(ACTION_KEY_PRE + uid);
+        Set<Object> keys = stringRedisTemplate.opsForHash().keys(ACTION_KEY_PRE + groupId);
         List<ActionEntity> res = new ArrayList<>();
         for (Object key : keys) {
 
-            String o = (String) stringRedisTemplate.opsForHash().get(ACTION_KEY_PRE + uid, key);
+            String o = (String) stringRedisTemplate.opsForHash().get(ACTION_KEY_PRE + groupId, key);
             res.add(gson.fromJson(o, ActionEntity.class));
 
         }

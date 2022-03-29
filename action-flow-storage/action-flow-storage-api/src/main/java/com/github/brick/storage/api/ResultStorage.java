@@ -21,7 +21,7 @@ import com.github.brick.action.flow.method.entity.ResultEntity;
 import java.util.List;
 
 public interface ResultStorage {
-    List<ResultEntity.Key> list(String uid);
+    List<ResultEntity.Key> list(String groupId);
 
-    void save(String uid, ResultEntity result);
+    void save(String groupId, ResultEntity result);
 }

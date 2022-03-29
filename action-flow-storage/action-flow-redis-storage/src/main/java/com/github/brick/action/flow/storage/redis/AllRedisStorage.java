@@ -16,12 +16,6 @@
 
 package com.github.brick.action.flow.storage.redis;
 
-import com.github.brick.action.flow.method.entity.WatcherEntity;
-import com.github.brick.action.flow.method.entity.ActionEntity;
-import com.github.brick.action.flow.method.entity.ParamEntity;
-
-import java.util.ArrayList;
-
 import com.github.brick.action.flow.method.entity.*;
 import com.github.brick.storage.api.*;
 
@@ -36,7 +30,7 @@ public class AllRedisStorage implements AllStorage {
 
     @Override
     public boolean add(AllEntity allEntity) {
-        String uid = allEntity.getUid();
+        String uid = allEntity.getGroupId();
         ParamsEntity params = allEntity.getParams();
         paramStorage.save(uid, params);
         ActionsEntity actions = allEntity.getActions();
@@ -54,58 +48,58 @@ public class AllRedisStorage implements AllStorage {
     }
 
     @Override
-    public AllEntity findByUid(String uid) {
+    public AllEntity findByUid(String groupId) {
         AllEntity allEntity = new AllEntity();
-        allEntity.setParams(this.findParamsByUid(uid));
-        allEntity.setActions(this.findActionsByUid(uid));
-        allEntity.setWatchers(this.findWatchersByUid(uid));
-        allEntity.setResult(this.findResultByUid(uid));
-        allEntity.setExtracts(this.findExtractsByUid(uid));
-        allEntity.setFlows(this.findFlowsByUid(uid));
+        allEntity.setParams(this.findParamsByUid(groupId));
+        allEntity.setActions(this.findActionsByUid(groupId));
+        allEntity.setWatchers(this.findWatchersByUid(groupId));
+        allEntity.setResult(this.findResultByUid(groupId));
+        allEntity.setExtracts(this.findExtractsByUid(groupId));
+        allEntity.setFlows(this.findFlowsByUid(groupId));
         return allEntity;
     }
 
     @Override
-    public ParamsEntity findParamsByUid(String uid) {
+    public ParamsEntity findParamsByUid(String groupId) {
         ParamsEntity paramsEntity = new ParamsEntity();
-        paramsEntity.setList(paramStorage.list(uid));
+        paramsEntity.setList(paramStorage.list(groupId));
         return paramsEntity;
     }
 
     @Override
-    public ActionsEntity findActionsByUid(String uid) {
+    public ActionsEntity findActionsByUid(String groupId) {
         ActionsEntity actionsEntity = new ActionsEntity();
-        actionsEntity.setList(actionStorage.list(uid));
+        actionsEntity.setList(actionStorage.list(groupId));
 
 
         return actionsEntity;
     }
 
     @Override
-    public WatchersEntity findWatchersByUid(String uid) {
+    public WatchersEntity findWatchersByUid(String groupId) {
         WatchersEntity watchersEntity = new WatchersEntity();
-        watchersEntity.setList(watcherStorage.list(uid));
+        watchersEntity.setList(watcherStorage.list(groupId));
         return watchersEntity;
     }
 
     @Override
-    public ResultEntity findResultByUid(String uid) {
+    public ResultEntity findResultByUid(String groupId) {
         ResultEntity resultEntity = new ResultEntity();
-        resultEntity.setKeys(resultStorage.list(uid));
+        resultEntity.setKeys(resultStorage.list(groupId));
         return resultEntity;
     }
 
     @Override
-    public ExtractsEntity findExtractsByUid(String uid) {
+    public ExtractsEntity findExtractsByUid(String groupId) {
         ExtractsEntity extractsEntity = new ExtractsEntity();
-        extractsEntity.setExtractEntities(extractStorage.list(uid));
+        extractsEntity.setExtractEntities(extractStorage.list(groupId));
         return extractsEntity;
     }
 
     @Override
-    public FlowsEntity findFlowsByUid(String uid) {
+    public FlowsEntity findFlowsByUid(String groupId) {
         FlowsEntity flowsEntity = new FlowsEntity();
-        flowsEntity.setFlowEntities(flowStorage.list(uid));
+        flowsEntity.setFlowEntities(flowStorage.list(groupId));
         return flowsEntity;
     }
 }

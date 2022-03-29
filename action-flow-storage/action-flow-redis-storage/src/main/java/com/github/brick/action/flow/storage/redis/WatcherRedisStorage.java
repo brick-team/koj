@@ -24,12 +24,12 @@ import java.util.List;
 
 public class WatcherRedisStorage implements WatcherStorage {
     @Override
-    public List<WatcherEntity> list(String uid) {
+    public List<WatcherEntity> list(String groupId) {
         return null;
     }
 
     @Override
-    public void save(String uid, WatchersEntity watchers) {
+    public void save(String groupId, WatchersEntity watchers) {
 
     }
 }

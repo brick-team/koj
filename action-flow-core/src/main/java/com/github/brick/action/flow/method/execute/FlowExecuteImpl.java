@@ -95,6 +95,9 @@ public class FlowExecuteImpl implements FlowExecute {
         this.httpWorker = httpWorkerFactory.gen(type);
     }
 
+    /**
+     * 核心方法 用于执行具体流程
+     */
     private Map<String, Object> getStringObjectMap(String flowId, AllEntity parse)
             throws Exception {
         ParamsEntity paramsEntity = parse.getParams();

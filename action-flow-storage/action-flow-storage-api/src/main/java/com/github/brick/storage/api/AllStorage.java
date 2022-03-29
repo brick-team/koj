@@ -23,17 +23,17 @@ public interface AllStorage {
     boolean add(AllEntity allEntity);
 
 
-    AllEntity findByUid(String uid);
+    AllEntity findByUid(String groupId);
 
-    ParamsEntity findParamsByUid(String uid);
+    ParamsEntity findParamsByUid(String groupId);
 
-    ActionsEntity findActionsByUid(String uid);
+    ActionsEntity findActionsByUid(String groupId);
 
-    WatchersEntity findWatchersByUid(String uid);
+    WatchersEntity findWatchersByUid(String groupId);
 
-    ResultEntity findResultByUid(String uid);
+    ResultEntity findResultByUid(String groupId);
 
-    ExtractsEntity findExtractsByUid(String uid);
+    ExtractsEntity findExtractsByUid(String groupId);
 
-    FlowsEntity findFlowsByUid(String uid);
+    FlowsEntity findFlowsByUid(String groupId);
 }

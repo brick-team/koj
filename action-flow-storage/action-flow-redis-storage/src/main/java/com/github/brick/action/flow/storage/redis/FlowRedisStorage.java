@@ -24,12 +24,12 @@ import java.util.List;
 
 public class FlowRedisStorage implements FlowStorage {
     @Override
-    public void save(String uid, FlowsEntity flows) {
+    public void save(String groupId, FlowsEntity flows) {
 
     }
 
     @Override
-    public List<FlowEntity> list(String uid) {
+    public List<FlowEntity> list(String groupId) {
         return null;
     }
 }

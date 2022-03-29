@@ -23,12 +23,12 @@ import java.util.List;
 
 public class ResultResultStorage implements ResultStorage {
     @Override
-    public List<ResultEntity.Key> list(String uid) {
+    public List<ResultEntity.Key> list(String groupId) {
         return null;
     }
 
     @Override
-    public void save(String uid, ResultEntity result) {
+    public void save(String groupId, ResultEntity result) {
 
     }
 }

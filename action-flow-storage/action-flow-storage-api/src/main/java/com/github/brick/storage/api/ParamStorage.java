@@ -22,7 +22,7 @@ import com.github.brick.action.flow.method.entity.ParamsEntity;
 import java.util.List;
 
 public interface ParamStorage {
-    List<ParamEntity> list(String uid);
+    List<ParamEntity> list(String groupId);
 
-    void save(String uid, ParamsEntity params);
+    void save(String groupId, ParamsEntity params);
 }

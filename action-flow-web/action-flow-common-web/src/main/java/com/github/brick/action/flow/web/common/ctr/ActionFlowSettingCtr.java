@@ -14,15 +14,11 @@
  *    limitations under the License.
  */
 
-package com.github.brick.storage.api;
+package com.github.brick.action.flow.web.common.ctr;
 
-import com.github.brick.action.flow.method.entity.WatcherEntity;
-import com.github.brick.action.flow.method.entity.WatchersEntity;
+/**
+ * action flow 设置控制器
+ */
+public interface ActionFlowSettingCtr {
 
-import java.util.List;
-
-public interface WatcherStorage {
-    List<WatcherEntity> list(String groupId);
-
-    void save(String groupId, WatchersEntity watchers);
 }

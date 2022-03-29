@@ -23,7 +23,7 @@ import java.util.List;
 
 public interface ActionStorage {
 
-    List<ActionEntity> list(String uid);
+    List<ActionEntity> list(String groupId);
 
-    void save(String uid, ActionsEntity actions);
+    void save(String groupId, ActionsEntity actions);
 }

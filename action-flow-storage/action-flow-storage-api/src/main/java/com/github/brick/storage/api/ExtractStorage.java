@@ -23,7 +23,7 @@ import java.util.List;
 
 public interface ExtractStorage {
 
-    List<ExtractEntity> list(String uid);
+    List<ExtractEntity> list(String groupId);
 
-    void save(String uid, ExtractsEntity extracts);
+    void save(String groupId, ExtractsEntity extracts);
 }

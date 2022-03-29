@@ -22,7 +22,7 @@ import com.github.brick.action.flow.method.entity.FlowsEntity;
 import java.util.List;
 
 public interface FlowStorage {
-    List<FlowEntity> list(String uid);
+    List<FlowEntity> list(String groupId);
 
-    void save(String uid, FlowsEntity flows);
+    void save(String groupId, FlowsEntity flows);
 }
