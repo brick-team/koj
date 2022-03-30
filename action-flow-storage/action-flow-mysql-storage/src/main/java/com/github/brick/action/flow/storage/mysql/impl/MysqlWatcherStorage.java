@@ -16,6 +16,7 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
+import com.github.brick.action.flow.method.entity.WatcherEntity;
 import com.github.brick.action.flow.storage.api.WatcherStorage;
 import com.github.brick.action.flow.storage.mysql.entity.AfWatcherEntity;
 import com.github.brick.action.flow.storage.mysql.entity.AfWatcherRsEntity;
@@ -26,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -59,5 +61,19 @@ public class MysqlWatcherStorage implements WatcherStorage {
         return id;
     }
 
+    @Override
+    public WatcherEntity findById(String refId) {
+        AfWatcherEntity byId = afWatcherEntityRepository.getById(refId);
+        WatcherEntity watcherEntity = new WatcherEntity();
+        watcherEntity.setId(refId);
+        watcherEntity.setExId(byId.getExId());
+        watcherEntity.setCondition(byId.getCondition());
 
+        AfWatcherRsEntity byWatcherId = afWatcherRsEntityRepository.findByWatcherId(refId);
+
+        // todo: 处理then、catch
+
+
+        return watcherEntity;
+    }
 }

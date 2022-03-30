@@ -16,6 +16,8 @@
 
 package com.github.brick.action.flow.storage.api;
 
+import com.github.brick.action.flow.method.entity.ExtractEntity;
+
 public interface ExtractStorage {
 
 
@@ -23,4 +25,6 @@ public interface ExtractStorage {
               String fromApi,
               String el,
               String elType);
+
+    ExtractEntity findById(String exId);
 }

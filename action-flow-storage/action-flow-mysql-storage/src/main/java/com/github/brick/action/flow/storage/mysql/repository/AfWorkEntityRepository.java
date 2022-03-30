@@ -23,4 +23,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AfWorkEntityRepository extends JpaRepository<AfWorkEntity, String>, JpaSpecificationExecutor<AfWorkEntity> {
+
 }

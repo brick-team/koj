@@ -21,4 +21,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface AfWatcherRsEntityRepository extends JpaRepository<AfWatcherRsEntity, String>, JpaSpecificationExecutor<AfWatcherRsEntity> {
+    AfWatcherRsEntity findByWatcherId(String watcherId);
+
 }

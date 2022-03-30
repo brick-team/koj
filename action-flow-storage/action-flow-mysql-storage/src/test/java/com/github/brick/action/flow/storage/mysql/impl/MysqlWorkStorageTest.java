@@ -16,8 +16,11 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
+import com.github.brick.action.flow.method.entity.WorkEntity;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 public class MysqlWorkStorageTest extends CommonTest {
     MysqlWorkStorage mysqlWorkStorage;
@@ -29,5 +32,13 @@ public class MysqlWorkStorageTest extends CommonTest {
 
     @Test
     public void save() {
+        WorkEntity workEntity = new WorkEntity();
+        workEntity.setId("w1");
+        workEntity.setType("api");
+        workEntity.setRefId("api-2");
+
+
+        this.mysqlWorkStorage.save("api", "ff8080817fd8aa0d017fd8aa12140000", new ArrayList<>(), new ArrayList<>());
+
     }
 }

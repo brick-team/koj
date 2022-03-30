@@ -16,6 +16,7 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
+import com.github.brick.action.flow.method.entity.ExtractEntity;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,5 +30,13 @@ public class MysqlExtractStorageTest extends CommonTest {
 
     @Test
     public void save() {
+        ExtractEntity extractEntity = new ExtractEntity();
+        extractEntity.setId("e1");
+        extractEntity.setFromApi("api-1");
+        extractEntity.setFromAction("api-1");
+        extractEntity.setEl("$.token");
+
+        mysqlExtractStorage.save(extractEntity.getFromAction(), extractEntity.getFromApi(), extractEntity.getEl(), "JSON_PATH");
+
     }
 }

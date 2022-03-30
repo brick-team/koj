@@ -23,7 +23,14 @@ import java.util.List;
 public interface ApiStorage {
     String save(String url, String method, String desc);
 
-    void saveForApi(List<ApiEntity> list);
+    /**
+     *
+     * @param list
+     * @param b 是否处理 取值
+     */
+    void saveForApi(List<ApiEntity> list, boolean b);
 
     ApiEntity findById(String apiId);
+
+    List<ApiEntity> all();
 }

@@ -16,19 +16,26 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
+import com.github.brick.action.flow.method.entity.FlowEntity;
+import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
 import com.github.brick.action.flow.storage.api.FlowStorage;
+import com.github.brick.action.flow.storage.mysql.entity.AfApiParamExEntity;
 import com.github.brick.action.flow.storage.mysql.entity.AfFlowEntity;
+import com.github.brick.action.flow.storage.mysql.repository.AfApiParamExEntityRepository;
 import com.github.brick.action.flow.storage.mysql.repository.AfFlowEntityRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MysqlFlowStorage implements FlowStorage {
     @Autowired
     private AfFlowEntityRepository afFlowEntityRepository;
+    @Autowired
+    private AfApiParamExEntityRepository afApiParamExEntityRepository;
 
     @Override
     public String save(String name, List<String> workIds) {
@@ -37,5 +44,43 @@ public class MysqlFlowStorage implements FlowStorage {
         entity.setWorks(StringUtils.join(workIds, ","));
         AfFlowEntity save = afFlowEntityRepository.save(entity);
         return save.getId();
+    }
+
+    public void saveForApi(String name, List<String> workIds, List<ApiParamEntity> list) {
+        String save = save(name, workIds);
+
+        for (ApiParamEntity apiParamEntity : list) {
+            AfApiParamExEntity entity = new AfApiParamExEntity();
+            entity.setParamGroup(apiParamEntity.getParamGroup());
+            entity.setEx(apiParamEntity.getEx());
+            entity.setExId(apiParamEntity.getExId());
+            entity.setEl(apiParamEntity.getEl());
+            entity.setFlowId(save);
+            entity.setApiParamId(apiParamEntity.getId());
+            afApiParamExEntityRepository.save(entity);
+        }
+    }
+
+    @Autowired
+    private MysqlWorkStorage workStorage;
+
+    @Override
+    public FlowEntity findById(String flowId) {
+        Optional<AfFlowEntity> byId = this.afFlowEntityRepository.findById(flowId);
+        if (byId.isPresent()) {
+
+            AfFlowEntity afFlowEntity = byId.get();
+            String works = afFlowEntity.getWorks();
+
+
+            FlowEntity flow = new FlowEntity();
+            flow.setId(flowId);
+            flow.setWorkEntities(workStorage.findByIds(works));
+
+            return flow;
+        }
+        else {
+            return null;
+        }
     }
 }

@@ -16,6 +16,8 @@
 
 package com.github.brick.action.flow.storage.api;
 
+import com.github.brick.action.flow.method.entity.WatcherEntity;
+
 import java.util.List;
 
 public interface WatcherStorage {
@@ -27,4 +29,6 @@ public interface WatcherStorage {
               List<String> thenApis,
               List<String> catchApis
     );
+
+    WatcherEntity findById(String refId);
 }

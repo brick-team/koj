@@ -16,11 +16,14 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
+import com.github.brick.action.flow.method.entity.ExtractEntity;
 import com.github.brick.action.flow.storage.api.ExtractStorage;
 import com.github.brick.action.flow.storage.mysql.entity.AfExtractEntity;
 import com.github.brick.action.flow.storage.mysql.repository.AfExtractEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class MysqlExtractStorage implements ExtractStorage {
@@ -37,5 +40,21 @@ public class MysqlExtractStorage implements ExtractStorage {
 
         AfExtractEntity save = extractEntityRepository.save(entity);
         return save.getId();
+    }
+
+    @Override
+    public ExtractEntity findById(String exId) {
+        Optional<AfExtractEntity> byId = extractEntityRepository.findById(exId);
+        if (byId.isPresent()) {
+            AfExtractEntity afExtractEntity = byId.get();
+            ExtractEntity extractEntity = new ExtractEntity();
+            extractEntity.setId(afExtractEntity.getId());
+            extractEntity.setFromAction(afExtractEntity.getFromAction());
+            extractEntity.setFromApi(afExtractEntity.getFromApi());
+            extractEntity.setEl(afExtractEntity.getEl());
+
+            return extractEntity;
+        }
+        return null;
     }
 }

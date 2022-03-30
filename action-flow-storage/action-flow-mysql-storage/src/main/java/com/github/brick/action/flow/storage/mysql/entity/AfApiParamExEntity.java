@@ -45,6 +45,18 @@ public class AfApiParamExEntity {
     @Column(name = "flow_id")
     private String flowId;
 
+    @Basic
+    @Column(name = "api_param_id")
+    private Long apiParamId;
+
+    public Long getApiParamId() {
+        return apiParamId;
+    }
+
+    public void setApiParamId(Long apiParamId) {
+        this.apiParamId = apiParamId;
+    }
+
     public String getId() {
         return id;
     }

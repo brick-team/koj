@@ -90,7 +90,7 @@ public class FlowExecuteImpl implements FlowExecute {
         return result;
     }
 
-    private void init(FLowModel module, HttpClientType type) {
+    public void init(FLowModel module, HttpClientType type) {
         this.actionFlowMethodParseApi = actionFlowParseApiFactory.gen(module);
         this.httpWorker = httpWorkerFactory.gen(type);
     }
@@ -140,18 +140,22 @@ public class FlowExecuteImpl implements FlowExecute {
         // 用于存储执行器执行结果
         // key: 执行器id
         // value: 执行器处理结果
+
+
+        Map<String, Object> result = getStringObjectMap(resultEntity, watcherMap, actionTagMap, exMap, paramsMap, apiEntityMap, workEntities);
+
+        return result;
+    }
+
+    public Map<String, Object> getStringObjectMap(ResultEntity resultEntity, Map<String, WatcherEntity> watcherMap, Map<String, ActionEntity> actionTagMap, Map<String, ExtractEntity> exMap, Map<String, List<ParamEntity>> paramsMap, Map<String, ApiEntity> apiEntityMap, List<WorkEntity> workEntities) throws Exception {
         Map<String, Object> actionResult = new HashMap<>();
-
-
         for (WorkEntity workEntity : workEntities) {
             run(workEntity, watcherMap, exMap, actionTagMap, paramsMap, actionResult, apiEntityMap);
-
         }
 
         logger.info("action/api execute result = {}", actionResult);
 
         Map<String, Object> result = handlerResult(resultEntity, exMap, actionResult);
-
         return result;
     }
 

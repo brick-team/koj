@@ -30,6 +30,7 @@ public class WatcherEntity {
     private List<Error> errors;
 
 
+    // TODO: 2022/3/30 then catch 设计需要修改为ref
     @Data
     public static class Then {
         private String actionId;

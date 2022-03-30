@@ -17,10 +17,13 @@
 package com.github.brick.action.flow.storage.mysql.impl;
 
 import com.github.brick.action.flow.method.entity.api.ApiEntity;
+import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
+import com.github.brick.action.flow.method.entity.api.ParamIn;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 public class MysqlApiStorageTest extends CommonTest {
@@ -39,9 +42,47 @@ public class MysqlApiStorageTest extends CommonTest {
 
     @Test
     public void saveForApi() {
-        ApiEntity apiEntity = gson.fromJson(JSON_TT, ApiEntity.class);
+        ApiEntity api1 = new ApiEntity();
+        api1.setId("api-1");
+        api1.setUrl("http://localhost:8080/login");
+        api1.setMethod("post");
+        ArrayList<ApiParamEntity> params1 = new ArrayList<>();
+        ApiParamEntity username = new ApiParamEntity();
+        username.setIn(ParamIn.formData);
+        username.setName("username");
+        username.setRequire(true);
 
-        mysqlApiStorage.saveForApi(Collections.singletonList(apiEntity));
+        params1.add(username);
+        ApiParamEntity password = new ApiParamEntity();
+        password.setIn(ParamIn.formData);
+        password.setName("password");
+        password.setRequire(true);
+        params1.add(password);
+        api1.setParams(params1);
+
+        mysqlApiStorage.saveForApi(Collections.singletonList(api1), true);
+
+
+        ApiEntity api2 = new ApiEntity();
+        api2.setId("api-2");
+        api2.setUrl("http://localhost:8080/user_info");
+        api2.setMethod("get");
+        ArrayList<ApiParamEntity> params = new ArrayList<>();
+        ApiParamEntity apiParamEntity = new ApiParamEntity();
+        apiParamEntity.setIn(ParamIn.header);
+        apiParamEntity.setName("token");
+        apiParamEntity.setRequire(true);
+        params.add(apiParamEntity);
+        api2.setParams(params);
+        mysqlApiStorage.saveForApi(Collections.singletonList(api2), true);
+
+
+    }
+
+    @Test
+    public void saveForApi2() {
+
+
 
     }
 }

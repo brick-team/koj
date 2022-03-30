@@ -16,11 +16,18 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
+import com.github.brick.action.flow.method.entity.ActionEntity;
 import com.github.brick.action.flow.storage.api.ActionStorage;
 import com.github.brick.action.flow.storage.mysql.entity.AfActionEntity;
+import com.github.brick.action.flow.storage.mysql.entity.AfActionParamEntity;
 import com.github.brick.action.flow.storage.mysql.repository.AfActionEntityRepository;
+import com.github.brick.action.flow.storage.mysql.repository.AfActionParamEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MysqlActionStorage implements ActionStorage {
@@ -35,4 +42,31 @@ public class MysqlActionStorage implements ActionStorage {
         AfActionEntity save = actionEntityRepository.save(entity);
         return save.getId();
     }
+
+    @Autowired
+    private AfActionParamEntityRepository actionParamEntityRepository;
+
+    @Override
+    public ActionEntity findById(String refId) {
+        AfActionEntity byId = actionEntityRepository.getById(refId);
+        ActionEntity actionEntity = new ActionEntity();
+        actionEntity.setId(refId);
+        actionEntity.setClazzStr(byId.getClazzStr());
+        actionEntity.setMethodStr(byId.getMethodStr());
+        actionEntity.setAsync(byId.isAsync());
+
+        List<AfActionParamEntity> byActionId = actionParamEntityRepository.findByActionId(refId);
+
+        ArrayList<ActionEntity.Param> params = new ArrayList<>();
+        for (AfActionParamEntity afActionParamEntity : byActionId) {
+            ActionEntity.Param param = new ActionEntity.Param();
+            param.setArgName(afActionParamEntity.getArgName());
+            param.setIndex(afActionParamEntity.getIndex());
+            param.setType(afActionParamEntity.getType());
+        }
+        actionEntity.setParams(params);
+
+        return actionEntity;
+    }
+
 }

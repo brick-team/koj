@@ -23,4 +23,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AfApiParamExEntityRepository extends JpaRepository<AfApiParamExEntity, String>, JpaSpecificationExecutor<AfApiParamExEntity> {
+    AfApiParamExEntity findByApiParamIdAndFlowId(long paramId, String flowId);
 }

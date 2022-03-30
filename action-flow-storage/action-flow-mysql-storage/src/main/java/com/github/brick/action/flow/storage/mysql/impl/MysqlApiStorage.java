@@ -21,6 +21,7 @@ import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
 import com.github.brick.action.flow.storage.api.ApiStorage;
 import com.github.brick.action.flow.storage.mysql.entity.AfApiEntity;
 import com.github.brick.action.flow.storage.mysql.repository.AfApiEntityRepository;
+import com.github.brick.action.flow.storage.mysql.repository.AfApiParamExEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MysqlApiStorage implements ApiStorage {
@@ -35,6 +37,8 @@ public class MysqlApiStorage implements ApiStorage {
     private AfApiEntityRepository afApiEntityRepository;
     @Autowired
     private MysqlApiParamStorage apiParamStorage;
+    @Autowired
+    private AfApiParamExEntityRepository afApiParamExEntityRepository;
 
     @Override
     public String save(String url, String method, String desc) {
@@ -49,7 +53,7 @@ public class MysqlApiStorage implements ApiStorage {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveForApi(List<ApiEntity> list) {
+    public void saveForApi(List<ApiEntity> list, boolean b) {
         for (ApiEntity apiEntity : list) {
             // step1: 保存当前API数据
             String apiId = this.save(apiEntity.getUrl(), apiEntity.getMethod(), apiEntity.getDesc());
@@ -63,7 +67,10 @@ public class MysqlApiStorage implements ApiStorage {
         for (ApiParamEntity param : params) {
             try {
 
+                // step1: 基础数据保存
                 Long save = apiParamStorage.save(apiId, pid, param.getIn() != null ? param.getIn().name() : null, param.getName(), param.isRequire());
+
+
                 List<ApiParamEntity> paramEntities = param.getParamEntities();
                 if (!CollectionUtils.isEmpty(paramEntities)) {
                     extracted(apiId, paramEntities, save);
@@ -77,17 +84,31 @@ public class MysqlApiStorage implements ApiStorage {
 
     @Override
     public ApiEntity findById(String apiId) {
-        AfApiEntity byId = this.afApiEntityRepository.getById(apiId);
-        List<ApiParamEntity> list = this.apiParamStorage.findByAppId(apiId);
-        ApiEntity apiEntity = new ApiEntity();
-        apiEntity.setId(byId.getId());
-        apiEntity.setUrl(byId.getUrl());
-        apiEntity.setMethod(byId.getMethod());
-        apiEntity.setDesc(byId.getDesca());
-        apiEntity.setParams(list);
+        Optional<AfApiEntity> byId1 = this.afApiEntityRepository.findById(apiId);
+        if (byId1.isPresent()) {
+            AfApiEntity byId = byId1.get();
+            List<ApiParamEntity> list = this.apiParamStorage.findByAppId(apiId);
+            ApiEntity apiEntity = new ApiEntity();
+            apiEntity.setId(byId.getId());
+            apiEntity.setUrl(byId.getUrl());
+            apiEntity.setMethod(byId.getMethod());
+            apiEntity.setDesc(byId.getDesca());
+            apiEntity.setParams(list);
 
 
-        return apiEntity;
+            return apiEntity;
+        }
+        return null;
 
+    }
+
+    @Override
+    public List<ApiEntity> all() {
+        List<AfApiEntity> all = this.afApiEntityRepository.findAll();
+        List<ApiEntity> res = new ArrayList<>();
+        for (AfApiEntity afApiEntity : all) {
+            res.add(findById(afApiEntity.getId()));
+        }
+        return res;
     }
 }

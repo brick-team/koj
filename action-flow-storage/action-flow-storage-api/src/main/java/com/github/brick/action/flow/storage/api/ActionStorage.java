@@ -26,4 +26,5 @@ public interface ActionStorage {
 
     String save(String classStr, String methodStr, boolean async);
 
+    ActionEntity findById(String refId);
 }

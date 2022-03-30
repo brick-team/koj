@@ -16,9 +16,13 @@
 
 package com.github.brick.action.flow.storage.api;
 
+import com.github.brick.action.flow.method.entity.FlowEntity;
+
 import java.util.List;
 
 public interface FlowStorage {
 
     String save(String name, List<String> workIds);
+
+    FlowEntity findById(String flowId);
 }
