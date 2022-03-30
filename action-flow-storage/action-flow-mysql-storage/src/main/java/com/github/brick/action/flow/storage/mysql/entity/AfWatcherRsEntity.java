@@ -32,49 +32,39 @@ public class AfWatcherRsEntity {
     @Column(name = "watcher_id")
     private String watcherId;
 
-    @Column(name = "then_action_ids")
-    private String thenActionIds;
+    @Column(name = "ref_type", nullable = false)
+    private String refType;
 
-    @Column(name = "then_api_ids")
-    private String thenApiIds;
+    @Column(name = "ref_id", nullable = false)
+    private String refId;
 
-    @Column(name = "catch_action_ids")
-    private String catchActionIds;
+    @Column(name = "type")
+    private Integer type;
 
-    @Column(name = "catch_api_ids")
-    private String catchApiIds;
-
-    public String getCatchApiIds() {
-        return catchApiIds;
+    public Integer getType() {
+        return type;
     }
 
-    public void setCatchApiIds(String catchApiIds) {
-        this.catchApiIds = catchApiIds;
+    public void setType(Integer type) {
+        this.type = type;
     }
 
-    public String getCatchActionIds() {
-        return catchActionIds;
+    public String getRefId() {
+        return refId;
     }
 
-    public void setCatchActionIds(String catchActionIds) {
-        this.catchActionIds = catchActionIds;
+    public void setRefId(String refId) {
+        this.refId = refId;
     }
 
-    public String getThenApiIds() {
-        return thenApiIds;
+    public String getRefType() {
+        return refType;
     }
 
-    public void setThenApiIds(String thenApiIds) {
-        this.thenApiIds = thenApiIds;
+    public void setRefType(String refType) {
+        this.refType = refType;
     }
 
-    public String getThenActionIds() {
-        return thenActionIds;
-    }
-
-    public void setThenActionIds(String thenActionIds) {
-        this.thenActionIds = thenActionIds;
-    }
 
     public String getWatcherId() {
         return watcherId;

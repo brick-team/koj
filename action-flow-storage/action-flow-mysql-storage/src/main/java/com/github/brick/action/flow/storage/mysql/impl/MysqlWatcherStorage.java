@@ -48,15 +48,51 @@ public class MysqlWatcherStorage implements WatcherStorage {
         AfWatcherEntity save = afWatcherEntityRepository.save(entity);
         String id = save.getId();
 
+        List<AfWatcherRsEntity> toSave = new ArrayList<>();
+        for (String thenAction : thenActions) {
 
-        AfWatcherRsEntity entity1 = new AfWatcherRsEntity();
-        entity1.setCatchApiIds(StringUtils.join(thenActions, ","));
-        entity1.setCatchActionIds(StringUtils.join(catchActions, ","));
-        entity1.setThenApiIds(StringUtils.join(thenApis, ","));
-        entity1.setThenActionIds(StringUtils.join(catchApis, ","));
-        entity1.setWatcherId(id);
+            AfWatcherRsEntity entity1 = new AfWatcherRsEntity();
+            entity1.setType(1);
+            entity1.setRefId(thenAction);
+            entity1.setRefType("action");
+            entity1.setWatcherId(id);
+            toSave.add(entity1);
+        }
 
-        afWatcherRsEntityRepository.save(entity1);
+
+        for (String thenAction : catchActions) {
+
+            AfWatcherRsEntity entity1 = new AfWatcherRsEntity();
+            entity1.setType(2);
+            entity1.setRefId(thenAction);
+            entity1.setRefType("action");
+            entity1.setWatcherId(id);
+            toSave.add(entity1);
+        }
+
+
+        for (String thenAction : thenApis) {
+
+            AfWatcherRsEntity entity1 = new AfWatcherRsEntity();
+            entity1.setType(1);
+            entity1.setRefId(thenAction);
+            entity1.setRefType("api");
+            entity1.setWatcherId(id);
+            toSave.add(entity1);
+        }
+
+
+        for (String thenAction : catchApis) {
+
+            AfWatcherRsEntity entity1 = new AfWatcherRsEntity();
+            entity1.setType(2);
+            entity1.setRefId(thenAction);
+            entity1.setRefType("api");
+            entity1.setWatcherId(id);
+            toSave.add(entity1);
+        }
+
+        afWatcherRsEntityRepository.saveAll(toSave);
 
         return id;
     }
