@@ -16,21 +16,25 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
-import com.github.brick.action.flow.storage.api.FormatStorage;
-import com.github.brick.action.flow.storage.mysql.entity.AfFormatEntity;
-import com.github.brick.action.flow.storage.mysql.repository.AfFormatEntityRepository;
+import com.github.brick.action.flow.storage.api.ResultStorage;
+import com.github.brick.action.flow.storage.mysql.entity.AfResultEntity;
+import com.github.brick.action.flow.storage.mysql.repository.AfResultEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 @Service
-public class MysqlFormatStorage implements FormatStorage {
+public class MysqlResultStorage implements ResultStorage {
+
     @Autowired
-    private AfFormatEntityRepository formatEntityRepository;
+    private AfResultEntityRepository afResultEntityRepository;
 
     @Override
-    public String save(String classStr) {
-        AfFormatEntity entity = new AfFormatEntity();
-        entity.setClassStr(classStr);
-        AfFormatEntity save = formatEntityRepository.save(entity);
+    public String save(String name, String exId) {
+        AfResultEntity entity = new AfResultEntity();
+        entity.setName(name);
+        entity.setExId(exId);
+
+        AfResultEntity save = afResultEntityRepository.save(entity);
         return save.getId();
     }
 }

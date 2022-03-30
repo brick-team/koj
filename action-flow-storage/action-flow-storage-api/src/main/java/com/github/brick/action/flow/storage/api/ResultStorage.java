@@ -18,6 +18,6 @@ package com.github.brick.action.flow.storage.api;
 
 public interface ResultStorage {
 
-    void save(String name,
+    String save(String name,
               String exId);
 }

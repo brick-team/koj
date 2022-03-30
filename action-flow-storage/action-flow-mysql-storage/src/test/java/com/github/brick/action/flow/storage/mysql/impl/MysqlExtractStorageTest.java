@@ -16,12 +16,18 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.junit.Before;
+import org.junit.Test;
 
-@SpringBootConfiguration
-@ComponentScan("com.github.brick.action.flow.storage.mysql")
-@EnableJpaRepositories
-public class App {
+public class MysqlExtractStorageTest extends CommonTest {
+    MysqlExtractStorage mysqlExtractStorage;
+
+    @Before
+    public void init() {
+        mysqlExtractStorage = context.getBean(MysqlExtractStorage.class);
+    }
+
+    @Test
+    public void save() {
+    }
 }

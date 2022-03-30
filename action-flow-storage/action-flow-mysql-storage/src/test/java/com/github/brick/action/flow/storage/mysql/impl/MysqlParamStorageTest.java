@@ -17,19 +17,17 @@
 package com.github.brick.action.flow.storage.mysql.impl;
 
 import org.junit.Before;
+import org.junit.Test;
 
-public class MysqlFormatStorageTest extends CommonTest {
-    MysqlFormatStorage mysqlFormatStorage;
-
+public class MysqlParamStorageTest extends CommonTest {
+    MysqlParamStorage mysqlParamStorage;
 
     @Before
     public void init() {
-        mysqlFormatStorage = context.getBean(MysqlFormatStorage.class);
+        mysqlParamStorage = context.getBean(MysqlParamStorage.class);
     }
 
-    @org.junit.Test
+    @Test
     public void save() {
-        mysqlFormatStorage.save("com.github.brick.action.flow.method.format.StringToClass");
-
     }
 }

@@ -17,5 +17,5 @@
 package com.github.brick.action.flow.storage.api;
 
 public interface FormatStorage {
-    void save(String classStr);
+    String save(String classStr);
 }

@@ -15,16 +15,17 @@
   ~    limitations under the License.
   -->
 
-<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence https://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence https://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 
-    <persistence-unit name="jpa.sample.plain">
+    <persistence-unit name="testDB">
         <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/action-flow" />
-            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver " />
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver" />
             <property name="hibernate.connection.username" value="root" />
             <property name="hibernate.connection.password" value="root123@" />
-            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
         </properties>
     </persistence-unit>
 

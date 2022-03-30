@@ -16,21 +16,27 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
-import com.github.brick.action.flow.storage.api.FormatStorage;
-import com.github.brick.action.flow.storage.mysql.entity.AfFormatEntity;
-import com.github.brick.action.flow.storage.mysql.repository.AfFormatEntityRepository;
+import com.github.brick.action.flow.storage.api.ParamStorage;
+import com.github.brick.action.flow.storage.mysql.entity.AfParamEntity;
+import com.github.brick.action.flow.storage.mysql.repository.AfParamEntityRepository;
+import com.github.brick.action.flow.storage.mysql.repository.AfWatcherRsEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 @Service
-public class MysqlFormatStorage implements FormatStorage {
+public class MysqlParamStorage implements ParamStorage {
     @Autowired
-    private AfFormatEntityRepository formatEntityRepository;
+    private AfParamEntityRepository afParamEntityRepository;
+
+
 
     @Override
-    public String save(String classStr) {
-        AfFormatEntity entity = new AfFormatEntity();
-        entity.setClassStr(classStr);
-        AfFormatEntity save = formatEntityRepository.save(entity);
+    public String save(String group, String key, String value) {
+        AfParamEntity entity = new AfParamEntity();
+        entity.setGroup(group);
+        entity.setKey(key);
+        entity.setValue(value);
+        AfParamEntity save = afParamEntityRepository.save(entity);
         return save.getId();
     }
 }

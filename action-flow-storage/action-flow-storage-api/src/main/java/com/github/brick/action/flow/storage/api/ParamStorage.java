@@ -18,7 +18,7 @@ package com.github.brick.action.flow.storage.api;
 
 public interface ParamStorage {
 
-    void save(String group,
+    String save(String group,
               String key,
               String value);
 }

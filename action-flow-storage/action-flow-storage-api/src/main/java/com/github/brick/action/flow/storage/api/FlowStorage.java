@@ -20,5 +20,5 @@ import java.util.List;
 
 public interface FlowStorage {
 
-    void save(String name, List<String> workIds);
+    String save(String name, List<String> workIds);
 }

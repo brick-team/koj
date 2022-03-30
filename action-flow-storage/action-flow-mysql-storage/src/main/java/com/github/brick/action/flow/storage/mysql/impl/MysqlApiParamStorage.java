@@ -16,21 +16,27 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
-import com.github.brick.action.flow.storage.api.FormatStorage;
-import com.github.brick.action.flow.storage.mysql.entity.AfFormatEntity;
-import com.github.brick.action.flow.storage.mysql.repository.AfFormatEntityRepository;
+import com.github.brick.action.flow.storage.api.ApiParamStorage;
+import com.github.brick.action.flow.storage.mysql.entity.AfApiParamEntity;
+import com.github.brick.action.flow.storage.mysql.repository.AfApiParamEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 @Service
-public class MysqlFormatStorage implements FormatStorage {
+public class MysqlApiParamStorage implements ApiParamStorage {
     @Autowired
-    private AfFormatEntityRepository formatEntityRepository;
+    private AfApiParamEntityRepository afApiParamEntityRepository;
 
     @Override
-    public String save(String classStr) {
-        AfFormatEntity entity = new AfFormatEntity();
-        entity.setClassStr(classStr);
-        AfFormatEntity save = formatEntityRepository.save(entity);
+    public Long save(String apiId, Long pid, String in, String name, String require) {
+        AfApiParamEntity entity = new AfApiParamEntity();
+        entity.setApiId(apiId);
+        entity.setPid(pid);
+        entity.setIn(in);
+        entity.setName(name);
+        entity.setRequire(require);
+
+        AfApiParamEntity save = afApiParamEntityRepository.save(entity);
         return save.getId();
     }
 }

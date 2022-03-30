@@ -16,12 +16,15 @@
 
 package com.github.brick.action.flow.storage.mysql.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "af_watcher")
 public class AfWatcherEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     @Id
     @Column(name = "id", nullable = false)
     private String id;

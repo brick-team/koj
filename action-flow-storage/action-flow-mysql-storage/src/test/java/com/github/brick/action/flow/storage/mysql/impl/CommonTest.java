@@ -16,20 +16,20 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
+import com.github.brick.action.flow.storage.mysql.config.ActionFLowMySQLStorageConfig;
 import org.junit.Before;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class MysqlFormatStorageTest extends CommonTest {
-    MysqlFormatStorage mysqlFormatStorage;
-
+public class CommonTest {
+    protected ApplicationContext context;
 
     @Before
-    public void init() {
-        mysqlFormatStorage = context.getBean(MysqlFormatStorage.class);
+    public void initCtx() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(JpaConfiguration.class,
+                ActionFLowMySQLStorageConfig.class);
+        this.context = context;
     }
 
-    @org.junit.Test
-    public void save() {
-        mysqlFormatStorage.save("com.github.brick.action.flow.method.format.StringToClass");
 
-    }
 }

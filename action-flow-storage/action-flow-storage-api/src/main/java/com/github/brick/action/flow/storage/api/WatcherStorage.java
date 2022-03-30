@@ -20,7 +20,7 @@ import java.util.List;
 
 public interface WatcherStorage {
 
-    void save(String exId,
+    String save(String exId,
               String condition,
               List<String> thenActions,
               List<String> catchActions,

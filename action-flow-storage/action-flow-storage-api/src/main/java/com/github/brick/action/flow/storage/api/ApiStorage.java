@@ -17,5 +17,5 @@
 package com.github.brick.action.flow.storage.api;
 
 public interface ApiStorage {
-    void save(String url, String method, String desca);
+    String save(String url, String method, String desc);
 }

@@ -19,7 +19,7 @@ package com.github.brick.action.flow.storage.api;
 public interface ExtractStorage {
 
 
-    void save(String fromAction,
+    String save(String fromAction,
               String fromApi,
               String el,
               String elType);

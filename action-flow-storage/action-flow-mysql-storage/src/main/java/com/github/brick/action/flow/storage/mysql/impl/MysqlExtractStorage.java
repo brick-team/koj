@@ -16,21 +16,26 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
-import com.github.brick.action.flow.storage.api.FormatStorage;
-import com.github.brick.action.flow.storage.mysql.entity.AfFormatEntity;
-import com.github.brick.action.flow.storage.mysql.repository.AfFormatEntityRepository;
+import com.github.brick.action.flow.storage.api.ExtractStorage;
+import com.github.brick.action.flow.storage.mysql.entity.AfExtractEntity;
+import com.github.brick.action.flow.storage.mysql.repository.AfExtractEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 @Service
-public class MysqlFormatStorage implements FormatStorage {
+public class MysqlExtractStorage implements ExtractStorage {
     @Autowired
-    private AfFormatEntityRepository formatEntityRepository;
+    private AfExtractEntityRepository extractEntityRepository;
 
     @Override
-    public String save(String classStr) {
-        AfFormatEntity entity = new AfFormatEntity();
-        entity.setClassStr(classStr);
-        AfFormatEntity save = formatEntityRepository.save(entity);
+    public String save(String fromAction, String fromApi, String el, String elType) {
+        AfExtractEntity entity = new AfExtractEntity();
+        entity.setFromAction(fromAction);
+        entity.setFromApi(fromApi);
+        entity.setEl(el);
+        entity.setElType(elType);
+
+        AfExtractEntity save = extractEntityRepository.save(entity);
         return save.getId();
     }
 }

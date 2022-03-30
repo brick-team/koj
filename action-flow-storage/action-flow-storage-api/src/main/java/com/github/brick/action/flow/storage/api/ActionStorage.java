@@ -24,6 +24,6 @@ import java.util.List;
 public interface ActionStorage {
 
 
-    void save(String classStr, String methodStr, boolean async);
+    String save(String classStr, String methodStr, boolean async);
 
 }
