@@ -16,16 +16,25 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
+import com.github.brick.action.flow.method.entity.api.ApiEntity;
+import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
 import com.github.brick.action.flow.storage.api.ApiStorage;
 import com.github.brick.action.flow.storage.mysql.entity.AfApiEntity;
 import com.github.brick.action.flow.storage.mysql.repository.AfApiEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MysqlApiStorage implements ApiStorage {
     @Autowired
     private AfApiEntityRepository afApiEntityRepository;
+    @Autowired
+    private MysqlApiParamStorage apiParamStorage;
 
     @Override
     public String save(String url, String method, String desc) {
@@ -36,5 +45,49 @@ public class MysqlApiStorage implements ApiStorage {
 
         AfApiEntity save = afApiEntityRepository.save(entity);
         return save.getId();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void saveForApi(List<ApiEntity> list) {
+        for (ApiEntity apiEntity : list) {
+            // step1: 保存当前API数据
+            String apiId = this.save(apiEntity.getUrl(), apiEntity.getMethod(), apiEntity.getDesc());
+            // step2: 保存参数数据
+            List<ApiParamEntity> params = apiEntity.getParams();
+            extracted(apiId, params, null);
+        }
+    }
+
+    private void extracted(String apiId, List<ApiParamEntity> params, Long pid) {
+        for (ApiParamEntity param : params) {
+            try {
+
+                Long save = apiParamStorage.save(apiId, pid, param.getIn() != null ? param.getIn().name() : null, param.getName(), param.isRequire());
+                List<ApiParamEntity> paramEntities = param.getParamEntities();
+                if (!CollectionUtils.isEmpty(paramEntities)) {
+                    extracted(apiId, paramEntities, save);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Override
+    public ApiEntity findById(String apiId) {
+        AfApiEntity byId = this.afApiEntityRepository.getById(apiId);
+        List<ApiParamEntity> list = this.apiParamStorage.findByAppId(apiId);
+        ApiEntity apiEntity = new ApiEntity();
+        apiEntity.setId(byId.getId());
+        apiEntity.setUrl(byId.getUrl());
+        apiEntity.setMethod(byId.getMethod());
+        apiEntity.setDesc(byId.getDesca());
+        apiEntity.setParams(list);
+
+
+        return apiEntity;
+
     }
 }

@@ -21,6 +21,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AfApiParamEntityRepository extends JpaRepository<AfApiParamEntity, Long>, JpaSpecificationExecutor<AfApiParamEntity> {
+
+    List<AfApiParamEntity> findAllByApiId(String appId);
 }

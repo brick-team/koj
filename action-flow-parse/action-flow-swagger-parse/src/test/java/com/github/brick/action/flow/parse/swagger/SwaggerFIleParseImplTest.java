@@ -31,8 +31,9 @@ public class SwaggerFIleParseImplTest {
         List<ApiEntity> parse = swaggerFIleParse.parse("swagge_example.json");
         for (ApiEntity apiEntity : parse) {
             List<ApiParamEntity> params = apiEntity.getParams();
-            System.out.println(gson.toJson(params));
+            System.out.println(gson.toJson(apiEntity));
         }
+
 
     }
 }

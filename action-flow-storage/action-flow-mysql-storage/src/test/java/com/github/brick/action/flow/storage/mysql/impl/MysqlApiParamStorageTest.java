@@ -16,8 +16,11 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
+import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 public class MysqlApiParamStorageTest extends CommonTest {
     MysqlApiParamStorage mysqlApiParamStorage;
@@ -29,5 +32,11 @@ public class MysqlApiParamStorageTest extends CommonTest {
 
     @Test
     public void save() {
+    }
+
+    @Test
+    public void find() {
+        List<ApiParamEntity> ff8080817fd8aa0d017fd8aa12140000 = this.mysqlApiParamStorage.findByAppId("ff8080817fd8aa0d017fd8aa12140000");
+        System.out.println();
     }
 }

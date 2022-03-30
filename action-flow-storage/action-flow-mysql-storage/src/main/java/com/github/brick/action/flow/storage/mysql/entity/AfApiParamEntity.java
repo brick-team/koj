@@ -24,23 +24,23 @@ import java.util.Objects;
 public class AfApiParamEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id")
+    @Column(name = "`id`")
     private Long id;
     @Basic
-    @Column(name = "api_id")
+    @Column(name = "`api_id`")
     private String apiId;
     @Basic
-    @Column(name = "pid")
+    @Column(name = "`pid`")
     private Long pid;
     @Basic
-    @Column(name = "in")
+    @Column(name = "`in`")
     private String in;
     @Basic
-    @Column(name = "name")
+    @Column(name = "`name`")
     private String name;
     @Basic
-    @Column(name = "require")
-    private String require;
+    @Column(name = "`require`")
+    private Integer require;
 
     public Long getId() {
         return id;
@@ -82,11 +82,11 @@ public class AfApiParamEntity {
         this.name = name;
     }
 
-    public String getRequire() {
+    public Integer getRequire() {
         return require;
     }
 
-    public void setRequire(String require) {
+    public void setRequire(Integer require) {
         this.require = require;
     }
 

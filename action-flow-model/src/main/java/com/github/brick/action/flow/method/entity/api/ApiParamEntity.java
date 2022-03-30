@@ -27,6 +27,7 @@ public class ApiParamEntity {
     private String name;
     private boolean require;
     private String type;
+    private Long id;
 
 
     private List<ApiParamEntity> paramEntities;

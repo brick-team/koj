@@ -16,6 +16,14 @@
 
 package com.github.brick.action.flow.storage.api;
 
+import com.github.brick.action.flow.method.entity.api.ApiEntity;
+
+import java.util.List;
+
 public interface ApiStorage {
     String save(String url, String method, String desc);
+
+    void saveForApi(List<ApiEntity> list);
+
+    ApiEntity findById(String apiId);
 }
