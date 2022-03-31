@@ -21,6 +21,7 @@ import com.github.brick.action.flow.method.entity.ExtractEntity;
 import com.github.brick.action.flow.method.entity.FormatEntity;
 import com.github.brick.action.flow.method.entity.WatcherEntity;
 import com.github.brick.action.flow.method.entity.api.ApiEntity;
+import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
 import com.github.brick.action.flow.method.enums.WorkTypeModel;
 import com.github.brick.action.flow.method.execute.MethodExecute;
 import com.github.brick.action.flow.method.execute.impl.MethodExecuteImpl;
@@ -167,7 +168,12 @@ public class ExecuteForMysql {
         }
         else if (workTypeModel == WorkTypeModel.API) {
             ApiEntity byId = this.apiStorage.findById(refId);
+            // TODO: 2022/3/31 API接口处理
+            for (ApiParamEntity param : byId.getParams()) {
+                AfActionParamExEntity afActionParamExEntity = this.afActionParamExEntityRepository.findByFlowIdAndActionParamId(flowId, param.getId());
 
+
+            }
             System.out.println();
 
         }
