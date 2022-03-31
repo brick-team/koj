@@ -125,13 +125,13 @@ public class MysqlWorkStorage implements WorkStorage {
         List<AfWorkCz> starts = list.stream().filter(s -> s.getWorkType().equals(WorkNodeType.START.getId())).collect(Collectors.toList());
 
         for (AfWorkCz start : starts) {
-            WorkNode WorkNode = new WorkNode();
-            WorkNode.setType(start.getType());
-            WorkNode.setRefId(start.getRefId());
-            WorkNode.setThen(workCzToThens(start, pidMap));
-            WorkNode.setCat(workCzToCat(start, pidMap));
-
-            res.add(WorkNode);
+            WorkNode workNode = new WorkNode();
+            workNode.setType(start.getType());
+            workNode.setRefId(start.getRefId());
+            workNode.setThen(workCzToThens(start, pidMap));
+            workNode.setCat(workCzToCat(start, pidMap));
+            workNode.setId(start.getId());
+            res.add(workNode);
         }
 
 
@@ -147,12 +147,13 @@ public class MysqlWorkStorage implements WorkStorage {
             }).collect(Collectors.toList());
 
             for (AfWorkCz afWorkCz : collect) {
-                WorkNode WorkNode = new WorkNode();
-                WorkNode.setType(afWorkCz.getType());
-                WorkNode.setRefId(afWorkCz.getRefId());
-                WorkNode.setThen(workCzToThens(afWorkCz, pidMap));
-                WorkNode.setCat(workCzToCat(afWorkCz, pidMap));
-                res.add(WorkNode);
+                WorkNode workNode = new WorkNode();
+                workNode.setId(afWorkCz.getId());
+                workNode.setType(afWorkCz.getType());
+                workNode.setRefId(afWorkCz.getRefId());
+                workNode.setThen(workCzToThens(afWorkCz, pidMap));
+                workNode.setCat(workCzToCat(afWorkCz, pidMap));
+                res.add(workNode);
             }
         }
 
@@ -168,12 +169,13 @@ public class MysqlWorkStorage implements WorkStorage {
             }).collect(Collectors.toList());
 
             for (AfWorkCz afWorkCz : collect) {
-                WorkNode WorkNode = new WorkNode();
-                WorkNode.setType(afWorkCz.getType());
-                WorkNode.setRefId(afWorkCz.getRefId());
-                WorkNode.setThen(workCzToThens(afWorkCz, pidMap));
-                WorkNode.setCat(workCzToCat(afWorkCz, pidMap));
-                res.add(WorkNode);
+                WorkNode workNode = new WorkNode();
+                workNode.setId(afWorkCz.getId());
+                workNode.setType(afWorkCz.getType());
+                workNode.setRefId(afWorkCz.getRefId());
+                workNode.setThen(workCzToThens(afWorkCz, pidMap));
+                workNode.setCat(workCzToCat(afWorkCz, pidMap));
+                res.add(workNode);
             }
         }
 

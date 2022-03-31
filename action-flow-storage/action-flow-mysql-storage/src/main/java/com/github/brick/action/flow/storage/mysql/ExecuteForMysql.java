@@ -112,12 +112,17 @@ public class ExecuteForMysql {
         }
 
         // 执行器执行结果
+        // fixme:
+        //  key : action \ api 的id ，如果重复请求怎么处理
+        //  value: action \ api 执行结果
         Map<Long, Object> resultData = new HashMap<>();
 
         for (WorkNode workNode : byFlowId) {
             // 搜索 action 、api 、watcher
             handlerWorkNode(flowId, jsonData, paramsFromDB, workNode, resultData);
         }
+        System.out.println(gson.toJson(resultData));
+
         return null;
     }
 
@@ -135,7 +140,6 @@ public class ExecuteForMysql {
             Object execute;
             try {
                 execute = executeAction(flowId, jsonData, paramsFromDB, resultData, refId, workNode);
-                resultData.put(refId, execute);
                 List<WorkNode> then = workNode.getThen();
                 for (WorkNode node : then) {
                     handlerWorkNode(flowId, jsonData, paramsFromDB, node, resultData);
@@ -292,7 +296,8 @@ public class ExecuteForMysql {
         // todo: 确认是否有办法知道异常是项目内的，
 
         Object execute = methodExecute.execute(byId.getClazzStr(), byId.getMethodStr(), types.toArray(new String[0]), collect);
-//        logger.info("执行 {} {} 结果 {}", byId.getClazzStr(), byId.getMethodStr(), execute);
+        logger.info("执行 {} {} 结果 {}", byId.getClazzStr(), byId.getMethodStr(), execute);
+        resultData.put(workNode.getId(), execute);
         return execute;
 
     }
