@@ -29,11 +29,11 @@ public class MysqlResultStorage implements ResultStorage {
     private AfResultEntityRepository afResultEntityRepository;
 
     @Override
-    public String save(String name, String exId) {
+    public Long save(Long flowId, String name, String exId) {
         AfResultEntity entity = new AfResultEntity();
         entity.setName(name);
         entity.setExId(exId);
-
+        entity.setFlowId(flowId);
         AfResultEntity save = afResultEntityRepository.save(entity);
         return save.getId();
     }

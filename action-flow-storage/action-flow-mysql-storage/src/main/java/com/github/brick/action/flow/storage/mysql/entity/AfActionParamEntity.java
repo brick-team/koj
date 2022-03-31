@@ -24,37 +24,37 @@ import java.util.Objects;
 @Entity
 @Table(name = "af_action_param", schema = "action-flow", catalog = "")
 public class AfActionParamEntity {
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
-    @Column(name = "id")
-    private String id;
+    @Column(name = "`id`")
+    private Long id;
     @Basic
-    @Column(name = "action_id")
-    private String actionId;
+    @Column(name = "`action_id`")
+    private Long actionId;
     @Basic
-    @Column(name = "arg_name")
+    @Column(name = "`arg_name`")
     private String argName;
     @Basic
-    @Column(name = "index")
+    @Column(name = "`index`")
     private Integer index;
     @Basic
-    @Column(name = "type")
+    @Column(name = "`type`")
     private String type;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getActionId() {
+    public Long getActionId() {
         return actionId;
     }
 
-    public void setActionId(String actionId) {
+    public void setActionId(Long actionId) {
         this.actionId = actionId;
     }
 

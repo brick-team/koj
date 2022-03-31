@@ -14,7 +14,9 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.execute;
+package com.github.brick.action.flow.method.execute.impl;
+
+import com.github.brick.action.flow.method.execute.MethodExecute;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

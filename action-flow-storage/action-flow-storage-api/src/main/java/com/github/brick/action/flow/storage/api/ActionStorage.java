@@ -24,7 +24,7 @@ import java.util.List;
 public interface ActionStorage {
 
 
-    String save(String classStr, String methodStr, boolean async);
+    Long save(String classStr, String methodStr, boolean async);
 
-    ActionEntity findById(String refId);
+    ActionEntity findById(Long refId);
 }

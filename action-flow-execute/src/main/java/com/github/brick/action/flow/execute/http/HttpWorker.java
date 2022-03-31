@@ -20,8 +20,29 @@ import java.io.IOException;
 import java.util.Map;
 
 public interface HttpWorker {
+
+    /**
+     * http 请求处理器
+     * @param url 请求地址
+     * @param method 请求方法
+     * @param queryParam 查询参数
+     * @param headers 头信息
+     * @param formatData 表单信息
+     * @param body 请求体
+     * @return http 响应结果
+     * @throws IOException 连接建立异常
+     */
     String work(String url, String method,
                 Map<String, String> queryParam,
-                Map<String, String> headers, Map<String, String> formatData, Map<String, String> body) throws IOException;
+                Map<String, String> headers,
+                Map<String, String> formatData,
+                Map<String, String> body
+    ) throws IOException;
 
+    String work(String url, String method,
+                Map<String, String> queryParam,
+                Map<String, String> headers,
+                Map<String, String> formatData,
+                String body
+    ) throws IOException;
 }

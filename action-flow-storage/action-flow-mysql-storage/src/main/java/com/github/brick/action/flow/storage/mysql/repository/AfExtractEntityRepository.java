@@ -22,5 +22,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AfExtractEntityRepository extends JpaRepository<AfExtractEntity, String>, JpaSpecificationExecutor<AfExtractEntity> {
+public interface AfExtractEntityRepository extends JpaRepository<AfExtractEntity, Long>, JpaSpecificationExecutor<AfExtractEntity> {
 }

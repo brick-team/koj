@@ -14,27 +14,14 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.mysql.impl;
+package com.github.brick.action.flow.storage.mysql.repository;
 
-import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
-import org.junit.Before;
-import org.junit.Test;
+import com.github.brick.action.flow.storage.mysql.entity.AfWorkCz;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public class MysqlApiParamStorageTest extends CommonTest {
-    MysqlApiParamStorage mysqlApiParamStorage;
-
-    @Before
-    public void init() {
-        mysqlApiParamStorage = context.getBean(MysqlApiParamStorage.class);
-    }
-
-    @Test
-    public void save() {
-    }
-
-    @Test
-    public void find() {
-    }
+public interface AfWorkCzRepository extends JpaRepository<AfWorkCz, Long>, JpaSpecificationExecutor<AfWorkCz> {
+    List<AfWorkCz> findByFlowId(Long flowId);
 }

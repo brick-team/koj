@@ -28,7 +28,7 @@ public class MysqlActionParamStorage implements ActionParamStorage {
     private AfActionParamEntityRepository actionParamEntityRepository;
 
     @Override
-    public String save(String actionId, String argName, Integer index, String type) {
+    public Long save(Long actionId, String argName, Integer index, String type) {
         AfActionParamEntity entity = new AfActionParamEntity();
         entity.setActionId(actionId);
         entity.setArgName(argName);

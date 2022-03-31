@@ -22,7 +22,6 @@ import com.github.brick.action.flow.storage.mysql.entity.AfWatcherEntity;
 import com.github.brick.action.flow.storage.mysql.entity.AfWatcherRsEntity;
 import com.github.brick.action.flow.storage.mysql.repository.AfWatcherEntityRepository;
 import com.github.brick.action.flow.storage.mysql.repository.AfWatcherRsEntityRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,20 +39,20 @@ public class MysqlWatcherStorage implements WatcherStorage {
 
     @Transactional
     @Override
-    public String save(String exId, String condition, List<String> thenActions, List<String> catchActions, List<String> thenApis, List<String> catchApis) {
+    public Long save(Long exId, String condition, List<String> thenActions, List<String> catchActions, List<String> thenApis, List<String> catchApis) {
         AfWatcherEntity entity = new AfWatcherEntity();
         entity.setCondition(condition);
         entity.setExId(exId);
 
         AfWatcherEntity save = afWatcherEntityRepository.save(entity);
-        String id = save.getId();
+        Long id = save.getId();
 
         List<AfWatcherRsEntity> toSave = new ArrayList<>();
         for (String thenAction : thenActions) {
 
             AfWatcherRsEntity entity1 = new AfWatcherRsEntity();
             entity1.setType(1);
-            entity1.setRefId(thenAction);
+            entity1.setRefId(Long.valueOf(thenAction));
             entity1.setRefType("action");
             entity1.setWatcherId(id);
             toSave.add(entity1);
@@ -64,7 +63,7 @@ public class MysqlWatcherStorage implements WatcherStorage {
 
             AfWatcherRsEntity entity1 = new AfWatcherRsEntity();
             entity1.setType(2);
-            entity1.setRefId(thenAction);
+            entity1.setRefId(Long.valueOf(thenAction));
             entity1.setRefType("action");
             entity1.setWatcherId(id);
             toSave.add(entity1);
@@ -75,7 +74,7 @@ public class MysqlWatcherStorage implements WatcherStorage {
 
             AfWatcherRsEntity entity1 = new AfWatcherRsEntity();
             entity1.setType(1);
-            entity1.setRefId(thenAction);
+            entity1.setRefId(Long.valueOf(thenAction));
             entity1.setRefType("api");
             entity1.setWatcherId(id);
             toSave.add(entity1);
@@ -86,7 +85,7 @@ public class MysqlWatcherStorage implements WatcherStorage {
 
             AfWatcherRsEntity entity1 = new AfWatcherRsEntity();
             entity1.setType(2);
-            entity1.setRefId(thenAction);
+            entity1.setRefId(Long.valueOf(thenAction));
             entity1.setRefType("api");
             entity1.setWatcherId(id);
             toSave.add(entity1);
@@ -98,11 +97,11 @@ public class MysqlWatcherStorage implements WatcherStorage {
     }
 
     @Override
-    public WatcherEntity findById(String refId) {
+    public WatcherEntity findById(Long refId) {
         AfWatcherEntity byId = afWatcherEntityRepository.getById(refId);
         WatcherEntity watcherEntity = new WatcherEntity();
-        watcherEntity.setId(refId);
-        watcherEntity.setExId(byId.getExId());
+        watcherEntity.setId(refId.toString());
+        watcherEntity.setExId(byId.getExId().toString());
         watcherEntity.setCondition(byId.getCondition());
 
         AfWatcherRsEntity byWatcherId = afWatcherRsEntityRepository.findByWatcherId(refId);

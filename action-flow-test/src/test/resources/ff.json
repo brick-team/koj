@@ -1,0 +1,101 @@
+{
+  "params": {
+    "list": [
+      {
+        "group": "a",
+        "key": "username",
+        "value": "username"
+      },
+      {
+        "group": "a",
+        "key": "password",
+        "value": "password"
+      }
+    ]
+  },
+  "actions": {
+    "list": []
+  },
+  "watchers": {
+    "list": [
+      {
+        "thens": [
+          {}
+        ],
+        "catchs": [
+          {}
+        ]
+      }
+    ]
+  },
+  "result": {
+    "keys": []
+  },
+  "extracts": {
+    "extractEntities": [
+      {
+        "id": "e1",
+        "fromAction": "api-1",
+        "fromApi": "api-1",
+        "el": "$.token"
+      }
+    ]
+  },
+  "flows": {
+    "flowEntities": [
+      {
+        "id": "1",
+        "workEntities": [
+          {
+            "type": "api",
+            "refId": "api-2",
+            "id": "w1",
+            "then": [],
+            "catchs": []
+          }
+        ]
+      }
+    ]
+  },
+  "apisEntity": {
+    "list": [
+      {
+        "id": "api-1",
+        "url": "http://localhost:8080/login",
+        "method": "post",
+        "params": [
+          {
+            "in": "formData",
+            "name": "username",
+            "require": true,
+            "paramEntities": [],
+            "paramGroup": "a",
+            "ex": "username"
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "require": true,
+            "paramEntities": [],
+            "paramGroup": "a",
+            "ex": "password"
+          }
+        ]
+      },
+      {
+        "id": "api-2",
+        "url": "http://localhost:8080/user_info",
+        "method": "get",
+        "params": [
+          {
+            "in": "header",
+            "name": "token",
+            "require": true,
+            "paramEntities": [],
+            "exId": "e1"
+          }
+        ]
+      }
+    ]
+  }
+}

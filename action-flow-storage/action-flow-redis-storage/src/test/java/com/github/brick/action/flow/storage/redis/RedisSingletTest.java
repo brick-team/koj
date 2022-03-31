@@ -24,7 +24,5 @@ public class RedisSingletTest {
 
     @Test
     public void tt() {
-        RedisTemplate redisTemplate = RedisSinglet.redisTemplate();
-        redisTemplate.opsForValue().set("a", "a");
     }
 }

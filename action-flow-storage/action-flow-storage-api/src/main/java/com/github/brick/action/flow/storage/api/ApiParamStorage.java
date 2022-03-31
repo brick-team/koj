@@ -18,7 +18,7 @@ package com.github.brick.action.flow.storage.api;
 
 
 public interface ApiParamStorage {
-    Long save(String apiId,
+    Long save(Long apiId,
               Long pid,
               String in,
               String name,

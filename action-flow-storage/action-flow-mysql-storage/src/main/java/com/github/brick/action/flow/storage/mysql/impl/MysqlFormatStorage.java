@@ -27,7 +27,7 @@ public class MysqlFormatStorage implements FormatStorage {
     private AfFormatEntityRepository formatEntityRepository;
 
     @Override
-    public String save(String classStr) {
+    public Long save(String classStr) {
         AfFormatEntity entity = new AfFormatEntity();
         entity.setClassStr(classStr);
         AfFormatEntity save = formatEntityRepository.save(entity);

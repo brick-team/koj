@@ -28,7 +28,7 @@ public class AfApiParamEntity {
     private Long id;
     @Basic
     @Column(name = "`api_id`")
-    private String apiId;
+    private Long apiId;
     @Basic
     @Column(name = "`pid`")
     private Long pid;
@@ -50,11 +50,11 @@ public class AfApiParamEntity {
         this.id = id;
     }
 
-    public String getApiId() {
+    public Long getApiId() {
         return apiId;
     }
 
-    public void setApiId(String apiId) {
+    public void setApiId(Long apiId) {
         this.apiId = apiId;
     }
 

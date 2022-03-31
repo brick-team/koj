@@ -20,7 +20,7 @@ import com.github.brick.action.flow.storage.mysql.entity.AfWatcherRsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface AfWatcherRsEntityRepository extends JpaRepository<AfWatcherRsEntity, String>, JpaSpecificationExecutor<AfWatcherRsEntity> {
-    AfWatcherRsEntity findByWatcherId(String watcherId);
+public interface AfWatcherRsEntityRepository extends JpaRepository<AfWatcherRsEntity, Long>, JpaSpecificationExecutor<AfWatcherRsEntity> {
+    AfWatcherRsEntity findByWatcherId(Long watcherId);
 
 }

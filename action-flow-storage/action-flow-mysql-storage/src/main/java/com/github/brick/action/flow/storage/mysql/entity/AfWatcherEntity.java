@@ -23,14 +23,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "af_watcher")
 public class AfWatcherEntity {
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
     @Column(name = "id", nullable = false)
-    private String id;
+    private Long id;
 
     @Column(name = "ex_id", nullable = false)
-    private String exId;
+    private Long exId;
 
     @Column(name = "`condition`", nullable = false)
     private String condition;
@@ -43,19 +43,19 @@ public class AfWatcherEntity {
         this.condition = condition;
     }
 
-    public String getExId() {
+    public Long getExId() {
         return exId;
     }
 
-    public void setExId(String exId) {
+    public void setExId(Long exId) {
         this.exId = exId;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

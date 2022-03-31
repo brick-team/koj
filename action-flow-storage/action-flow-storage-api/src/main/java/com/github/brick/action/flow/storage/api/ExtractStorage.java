@@ -21,10 +21,10 @@ import com.github.brick.action.flow.method.entity.ExtractEntity;
 public interface ExtractStorage {
 
 
-    String save(String fromAction,
-              String fromApi,
+    Long save(Long fromAction,
+              Long fromApi,
               String el,
               String elType);
 
-    ExtractEntity findById(String exId);
+    ExtractEntity findById(Long exId);
 }

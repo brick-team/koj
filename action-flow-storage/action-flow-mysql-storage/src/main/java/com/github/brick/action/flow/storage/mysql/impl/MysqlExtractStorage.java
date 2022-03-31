@@ -31,7 +31,7 @@ public class MysqlExtractStorage implements ExtractStorage {
     private AfExtractEntityRepository extractEntityRepository;
 
     @Override
-    public String save(String fromAction, String fromApi, String el, String elType) {
+    public Long save(Long fromAction, Long fromApi, String el, String elType) {
         AfExtractEntity entity = new AfExtractEntity();
         entity.setFromAction(fromAction);
         entity.setFromApi(fromApi);
@@ -43,14 +43,14 @@ public class MysqlExtractStorage implements ExtractStorage {
     }
 
     @Override
-    public ExtractEntity findById(String exId) {
+    public ExtractEntity findById(Long exId) {
         Optional<AfExtractEntity> byId = extractEntityRepository.findById(exId);
         if (byId.isPresent()) {
             AfExtractEntity afExtractEntity = byId.get();
             ExtractEntity extractEntity = new ExtractEntity();
-            extractEntity.setId(afExtractEntity.getId());
-            extractEntity.setFromAction(afExtractEntity.getFromAction());
-            extractEntity.setFromApi(afExtractEntity.getFromApi());
+            extractEntity.setId(afExtractEntity.getId().toString());
+            extractEntity.setFromAction(afExtractEntity.getFromAction().toString());
+            extractEntity.setFromApi(afExtractEntity.getFromApi().toString());
             extractEntity.setEl(afExtractEntity.getEl());
 
             return extractEntity;

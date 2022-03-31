@@ -18,6 +18,6 @@ package com.github.brick.action.flow.storage.api;
 
 public interface ActionParamStorage {
 
-    String save(String actionId, String argName, Integer index, String type);
+    Long save(Long actionId, String argName, Integer index, String type);
 
 }

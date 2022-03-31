@@ -26,5 +26,5 @@ import java.util.List;
 @Repository
 public interface AfApiParamEntityRepository extends JpaRepository<AfApiParamEntity, Long>, JpaSpecificationExecutor<AfApiParamEntity> {
 
-    List<AfApiParamEntity> findAllByApiId(String appId);
+    List<AfApiParamEntity> findAllByApiId(Long appId);
 }

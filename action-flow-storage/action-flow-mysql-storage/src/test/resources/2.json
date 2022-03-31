@@ -1,0 +1,66 @@
+{
+  "type": "action",
+  "refId": 1,
+  "then": [
+    {
+      "type": "watcher",
+      "refId": 2,
+      "then": [
+        {
+          "type": "watcher",
+          "refId": 21,
+          "then": [
+            {
+              "type": "watcher",
+              "refId": 221,
+              "then": [
+                {
+                  "type": "watcher",
+                  "refId": 2221
+                }
+              ]
+            },
+            {
+              "type": "watcher",
+              "refId": 222,
+              "then": [
+                {
+                  "type": "watcher",
+                  "refId": 2221
+                },
+                {
+                  "type": "watcher",
+                  "refId": 2222
+                }
+              ],
+              "cat": [
+                {
+                  "type": "watcher",
+                  "refId": 2232,
+                  "then": [
+                    {
+                      "type": "watcher",
+                      "refId": 22321
+                    }
+                  ],
+                  "cat": [
+                    {
+                      "type": "watcher",
+                      "refId": 22322
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "cat": [
+    {
+      "type": "watcher",
+      "refId": 11
+    }
+  ]
+}

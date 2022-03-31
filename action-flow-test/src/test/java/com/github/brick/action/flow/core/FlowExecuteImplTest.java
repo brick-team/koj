@@ -18,7 +18,7 @@ package com.github.brick.action.flow.core;
 
 import com.github.brick.action.flow.method.enums.FLowModel;
 import com.github.brick.action.flow.method.execute.FlowExecute;
-import com.github.brick.action.flow.method.execute.FlowExecuteImpl;
+import com.github.brick.action.flow.method.execute.impl.FlowExecuteImpl;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

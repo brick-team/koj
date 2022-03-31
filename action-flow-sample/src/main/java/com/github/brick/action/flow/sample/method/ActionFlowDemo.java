@@ -18,7 +18,7 @@ package com.github.brick.action.flow.sample.method;
 
 import com.github.brick.action.flow.method.execute.FlowExecute;
 import com.github.brick.action.flow.method.enums.FLowModel;
-import com.github.brick.action.flow.method.execute.FlowExecuteImpl;
+import com.github.brick.action.flow.method.execute.impl.FlowExecuteImpl;
 
 public class ActionFlowDemo {
 

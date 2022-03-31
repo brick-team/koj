@@ -16,8 +16,11 @@
 
 package com.github.brick.action.flow;
 
+import com.github.brick.action.flow.method.entity.api.ApiEntity;
 import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
-import com.github.brick.action.flow.method.execute.HandlerApiParamEntity;
+import com.github.brick.action.flow.method.execute.ApiExecute;
+import com.github.brick.action.flow.method.execute.impl.ApiExecuteImpl;
+import com.github.brick.action.flow.method.execute.impl.HandlerApiParamEntity;
 import com.github.brick.action.flow.model.Category;
 import com.github.brick.action.flow.model.Pet;
 import com.github.brick.action.flow.model.Tag;
@@ -93,6 +96,12 @@ public class HandlerApiParamEntityTest {
     @Test
     public void handler() {
         handlerApiParamEntity.handler(apiParamEntities, data);
+        ApiEntity apiEntity = new ApiEntity();
+        apiEntity.setParams(apiParamEntities);
 
+        apiExecute.execute(apiEntity, "");
     }
+
+    ApiExecute apiExecute = new ApiExecuteImpl();
+
 }

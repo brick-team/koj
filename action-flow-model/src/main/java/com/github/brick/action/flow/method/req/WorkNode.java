@@ -14,14 +14,27 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.mysql.repository;
+package com.github.brick.action.flow.method.req;
 
-import com.github.brick.action.flow.storage.mysql.entity.AfWorkEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Repository;
+import lombok.Data;
 
-@Repository
-public interface AfWorkEntityRepository extends JpaRepository<AfWorkEntity, String>, JpaSpecificationExecutor<AfWorkEntity> {
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 工作节点
+ */
+@Data
+public class WorkNode {
+    private String type;
+    private Long refId;
+    /**
+     * 执行成功后
+     */
+    private List<WorkNode> then = new ArrayList<>();
+    /**
+     * 执行失败后
+     */
+    private List<WorkNode> cat = new ArrayList<>();
 
 }

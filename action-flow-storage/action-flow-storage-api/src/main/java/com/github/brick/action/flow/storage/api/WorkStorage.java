@@ -19,11 +19,6 @@ package com.github.brick.action.flow.storage.api;
 import java.util.List;
 
 public interface WorkStorage {
-    String save(
-            String type,
-            String refId,
-            List<String> thenWorkIds,
-            List<String> catchWorkIds
-    );
+
 
 }

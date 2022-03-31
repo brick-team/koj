@@ -145,4 +145,75 @@ public class OkHttpWorkerImpl implements HttpWorker {
         headers.forEach(builder::add);
         return builder.build();
     }
+
+    @Override
+    public String work(String url, String method, Map<String, String> queryParam, Map<String, String> headers, Map<String, String> formatData, String body) throws IOException {
+        url = handlerUrl(url, queryParam);
+
+
+        FormBody formBody = buildFormBody(formatData);
+        Headers reqHead = buildHeaders(headers);
+
+
+        if ("get".equalsIgnoreCase(method)) {
+            Request.Builder builder = new Request.Builder().url(url).headers(reqHead).get();
+            Request request = builder.build();
+            return getHttpResponse(request);
+
+        }
+        else if ("post".equalsIgnoreCase(method)) {
+            if (!formatData.isEmpty()) {
+                Request request = new Request.Builder().url(url).post(formBody).headers(reqHead).build();
+                return getHttpResponse(request);
+            }
+
+            if (!body.isEmpty()) {
+                RequestBody requestBody = RequestBody.create(JSON, body);
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(requestBody)
+                        .build();
+                return getHttpResponse(request);
+            }
+            throw new IllegalArgumentException("post 请求异常");
+
+        }
+        else if ("put".equalsIgnoreCase(method)) {
+            if (!formatData.isEmpty()) {
+                Request request = new Request.Builder().url(url).put(formBody).headers(reqHead).build();
+                return getHttpResponse(request);
+            }
+
+            if (!body.isEmpty()) {
+                RequestBody requestBody = RequestBody.create(JSON, body);
+                Request request = new Request.Builder()
+                        .url(url)
+                        .put(requestBody)
+                        .build();
+                return getHttpResponse(request);
+            }
+            throw new IllegalArgumentException("put 请求异常");
+
+        }
+        else if ("delete".equalsIgnoreCase(method)) {
+            if (!formatData.isEmpty()) {
+                Request request = new Request.Builder().url(url).delete(formBody).headers(reqHead).build();
+                return getHttpResponse(request);
+            }
+
+            if (!body.isEmpty()) {
+                RequestBody requestBody = RequestBody.create(JSON, body);
+                Request request = new Request.Builder()
+                        .url(url)
+                        .delete(requestBody)
+                        .build();
+                return getHttpResponse(request);
+            }
+            throw new IllegalArgumentException("put 请求异常");
+        }
+        else {
+            throw new IllegalArgumentException("无法发送非 get post put delete 以外的请求");
+        }
+
+    }
 }

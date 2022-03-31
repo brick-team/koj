@@ -36,9 +36,11 @@ public class MysqlFlowStorage implements FlowStorage {
     private AfFlowEntityRepository afFlowEntityRepository;
     @Autowired
     private AfApiParamExEntityRepository afApiParamExEntityRepository;
+    @Autowired
+    private MysqlWorkStorage workStorage;
 
     @Override
-    public String save(String name, List<String> workIds) {
+    public Long save(String name, List<Long> workIds) {
         AfFlowEntity entity = new AfFlowEntity();
         entity.setName(name);
         entity.setWorks(StringUtils.join(workIds, ","));
@@ -46,8 +48,8 @@ public class MysqlFlowStorage implements FlowStorage {
         return save.getId();
     }
 
-    public void saveForApi(String name, List<String> workIds, List<ApiParamEntity> list) {
-        String save = save(name, workIds);
+    public void saveForApi(String name, List<Long> workIds, List<ApiParamEntity> list) {
+        Long save = save(name, workIds);
 
         for (ApiParamEntity apiParamEntity : list) {
             AfApiParamExEntity entity = new AfApiParamExEntity();
@@ -61,11 +63,8 @@ public class MysqlFlowStorage implements FlowStorage {
         }
     }
 
-    @Autowired
-    private MysqlWorkStorage workStorage;
-
     @Override
-    public FlowEntity findById(String flowId) {
+    public FlowEntity findById(Long flowId) {
         Optional<AfFlowEntity> byId = this.afFlowEntityRepository.findById(flowId);
         if (byId.isPresent()) {
 
@@ -74,9 +73,8 @@ public class MysqlFlowStorage implements FlowStorage {
 
 
             FlowEntity flow = new FlowEntity();
-            flow.setId(flowId);
-            flow.setWorkEntities(workStorage.findByIds(works));
-
+            flow.setId(flowId.toString());
+// todo: workEntity 计算
             return flow;
         }
         else {

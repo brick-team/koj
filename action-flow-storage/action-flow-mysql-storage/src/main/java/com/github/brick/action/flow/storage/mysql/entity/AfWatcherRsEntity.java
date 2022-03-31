@@ -23,20 +23,20 @@ import javax.persistence.*;
 @Entity
 @Table(name = "af_watcher_rs")
 public class AfWatcherRsEntity {
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
     @Column(name = "id", nullable = false)
-    private String id;
+    private Long id;
 
     @Column(name = "watcher_id")
-    private String watcherId;
+    private Long watcherId;
 
     @Column(name = "ref_type", nullable = false)
     private String refType;
 
     @Column(name = "ref_id", nullable = false)
-    private String refId;
+    private Long refId;
 
     @Column(name = "type")
     private Integer type;
@@ -49,11 +49,11 @@ public class AfWatcherRsEntity {
         this.type = type;
     }
 
-    public String getRefId() {
+    public Long getRefId() {
         return refId;
     }
 
-    public void setRefId(String refId) {
+    public void setRefId(Long refId) {
         this.refId = refId;
     }
 
@@ -66,19 +66,19 @@ public class AfWatcherRsEntity {
     }
 
 
-    public String getWatcherId() {
+    public Long getWatcherId() {
         return watcherId;
     }
 
-    public void setWatcherId(String watcherId) {
+    public void setWatcherId(Long watcherId) {
         this.watcherId = watcherId;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

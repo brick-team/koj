@@ -24,17 +24,17 @@ import java.util.Objects;
 @Entity
 @Table(name = "af_extract", schema = "action-flow", catalog = "")
 public class AfExtractEntity {
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
     @Column(name = "id")
-    private String id;
+    private Long id;
     @Basic
     @Column(name = "from_action")
-    private String fromAction;
+    private Long fromAction;
     @Basic
     @Column(name = "from_api")
-    private String fromApi;
+    private Long fromApi;
     @Basic
     @Column(name = "el")
     private String el;
@@ -42,27 +42,27 @@ public class AfExtractEntity {
     @Column(name = "el_type")
     private String elType;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getFromAction() {
+    public Long getFromAction() {
         return fromAction;
     }
 
-    public void setFromAction(String fromAction) {
+    public void setFromAction(Long fromAction) {
         this.fromAction = fromAction;
     }
 
-    public String getFromApi() {
+    public Long getFromApi() {
         return fromApi;
     }
 
-    public void setFromApi(String fromApi) {
+    public void setFromApi(Long fromApi) {
         this.fromApi = fromApi;
     }
 

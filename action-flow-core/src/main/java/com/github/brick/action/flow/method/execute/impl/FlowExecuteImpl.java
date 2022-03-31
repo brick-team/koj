@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.execute;
+package com.github.brick.action.flow.method.execute.impl;
 
 import com.github.brick.action.flow.execute.http.HttpWorker;
 import com.github.brick.action.flow.method.entity.*;
@@ -24,6 +24,7 @@ import com.github.brick.action.flow.method.entity.api.ApisEntity;
 import com.github.brick.action.flow.method.entity.api.ParamIn;
 import com.github.brick.action.flow.method.enums.FLowModel;
 import com.github.brick.action.flow.method.enums.HttpClientType;
+import com.github.brick.action.flow.method.execute.FlowExecute;
 import com.github.brick.action.flow.method.extract.Extract;
 import com.github.brick.action.flow.method.extract.ExtractImpl;
 import com.github.brick.action.flow.method.factory.ActionFlowParseApiFactory;
@@ -69,7 +70,6 @@ public class FlowExecuteImpl implements FlowExecute {
             new HttpWorkerFactory();
     ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
     HttpWorker httpWorker = null;
-    HttpExecute httpExecute = new HttpExecute();
     Gson gson = new Gson();
 
 
@@ -463,13 +463,10 @@ public class FlowExecuteImpl implements FlowExecute {
             if (in == ParamIn.body) {
                 handlerExId(exMap, apisEntity, actionResult, body, name, exId, paramsMap);
                 handlerEx(paramsMap, body, paramGroup, ex, name);
-
-
             }
             else if (in == ParamIn.path) {
                 handlerExId(exMap, apisEntity, actionResult, path, name, exId, paramsMap);
                 handlerEx(paramsMap, path, paramGroup, ex, name);
-
             }
             else if (in == ParamIn.formData) {
                 handlerExId(exMap, apisEntity, actionResult, formatData, name, exId, paramsMap);
@@ -478,12 +475,10 @@ public class FlowExecuteImpl implements FlowExecute {
             else if (in == ParamIn.query) {
                 handlerExId(exMap, apisEntity, actionResult, queryParam, name, exId, paramsMap);
                 handlerEx(paramsMap, queryParam, paramGroup, ex, name);
-
             }
             else if (in == ParamIn.header) {
                 handlerExId(exMap, apisEntity, actionResult, headers, name, exId, paramsMap);
                 handlerEx(paramsMap, headers, paramGroup, ex, name);
-
             }
 
         }

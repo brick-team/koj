@@ -24,11 +24,11 @@ import java.util.Objects;
 @Entity
 @Table(name = "af_param", schema = "action-flow", catalog = "")
 public class AfParamEntity {
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
     @Column(name = "id")
-    private String id;
+    private Long id;
     @Basic
     @Column(name = "group")
     private String group;
@@ -39,11 +39,11 @@ public class AfParamEntity {
     @Column(name = "value")
     private String value;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

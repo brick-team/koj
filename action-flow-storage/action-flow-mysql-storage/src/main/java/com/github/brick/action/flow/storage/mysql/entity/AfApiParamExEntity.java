@@ -24,11 +24,11 @@ import java.util.Objects;
 @Entity
 @Table(name = "af_api_param_ex", schema = "action-flow", catalog = "")
 public class AfApiParamExEntity {
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
     @Column(name = "id")
-    private String id;
+    private Long id;
     @Basic
     @Column(name = "param_group")
     private String paramGroup;
@@ -43,7 +43,7 @@ public class AfApiParamExEntity {
     private String el;
     @Basic
     @Column(name = "flow_id")
-    private String flowId;
+    private Long flowId;
 
     @Basic
     @Column(name = "api_param_id")
@@ -57,11 +57,11 @@ public class AfApiParamExEntity {
         this.apiParamId = apiParamId;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -97,11 +97,11 @@ public class AfApiParamExEntity {
         this.el = el;
     }
 
-    public String getFlowId() {
+    public Long getFlowId() {
         return flowId;
     }
 
-    public void setFlowId(String flowId) {
+    public void setFlowId(Long flowId) {
         this.flowId = flowId;
     }
 

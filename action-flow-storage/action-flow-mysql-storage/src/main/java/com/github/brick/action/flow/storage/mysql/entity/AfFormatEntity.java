@@ -25,19 +25,19 @@ import java.util.Objects;
 @Table(name = "af_format", schema = "action-flow", catalog = "")
 public class AfFormatEntity {
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id")
-    private String id;
+    private Long id;
     @Basic
     @Column(name = "class_str")
     private String classStr;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -22,7 +22,7 @@ import java.util.List;
 
 public interface FlowStorage {
 
-    String save(String name, List<String> workIds);
+    Long save(String name, List<Long> workIds);
 
-    FlowEntity findById(String flowId);
+    FlowEntity findById(Long flowId);
 }

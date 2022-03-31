@@ -36,7 +36,6 @@ public class MysqlExtractStorageTest extends CommonTest {
         extractEntity.setFromAction("api-1");
         extractEntity.setEl("$.token");
 
-        mysqlExtractStorage.save(extractEntity.getFromAction(), extractEntity.getFromApi(), extractEntity.getEl(), "JSON_PATH");
 
     }
 }

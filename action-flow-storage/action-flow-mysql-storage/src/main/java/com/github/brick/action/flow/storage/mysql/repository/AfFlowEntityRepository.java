@@ -22,5 +22,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AfFlowEntityRepository extends JpaRepository<AfFlowEntity, String>, JpaSpecificationExecutor<AfFlowEntity> {
+public interface AfFlowEntityRepository extends JpaRepository<AfFlowEntity, Long>, JpaSpecificationExecutor<AfFlowEntity> {
 }

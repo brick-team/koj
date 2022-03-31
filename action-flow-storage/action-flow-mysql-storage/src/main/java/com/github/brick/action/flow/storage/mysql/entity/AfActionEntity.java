@@ -16,19 +16,17 @@
 
 package com.github.brick.action.flow.storage.mysql.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "af_action", schema = "action-flow", catalog = "")
 public class AfActionEntity {
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
     @Column(name = "id")
-    private String id;
+    private Long id;
     @Basic
     @Column(name = "clazz_str")
     private String clazzStr;
@@ -39,11 +37,11 @@ public class AfActionEntity {
     @Column(name = "async")
     private boolean async;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

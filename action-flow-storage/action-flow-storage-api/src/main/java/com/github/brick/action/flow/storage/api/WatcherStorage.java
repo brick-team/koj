@@ -22,7 +22,7 @@ import java.util.List;
 
 public interface WatcherStorage {
 
-    String save(String exId,
+    Long save(Long exId,
               String condition,
               List<String> thenActions,
               List<String> catchActions,
@@ -30,5 +30,5 @@ public interface WatcherStorage {
               List<String> catchApis
     );
 
-    WatcherEntity findById(String refId);
+    WatcherEntity findById(Long refId);
 }

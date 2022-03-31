@@ -31,7 +31,7 @@ public class MysqlParamStorage implements ParamStorage {
 
 
     @Override
-    public String save(String group, String key, String value) {
+    public Long save(String group, String key, String value) {
         AfParamEntity entity = new AfParamEntity();
         entity.setGroup(group);
         entity.setKey(key);

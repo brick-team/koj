@@ -24,23 +24,34 @@ import java.util.Objects;
 @Entity
 @Table(name = "af_result", schema = "action-flow", catalog = "")
 public class AfResultEntity {
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
     @Column(name = "id")
-    private String id;
+    private Long id;
     @Basic
     @Column(name = "name")
     private String name;
     @Basic
     @Column(name = "ex_id")
     private String exId;
+    @Basic
+    @Column(name = "flow_id")
+    private Long flowId;
 
-    public String getId() {
+    public Long getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(Long flowId) {
+        this.flowId = flowId;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

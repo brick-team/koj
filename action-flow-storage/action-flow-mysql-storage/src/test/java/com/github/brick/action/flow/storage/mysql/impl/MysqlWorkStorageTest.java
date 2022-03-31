@@ -38,7 +38,6 @@ public class MysqlWorkStorageTest extends CommonTest {
         workEntity.setRefId("api-2");
 
 
-        this.mysqlWorkStorage.save("api", "ff8080817fd8aa0d017fd8aa12140000", new ArrayList<>(), new ArrayList<>());
 
     }
 }

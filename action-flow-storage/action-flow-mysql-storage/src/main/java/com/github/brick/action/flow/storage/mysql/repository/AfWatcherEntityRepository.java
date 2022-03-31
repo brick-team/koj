@@ -20,5 +20,5 @@ import com.github.brick.action.flow.storage.mysql.entity.AfWatcherEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface AfWatcherEntityRepository extends JpaRepository<AfWatcherEntity, String>, JpaSpecificationExecutor<AfWatcherEntity> {
+public interface AfWatcherEntityRepository extends JpaRepository<AfWatcherEntity, Long>, JpaSpecificationExecutor<AfWatcherEntity> {
 }

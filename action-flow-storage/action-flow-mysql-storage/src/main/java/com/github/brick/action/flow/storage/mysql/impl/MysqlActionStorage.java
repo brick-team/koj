@@ -33,8 +33,10 @@ import java.util.Optional;
 public class MysqlActionStorage implements ActionStorage {
     @Autowired
     private AfActionEntityRepository actionEntityRepository;
+
     @Override
-    public String save(String classStr, String methodStr, boolean async) {
+    public Long save(String classStr, String methodStr, boolean async) {
+
         AfActionEntity entity = new AfActionEntity();
         entity.setClazzStr(classStr);
         entity.setMethodStr(methodStr);
@@ -47,10 +49,10 @@ public class MysqlActionStorage implements ActionStorage {
     private AfActionParamEntityRepository actionParamEntityRepository;
 
     @Override
-    public ActionEntity findById(String refId) {
+    public ActionEntity findById(Long refId) {
         AfActionEntity byId = actionEntityRepository.getById(refId);
         ActionEntity actionEntity = new ActionEntity();
-        actionEntity.setId(refId);
+        actionEntity.setId(refId.toString());
         actionEntity.setClazzStr(byId.getClazzStr());
         actionEntity.setMethodStr(byId.getMethodStr());
         actionEntity.setAsync(byId.isAsync());

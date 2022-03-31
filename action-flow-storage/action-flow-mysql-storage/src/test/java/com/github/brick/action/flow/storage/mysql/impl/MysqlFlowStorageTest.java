@@ -22,7 +22,7 @@ import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
 import com.github.brick.action.flow.method.entity.api.ParamIn;
 import com.github.brick.action.flow.method.enums.FLowModel;
 import com.github.brick.action.flow.method.enums.HttpClientType;
-import com.github.brick.action.flow.method.execute.FlowExecuteImpl;
+import com.github.brick.action.flow.method.execute.impl.FlowExecuteImpl;
 import com.github.brick.action.flow.storage.mysql.entity.AfApiParamExEntity;
 import com.github.brick.action.flow.storage.mysql.repository.AfApiParamExEntityRepository;
 import org.junit.Before;
@@ -87,7 +87,7 @@ public class MysqlFlowStorageTest extends CommonTest {
         list.add(token);
         list.add(username);
         list.add(password);
-        mysqlFlowStorage.saveForApi("获取用户信息", Collections.singletonList("ff8080817fd8c469017fd8c46efe0000"), list);
+        mysqlFlowStorage.saveForApi("获取用户信息", new ArrayList<>(), list);
 
 
     }
@@ -96,8 +96,8 @@ public class MysqlFlowStorageTest extends CommonTest {
     @Test
     public void runner() throws Exception {
         AllEntity allEntity = new AllEntity();
-        String flowID = "ff8080817fd8e2e5017fd8e2ea170000";
-        FlowEntity getUserInfo = this.mysqlFlowStorage.findById(flowID);
+        String flowID = "1";
+        FlowEntity getUserInfo = this.mysqlFlowStorage.findById(Long.valueOf(flowID));
 
 
         Map<String, WatcherEntity> watcherMap = new HashMap<>();
@@ -132,15 +132,15 @@ public class MysqlFlowStorageTest extends CommonTest {
         for (WorkEntity workEntity : workEntities) {
             String type = workEntity.getType();
             if (type.equals("watcher")) {
-                WatcherEntity watcherEntity = mysqlWatcherStorage.findById(workEntity.getRefId());
+                WatcherEntity watcherEntity = mysqlWatcherStorage.findById(Long.valueOf(workEntity.getRefId()));
                 watcherMap.put(workEntity.getRefId(), watcherEntity);
             }
             else if (type.equals("action")) {
-                ActionEntity actionEntity = actionStorage.findById(workEntity.getRefId());
+                ActionEntity actionEntity = actionStorage.findById(Long.valueOf(workEntity.getRefId()));
                 actionTagMap.put(workEntity.getRefId(), actionEntity);
             }
             else if (type.equals("api")) {
-                ApiEntity apiEntity = apiStorage.findById(workEntity.getRefId());
+                ApiEntity apiEntity = apiStorage.findById(Long.valueOf(workEntity.getRefId()));
                 List<ApiParamEntity> params = apiEntity.getParams();
                 // 处理参数信息
                 handlerApiParamValue(flowID, exMap, params, apiEntityMap);
@@ -166,16 +166,14 @@ public class MysqlFlowStorageTest extends CommonTest {
 
     private void handlerOneApiValue(String flowID, Map<String, ExtractEntity> exMap, ApiParamEntity param, Map<String, ApiEntity> apiEntityMap) {
         Long id = param.getId();
-        AfApiParamExEntity byApiParamIdAndFlowId = paramExEntityRepository.findByApiParamIdAndFlowId(id, flowID);
-
+        AfApiParamExEntity byApiParamIdAndFlowId = paramExEntityRepository.findByApiParamIdAndFlowId(id, Long.valueOf(flowID));
         String exId = byApiParamIdAndFlowId.getExId();
         if (exId != null) {
 
-            ExtractEntity extractEntity = mysqlExtractStorage.findById(exId);
-
+            ExtractEntity extractEntity = mysqlExtractStorage.findById(Long.valueOf(exId));
             String fromApi = extractEntity.getFromApi();
             if (fromApi != null) {
-                ApiEntity byId = apiStorage.findById(fromApi);
+                ApiEntity byId = apiStorage.findById(Long.valueOf(fromApi));
                 List<ApiParamEntity> params = byId.getParams();
                 handlerApiParamValue(flowID, exMap, params, apiEntityMap);
                 apiEntityMap.put(fromApi, byId);

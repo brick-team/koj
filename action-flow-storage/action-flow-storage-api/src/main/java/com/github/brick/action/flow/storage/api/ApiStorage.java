@@ -21,7 +21,7 @@ import com.github.brick.action.flow.method.entity.api.ApiEntity;
 import java.util.List;
 
 public interface ApiStorage {
-    String save(String url, String method, String desc);
+    Long save(String url, String method, String desc);
 
     /**
      *
@@ -30,7 +30,7 @@ public interface ApiStorage {
      */
     void saveForApi(List<ApiEntity> list, boolean b);
 
-    ApiEntity findById(String apiId);
+    ApiEntity findById(Long apiId);
 
     List<ApiEntity> all();
 }

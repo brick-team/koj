@@ -22,5 +22,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AfParamEntityRepository extends JpaRepository<AfParamEntity, String>, JpaSpecificationExecutor<AfParamEntity> {
+public interface AfParamEntityRepository extends JpaRepository<AfParamEntity, Long>, JpaSpecificationExecutor<AfParamEntity> {
 }

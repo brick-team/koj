@@ -33,7 +33,7 @@ public class MysqlApiParamStorage implements ApiParamStorage {
     private AfApiParamEntityRepository afApiParamEntityRepository;
 
     @Override
-    public Long save(String apiId, Long pid, String in, String name, Boolean require) {
+    public Long save(Long apiId, Long pid, String in, String name, Boolean require) {
         AfApiParamEntity entity = new AfApiParamEntity();
         entity.setApiId(apiId);
         entity.setPid(pid);
@@ -45,7 +45,7 @@ public class MysqlApiParamStorage implements ApiParamStorage {
         return save.getId();
     }
 
-    public List<ApiParamEntity> findByAppId(String apiId) {
+    public List<ApiParamEntity> findByAppId(Long apiId) {
 
         List<ApiParamEntity> res = new ArrayList<>();
 

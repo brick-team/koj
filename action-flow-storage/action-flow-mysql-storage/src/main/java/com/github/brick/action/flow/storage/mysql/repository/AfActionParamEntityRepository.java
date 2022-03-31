@@ -24,6 +24,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AfActionParamEntityRepository extends JpaRepository<AfActionParamEntity, String>, JpaSpecificationExecutor<AfActionParamEntity> {
-    List<AfActionParamEntity> findByActionId(String actionId);
+public interface AfActionParamEntityRepository extends JpaRepository<AfActionParamEntity, Long>, JpaSpecificationExecutor<AfActionParamEntity> {
+    List<AfActionParamEntity> findByActionId(Long actionId);
 }

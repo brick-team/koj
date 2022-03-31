@@ -14,20 +14,22 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.execute;
+package com.github.brick.action.flow.method.execute.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
 import com.github.brick.action.flow.method.entity.api.ParamIn;
 import com.github.brick.action.flow.method.extract.Extract;
 import com.github.brick.action.flow.method.extract.ExtractImpl;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import net.minidev.json.JSONArray;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+/**
+ * 核心作用: 根据api参数列表和map结构组装实际请求对象
+ */
 public class HandlerApiParamEntity {
     Gson gson = new Gson();
     Extract extract = new ExtractImpl();
@@ -37,8 +39,8 @@ public class HandlerApiParamEntity {
             ParamIn in = apiParamEntity.getIn();
             if (in == ParamIn.body) {
                 List<ApiParamEntity> paramEntities = apiParamEntity.getParamEntities();
-                Map<String, Object> ss = extracted(paramEntities, data);
-                System.out.println(gson.toJson(ss));
+                Map<String, Object> body = extracted(paramEntities, data);
+                System.out.println(gson.toJson(body));
             }
         }
 
@@ -51,7 +53,6 @@ public class HandlerApiParamEntity {
         for (ApiParamEntity paramEntity : paramEntities) {
             String type = paramEntity.getType();
             String name = paramEntity.getName();
-            String flag = paramEntity.getFlag();
             String el = paramEntity.getEl();
             List<ApiParamEntity> pp = paramEntity.getParamEntities();
             // 判断是否是 object

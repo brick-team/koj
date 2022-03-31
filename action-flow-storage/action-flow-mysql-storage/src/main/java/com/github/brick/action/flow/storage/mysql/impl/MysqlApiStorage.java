@@ -41,7 +41,7 @@ public class MysqlApiStorage implements ApiStorage {
     private AfApiParamExEntityRepository afApiParamExEntityRepository;
 
     @Override
-    public String save(String url, String method, String desc) {
+    public Long save(String url, String method, String desc) {
         AfApiEntity entity = new AfApiEntity();
         entity.setUrl(url);
         entity.setMethod(method);
@@ -56,14 +56,14 @@ public class MysqlApiStorage implements ApiStorage {
     public void saveForApi(List<ApiEntity> list, boolean b) {
         for (ApiEntity apiEntity : list) {
             // step1: 保存当前API数据
-            String apiId = this.save(apiEntity.getUrl(), apiEntity.getMethod(), apiEntity.getDesc());
+            Long apiId = this.save(apiEntity.getUrl(), apiEntity.getMethod(), apiEntity.getDesc());
             // step2: 保存参数数据
             List<ApiParamEntity> params = apiEntity.getParams();
             extracted(apiId, params, null);
         }
     }
 
-    private void extracted(String apiId, List<ApiParamEntity> params, Long pid) {
+    private void extracted(Long apiId, List<ApiParamEntity> params, Long pid) {
         for (ApiParamEntity param : params) {
             try {
 
@@ -83,13 +83,13 @@ public class MysqlApiStorage implements ApiStorage {
 
 
     @Override
-    public ApiEntity findById(String apiId) {
+    public ApiEntity findById(Long apiId) {
         Optional<AfApiEntity> byId1 = this.afApiEntityRepository.findById(apiId);
         if (byId1.isPresent()) {
             AfApiEntity byId = byId1.get();
             List<ApiParamEntity> list = this.apiParamStorage.findByAppId(apiId);
             ApiEntity apiEntity = new ApiEntity();
-            apiEntity.setId(byId.getId());
+            apiEntity.setId(byId.getId().toString());
             apiEntity.setUrl(byId.getUrl());
             apiEntity.setMethod(byId.getMethod());
             apiEntity.setDesc(byId.getDesca());

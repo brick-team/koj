@@ -14,27 +14,31 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.mysql.impl;
+package com.github.brick.action.flow.method.enums;
 
-import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
-import org.junit.Before;
-import org.junit.Test;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import java.util.List;
+/**
+ * 工作节点类型
+ */
+@AllArgsConstructor
+@Getter
+public enum WorkNodeType {
+    /**
+     * 开始节点
+     */
+    START(1L),
+    /**
+     * 成功节点
+     */
+    THEN(2L),
 
-public class MysqlApiParamStorageTest extends CommonTest {
-    MysqlApiParamStorage mysqlApiParamStorage;
+    /**
+     * 失败节点
+     */
+    CAT(3L),
+    ;
+    private Long id;
 
-    @Before
-    public void init() {
-        mysqlApiParamStorage = context.getBean(MysqlApiParamStorage.class);
-    }
-
-    @Test
-    public void save() {
-    }
-
-    @Test
-    public void find() {
-    }
 }
