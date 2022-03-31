@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 30/03/2022 14:43:13
+ Date: 31/03/2022 15:56:46
 */
 
 SET NAMES utf8mb4;
@@ -22,17 +22,19 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_action`;
 CREATE TABLE `af_action` (
-  `id` varchar(255) NOT NULL,
-  `clazz_str` varchar(255) NOT NULL,
-  `method_str` varchar(255) NOT NULL,
-  `async` bit(1) NOT NULL DEFAULT b'0',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `async` bit(1) DEFAULT NULL,
+  `clazz_str` varchar(255) DEFAULT NULL,
+  `method_str` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_action
 -- ----------------------------
 BEGIN;
+INSERT INTO `af_action` (`id`, `async`, `clazz_str`, `method_str`) VALUES (1, b'0', 'com.github.brick.action.flow.LoginAction', 'login');
+INSERT INTO `af_action` (`id`, `async`, `clazz_str`, `method_str`) VALUES (2, b'0', 'com.github.brick.action.flow.SendPointAction', 'sendPoint');
 COMMIT;
 
 -- ----------------------------
@@ -40,18 +42,22 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_action_param`;
 CREATE TABLE `af_action_param` (
-  `id` varchar(255) NOT NULL,
-  `action_id` varchar(255) NOT NULL COMMENT 'action表id',
-  `arg_name` varchar(255) DEFAULT NULL COMMENT '方法参数名称',
-  `index` int DEFAULT NULL COMMENT '参数索引',
-  `type` varchar(255) DEFAULT NULL COMMENT '参数类型',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `action_id` bigint DEFAULT NULL,
+  `arg_name` varchar(255) DEFAULT NULL,
+  `index` int DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_action_param
 -- ----------------------------
 BEGIN;
+INSERT INTO `af_action_param` (`id`, `action_id`, `arg_name`, `index`, `type`) VALUES (1, 1, 'username', 0, 'java.lang.String');
+INSERT INTO `af_action_param` (`id`, `action_id`, `arg_name`, `index`, `type`) VALUES (2, 1, 'password', 1, 'java.lang.String');
+INSERT INTO `af_action_param` (`id`, `action_id`, `arg_name`, `index`, `type`) VALUES (3, 2, 'uid', 0, 'java.lang.String');
+INSERT INTO `af_action_param` (`id`, `action_id`, `arg_name`, `index`, `type`) VALUES (4, 2, 'point', 1, 'java.lang.Integer');
 COMMIT;
 
 -- ----------------------------
@@ -59,21 +65,25 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_action_param_ex`;
 CREATE TABLE `af_action_param_ex` (
-  `id` varchar(255) NOT NULL,
-  `action_param_id` varchar(255) NOT NULL COMMENT 'action_param参数表id',
-  `param_group_id` varchar(255) DEFAULT NULL COMMENT '参数组id',
-  `ex` varchar(255) DEFAULT NULL COMMENT '参数组取值表达式',
-  `ex_id` varchar(255) DEFAULT NULL COMMENT '值提取器ID , 对应 ac_extract 表id',
-  `format_id` varchar(255) DEFAULT NULL COMMENT '转换器id',
-  `value` varchar(255) DEFAULT NULL COMMENT '静态值',
-  `flow_id` varchar(255) NOT NULL COMMENT '流程id',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `action_param_id` varchar(255) DEFAULT NULL,
+  `ex` varchar(255) DEFAULT NULL,
+  `ex_id` varchar(255) DEFAULT NULL,
+  `flow_id` varchar(255) DEFAULT NULL,
+  `format_id` varchar(255) DEFAULT NULL,
+  `param_group_id` varchar(255) DEFAULT NULL,
+  `value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_action_param_ex
 -- ----------------------------
 BEGIN;
+INSERT INTO `af_action_param_ex` (`id`, `action_param_id`, `ex`, `ex_id`, `flow_id`, `format_id`, `param_group_id`, `value`) VALUES (12, '4', NULL, NULL, '3', '1', NULL, '10');
+INSERT INTO `af_action_param_ex` (`id`, `action_param_id`, `ex`, `ex_id`, `flow_id`, `format_id`, `param_group_id`, `value`) VALUES (11, '3', 'username', NULL, '3', NULL, 'a', NULL);
+INSERT INTO `af_action_param_ex` (`id`, `action_param_id`, `ex`, `ex_id`, `flow_id`, `format_id`, `param_group_id`, `value`) VALUES (10, '2', 'password', NULL, '3', NULL, 'a', NULL);
+INSERT INTO `af_action_param_ex` (`id`, `action_param_id`, `ex`, `ex_id`, `flow_id`, `format_id`, `param_group_id`, `value`) VALUES (9, '1', 'username', NULL, '3', NULL, 'a', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -81,22 +91,17 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_api`;
 CREATE TABLE `af_api` (
-  `id` varchar(255) NOT NULL,
-  `url` varchar(255) DEFAULT NULL COMMENT '接口地址',
-  `method` varchar(255) DEFAULT NULL COMMENT '请求方式',
-  `desca` varchar(255) DEFAULT NULL COMMENT '描述信息',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `desca` varchar(255) DEFAULT NULL,
+  `method` varchar(255) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_api
 -- ----------------------------
 BEGIN;
-INSERT INTO `af_api` (`id`, `url`, `method`, `desca`) VALUES ('ff8080817fd8aa0d017fd8aa12140000', '/pet', 'post', 'Add a new pet to the store');
-INSERT INTO `af_api` (`id`, `url`, `method`, `desca`) VALUES ('ff8080817fd8d461017fd8d466bb0000', 'http://localhost:8080/login', 'post', NULL);
-INSERT INTO `af_api` (`id`, `url`, `method`, `desca`) VALUES ('ff8080817fd8d461017fd8d4671a0001', 'http://localhost:8080/login', 'post', NULL);
-INSERT INTO `af_api` (`id`, `url`, `method`, `desca`) VALUES ('ff8080817fd8d4fa017fd8d4ff870000', 'http://localhost:8080/login', 'post', NULL);
-INSERT INTO `af_api` (`id`, `url`, `method`, `desca`) VALUES ('ff8080817fd8d4fa017fd8d4ffe30001', 'http://localhost:8080/user_info', 'get', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -105,37 +110,18 @@ COMMIT;
 DROP TABLE IF EXISTS `af_api_param`;
 CREATE TABLE `af_api_param` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `api_id` varchar(255) DEFAULT NULL,
+  `api_id` bigint DEFAULT NULL,
   `in` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `pid` bigint DEFAULT NULL,
   `require` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_api_param
 -- ----------------------------
 BEGIN;
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (1, 'ff8080817fd8aa0d017fd8aa12140000', 'body', 'body', NULL, 1);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (2, 'ff8080817fd8aa0d017fd8aa12140000', NULL, 'id', 1, 0);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (3, 'ff8080817fd8aa0d017fd8aa12140000', NULL, 'category', 1, 0);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (4, 'ff8080817fd8aa0d017fd8aa12140000', NULL, 'id', 3, 0);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (5, 'ff8080817fd8aa0d017fd8aa12140000', NULL, 'name', 3, 0);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (6, 'ff8080817fd8aa0d017fd8aa12140000', NULL, 'name', 1, 1);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (7, 'ff8080817fd8aa0d017fd8aa12140000', NULL, 'photoUrls', 1, 1);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (8, 'ff8080817fd8aa0d017fd8aa12140000', NULL, 'tags', 1, 0);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (9, 'ff8080817fd8aa0d017fd8aa12140000', NULL, 'tags', 8, 0);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (10, 'ff8080817fd8aa0d017fd8aa12140000', NULL, 'id', 9, 0);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (11, 'ff8080817fd8aa0d017fd8aa12140000', NULL, 'name', 9, 0);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (12, 'ff8080817fd8aa0d017fd8aa12140000', NULL, 'status', 1, 0);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (13, 'ff8080817fd8d461017fd8d466bb0000', 'formData', 'username', NULL, 1);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (14, 'ff8080817fd8d461017fd8d466bb0000', 'formData', 'password', NULL, 1);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (15, 'ff8080817fd8d461017fd8d4671a0001', 'formData', 'username', NULL, 1);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (16, 'ff8080817fd8d461017fd8d4671a0001', 'formData', 'password', NULL, 1);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (17, 'ff8080817fd8d4fa017fd8d4ff870000', 'formData', 'username', NULL, 1);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (18, 'ff8080817fd8d4fa017fd8d4ff870000', 'formData', 'password', NULL, 1);
-INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (19, 'ff8080817fd8d4fa017fd8d4ffe30001', 'header', 'token', NULL, 1);
 COMMIT;
 
 -- ----------------------------
@@ -143,23 +129,20 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_api_param_ex`;
 CREATE TABLE `af_api_param_ex` (
-  `id` varchar(255) NOT NULL,
-  `param_group` varchar(255) DEFAULT NULL COMMENT '参数组',
-  `ex` varchar(255) DEFAULT NULL COMMENT '参数组对应提取式',
-  `ex_id` varchar(255) DEFAULT NULL COMMENT '提取器id',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `api_param_id` bigint DEFAULT NULL,
   `el` varchar(255) DEFAULT NULL,
-  `flow_id` varchar(255) NOT NULL COMMENT '流程id',
-  `api_param_id` int NOT NULL,
+  `ex` varchar(255) DEFAULT NULL,
+  `ex_id` varchar(255) DEFAULT NULL,
+  `flow_id` bigint DEFAULT NULL,
+  `param_group` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_api_param_ex
 -- ----------------------------
 BEGIN;
-INSERT INTO `af_api_param_ex` (`id`, `param_group`, `ex`, `ex_id`, `el`, `flow_id`, `api_param_id`) VALUES ('ff8080817fd8e2e5017fd8e2ea540001', NULL, NULL, 'ff8080817fd8d20f017fd8d214b30000', NULL, 'ff8080817fd8e2e5017fd8e2ea170000', 19);
-INSERT INTO `af_api_param_ex` (`id`, `param_group`, `ex`, `ex_id`, `el`, `flow_id`, `api_param_id`) VALUES ('ff8080817fd8e2e5017fd8e2ea6a0002', 'a', 'username', NULL, NULL, 'ff8080817fd8e2e5017fd8e2ea170000', 17);
-INSERT INTO `af_api_param_ex` (`id`, `param_group`, `ex`, `ex_id`, `el`, `flow_id`, `api_param_id`) VALUES ('ff8080817fd8e2e5017fd8e2ea7d0003', 'a', 'password', NULL, NULL, 'ff8080817fd8e2e5017fd8e2ea170000', 18);
 COMMIT;
 
 -- ----------------------------
@@ -167,19 +150,21 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_extract`;
 CREATE TABLE `af_extract` (
-  `id` varchar(255) NOT NULL,
-  `from_action` varchar(255) DEFAULT NULL COMMENT '来自那个action执行结果',
-  `from_api` varchar(255) DEFAULT NULL COMMENT '来自那个api执行结果',
-  `el` varchar(255) NOT NULL COMMENT '提取表达式',
-  `el_type` varchar(255) DEFAULT 'JSON_PATH' COMMENT '提取方式',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `el` varchar(255) DEFAULT NULL,
+  `el_type` varchar(255) DEFAULT NULL,
+  `from_action` bigint DEFAULT NULL,
+  `from_api` bigint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_extract
 -- ----------------------------
 BEGIN;
-INSERT INTO `af_extract` (`id`, `from_action`, `from_api`, `el`, `el_type`) VALUES ('ff8080817fd8d20f017fd8d214b30000', '', 'ff8080817fd8d4fa017fd8d4ff870000', '$.token', 'JSON_PATH');
+INSERT INTO `af_extract` (`id`, `el`, `el_type`, `from_action`, `from_api`) VALUES (1, '$.username', 'JSON_PATH', 1, NULL);
+INSERT INTO `af_extract` (`id`, `el`, `el_type`, `from_action`, `from_api`) VALUES (2, '$.login_time', 'JSON_PATH', 1, NULL);
+INSERT INTO `af_extract` (`id`, `el`, `el_type`, `from_action`, `from_api`) VALUES (3, '$.age', 'JSON_PATH', 1, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -187,20 +172,23 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_flow`;
 CREATE TABLE `af_flow` (
-  `id` varchar(255) NOT NULL,
-  `name` varchar(255) DEFAULT NULL COMMENT '流程名称',
-  `works` varchar(255) NOT NULL COMMENT '需要执行的顶层工作id',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `works` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_flow
 -- ----------------------------
 BEGIN;
-INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES ('2c9094b87fd8e161017fd8e1669d0000', '获取用户信息', 'ff8080817fd8d4fa017fd8d4ffe30001');
-INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES ('ff8080817fd8d73f017fd8d744dd0000', '获取用户信息', 'ff8080817fd8d4fa017fd8d4ffe30001');
-INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES ('ff8080817fd8e26a017fd8e271250000', '获取用户信息', 'ff8080817fd8d4fa017fd8d4ffe30001');
-INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES ('ff8080817fd8e2e5017fd8e2ea170000', '获取用户信息', 'ff8080817fd8c469017fd8c46efe0000');
+INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (1, 'action1', NULL);
+INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (2, 'action1', NULL);
+INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (3, 'tttt', NULL);
+INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (4, 'tttt', NULL);
+INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (5, 'tttt', NULL);
+INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (6, 'tttt', NULL);
+INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (7, 'tttt', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -208,16 +196,16 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_format`;
 CREATE TABLE `af_format` (
-  `id` varchar(255) NOT NULL,
-  `class_str` varchar(255) NOT NULL COMMENT '转换器类全路径',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `class_str` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_format
 -- ----------------------------
 BEGIN;
-INSERT INTO `af_format` (`id`, `class_str`) VALUES ('2c9094b87fd871c6017fd871cb740000', 'com.github.brick.action.flow.method.format.StringToClass');
+INSERT INTO `af_format` (`id`, `class_str`) VALUES (1, 'com.github.brick.action.flow.method.format.num.StringToIntegerFormat');
 COMMIT;
 
 -- ----------------------------
@@ -225,17 +213,21 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_param`;
 CREATE TABLE `af_param` (
-  `id` varchar(255) NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `group` varchar(255) NOT NULL COMMENT '参数组',
   `key` varchar(255) NOT NULL COMMENT '参数键',
   `value` varchar(255) DEFAULT NULL COMMENT '参数值',
+  `flow_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_param
 -- ----------------------------
 BEGIN;
+INSERT INTO `af_param` (`id`, `group`, `key`, `value`, `flow_id`) VALUES (1, 'a', 'password', 'password', 3);
+INSERT INTO `af_param` (`id`, `group`, `key`, `value`, `flow_id`) VALUES (2, 'a', 'username', 'username', 3);
+INSERT INTO `af_param` (`id`, `group`, `key`, `value`, `flow_id`) VALUES (3, 'a', 'password', 'password', 3);
 COMMIT;
 
 -- ----------------------------
@@ -243,11 +235,12 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_result`;
 CREATE TABLE `af_result` (
-  `id` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL COMMENT '结果键',
-  `ex_id` varchar(255) NOT NULL COMMENT '结果取值表达式',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `ex_id` varchar(255) DEFAULT NULL,
+  `flow_id` bigint DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_result
@@ -260,16 +253,17 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_watcher`;
 CREATE TABLE `af_watcher` (
-  `id` varchar(255) NOT NULL,
-  `ex_id` varchar(255) NOT NULL COMMENT '取值器id',
-  `condition` varchar(255) NOT NULL COMMENT '表达式',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `condition` varchar(255) NOT NULL,
+  `ex_id` bigint NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_watcher
 -- ----------------------------
 BEGIN;
+INSERT INTO `af_watcher` (`id`, `condition`, `ex_id`) VALUES (1, '>10', 3);
 COMMIT;
 
 -- ----------------------------
@@ -277,19 +271,21 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_watcher_rs`;
 CREATE TABLE `af_watcher_rs` (
-  `id` varchar(255) NOT NULL,
-  `watcher_id` varchar(255) DEFAULT NULL,
-  `then_action_ids` varchar(255) DEFAULT NULL,
-  `then_api_ids` varchar(255) DEFAULT NULL,
-  `catch_action_ids` varchar(255) DEFAULT NULL,
-  `catch_api_ids` varchar(255) DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `ref_id` bigint NOT NULL,
+  `ref_type` varchar(255) NOT NULL,
+  `type` int DEFAULT NULL,
+  `watcher_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_watcher_rs
 -- ----------------------------
 BEGIN;
+INSERT INTO `af_watcher_rs` (`id`, `ref_id`, `ref_type`, `type`, `watcher_id`) VALUES (1, 2, 'action', 1, 1);
+INSERT INTO `af_watcher_rs` (`id`, `ref_id`, `ref_type`, `type`, `watcher_id`) VALUES (2, 2, 'action', 1, 1);
+INSERT INTO `af_watcher_rs` (`id`, `ref_id`, `ref_type`, `type`, `watcher_id`) VALUES (3, 2, 'action', 2, 1);
 COMMIT;
 
 -- ----------------------------
@@ -297,19 +293,104 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `af_work`;
 CREATE TABLE `af_work` (
-  `id` varchar(255) NOT NULL,
-  `type` varchar(255) NOT NULL COMMENT '执行类型包含：监控、函数、api',
-  `ref_id` varchar(255) NOT NULL COMMENT '对应的id',
-  `thens` varchar(255) DEFAULT NULL COMMENT '执行成功需要继续执行的workid',
-  `catchs` varchar(255) DEFAULT NULL COMMENT '执行失败需要继续执行的workid',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `ref_id` bigint DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_work
 -- ----------------------------
 BEGIN;
-INSERT INTO `af_work` (`id`, `type`, `ref_id`, `thens`, `catchs`) VALUES ('ff8080817fd8c469017fd8c46efe0000', 'api', 'ff8080817fd8d4fa017fd8d4ffe30001', '', '');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for af_work_cat
+-- ----------------------------
+DROP TABLE IF EXISTS `af_work_cat`;
+CREATE TABLE `af_work_cat` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `pid` bigint DEFAULT NULL,
+  `ref_id` bigint DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `work_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of af_work_cat
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for af_work_cz
+-- ----------------------------
+DROP TABLE IF EXISTS `af_work_cz`;
+CREATE TABLE `af_work_cz` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `flow_id` bigint DEFAULT NULL,
+  `pid` bigint DEFAULT NULL,
+  `ref_id` bigint DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `work_type` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of af_work_cz
+-- ----------------------------
+BEGIN;
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (59, 6, 58, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (66, 7, 65, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (65, 7, 64, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (64, 7, 63, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (63, 7, 61, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (62, 7, 61, 1, 'watcher', 3);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (61, 7, NULL, 1, 'action', 1);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (60, 6, 59, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (58, 6, 57, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (57, 6, 55, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (56, 6, 55, 1, 'watcher', 3);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (55, 6, NULL, 1, 'action', 1);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (54, 5, 53, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (53, 5, 52, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (52, 5, 51, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (51, 5, 49, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (50, 5, 49, 1, 'watcher', 3);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (49, 5, NULL, 1, 'action', 1);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (48, 4, 47, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (47, 4, 46, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (46, 4, 45, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (45, 4, 43, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (44, 4, 43, 1, 'watcher', 3);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (43, 4, NULL, 1, 'action', 1);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (42, 3, 41, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (41, 3, 40, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (40, 3, 39, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (39, 3, 37, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (38, 3, 37, 1, 'watcher', 3);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (37, 3, NULL, 1, 'action', 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for af_work_then
+-- ----------------------------
+DROP TABLE IF EXISTS `af_work_then`;
+CREATE TABLE `af_work_then` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `pid` bigint DEFAULT NULL,
+  `ref_id` bigint DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `work_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of af_work_then
+-- ----------------------------
+BEGIN;
 COMMIT;
 
 -- ----------------------------
