@@ -14,26 +14,22 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.enums;
+package com.github.brick.action.flow;
 
-/**
- * work节点类型
- */
-public enum WorkTypeModel implements Type {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    /**
-     * 动作
-     */
-    ACTION(),
-    /**
-     * 监控
-     */
-    WATCHER(),
-    API(),
-    ;
+import java.util.HashMap;
+import java.util.Map;
 
-    @Override
-    public String type() {
-        return name();
+public class SendPointAction {
+    private static final Logger logger = LoggerFactory.getLogger(SendPointAction.class);
+    Map<String, Object> points = new HashMap<>();
+
+    public Map<String, Object> sendPoint(String uid, Integer point) {
+            logger.error("sendPoint,uid = {}, point = {}", uid, point);
+
+        points.put(uid, point);
+        return points;
     }
 }

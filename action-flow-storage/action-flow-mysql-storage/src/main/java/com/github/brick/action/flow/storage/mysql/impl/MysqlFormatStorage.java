@@ -21,6 +21,9 @@ import com.github.brick.action.flow.storage.mysql.entity.AfFormatEntity;
 import com.github.brick.action.flow.storage.mysql.repository.AfFormatEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
 @Service
 public class MysqlFormatStorage implements FormatStorage {
     @Autowired
@@ -32,5 +35,14 @@ public class MysqlFormatStorage implements FormatStorage {
         entity.setClassStr(classStr);
         AfFormatEntity save = formatEntityRepository.save(entity);
         return save.getId();
+    }
+
+    public String findById(Long formatId) {
+        Optional<AfFormatEntity> byId = formatEntityRepository.findById(formatId);
+        if (byId.isPresent()) {
+            return byId.get().getClassStr();
+        }
+
+        return null;
     }
 }

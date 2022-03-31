@@ -49,8 +49,15 @@ public class MysqlExtractStorage implements ExtractStorage {
             AfExtractEntity afExtractEntity = byId.get();
             ExtractEntity extractEntity = new ExtractEntity();
             extractEntity.setId(afExtractEntity.getId().toString());
-            extractEntity.setFromAction(afExtractEntity.getFromAction().toString());
-            extractEntity.setFromApi(afExtractEntity.getFromApi().toString());
+            Long fromAction = afExtractEntity.getFromAction();
+            if (fromAction != null) {
+
+                extractEntity.setFromAction(fromAction.toString());
+            }
+            Long fromApi = afExtractEntity.getFromApi();
+            if (fromApi != null) {
+                extractEntity.setFromApi(fromApi.toString());
+            }
             extractEntity.setEl(afExtractEntity.getEl());
 
             return extractEntity;

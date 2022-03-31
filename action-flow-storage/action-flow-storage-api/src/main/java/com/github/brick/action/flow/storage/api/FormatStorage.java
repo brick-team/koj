@@ -18,4 +18,6 @@ package com.github.brick.action.flow.storage.api;
 
 public interface FormatStorage {
     Long save(String classStr);
+
+    public String findById(Long formatId);
 }

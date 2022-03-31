@@ -16,10 +16,168 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
+import com.github.brick.action.flow.method.enums.WorkNodeType;
+import com.github.brick.action.flow.method.req.WorkNode;
 import com.github.brick.action.flow.storage.api.WorkStorage;
+import com.github.brick.action.flow.storage.mysql.entity.AfWorkCz;
+import com.github.brick.action.flow.storage.mysql.repository.AfWorkCzRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class MysqlWorkStorage implements WorkStorage {
+    @Autowired
+    private AfWorkCzRepository workCzRepository;
+
+    @Override
+    public void saveWorkNodes(List<WorkNode> workNodes, Long flowId) {
+        for (WorkNode workNode : workNodes) {
+            saveWorkNode(workNode, flowId);
+        }
+    }
+
+    @Override
+    public void saveWorkNode(WorkNode workNode, Long flowId) {
+        AfWorkCz entity1 = new AfWorkCz();
+        entity1.setFlowId(flowId);
+        entity1.setWorkType(WorkNodeType.START.getId());
+
+        entity1.setPid(null);
+        entity1.setType(workNode.getType());
+        entity1.setRefId(workNode.getRefId());
+
+        AfWorkCz save = workCzRepository.save(entity1);
+
+
+        // TODO: 2022/3/30 then cat 数据存储
+        List<WorkNode> cat = workNode.getCat();
+        handlerCat(cat, save.getId(), flowId);
+        List<WorkNode> then = workNode.getThen();
+        handlerThe(then, save.getId(), flowId);
+
+    }
+
+    private void handlerCat(List<WorkNode> data, Long pid, long workFlowId) {
+        for (WorkNode WorkNode : data) {
+            AfWorkCz entity1 = new AfWorkCz();
+            entity1.setWorkType(WorkNodeType.CAT.getId());
+            entity1.setFlowId(workFlowId);
+
+            entity1.setPid(pid);
+            entity1.setType(WorkNode.getType());
+            entity1.setRefId(WorkNode.getRefId());
+
+            AfWorkCz save = workCzRepository.save(entity1);
+            List<WorkNode> then = WorkNode.getThen();
+            handlerThe(then, save.getId(), workFlowId);
+            List<WorkNode> cat = WorkNode.getCat();
+            handlerCat(cat, save.getId(), workFlowId);
+
+        }
+    }
+
+    private void handlerThe(List<WorkNode> data, Long pid, long workFlowId) {
+        for (WorkNode WorkNode : data) {
+            AfWorkCz entity1 = new AfWorkCz();
+            entity1.setWorkType(WorkNodeType.THEN.getId());
+            entity1.setFlowId(workFlowId);
+            entity1.setPid(pid);
+            entity1.setType(WorkNode.getType());
+            entity1.setRefId(WorkNode.getRefId());
+
+            AfWorkCz save = workCzRepository.save(entity1);
+            List<WorkNode> then = WorkNode.getThen();
+            handlerThe(then, save.getId(), workFlowId);
+            List<WorkNode> cat = WorkNode.getCat();
+
+            handlerCat(cat, save.getId(), workFlowId);
+
+        }
+
+
+    }
+
+
+    @Override
+    public List<WorkNode> findByFlowId(Long flowId) {
+        List<AfWorkCz> list = workCzRepository.findByFlowId(flowId);
+        List<WorkNode> res = new ArrayList<>();
+        Map<Long, List<AfWorkCz>> pidMap = new HashMap<>();
+
+        for (AfWorkCz afWorkCz : list) {
+            Long pid = afWorkCz.getPid();
+            if (pid != null) {
+                List<AfWorkCz> afWorkCzs = pidMap.get(pid);
+                if (afWorkCzs == null) {
+                    afWorkCzs = new ArrayList<>();
+                }
+                afWorkCzs.add(afWorkCz);
+                pidMap.put(pid, afWorkCzs);
+            }
+        }
+
+        List<AfWorkCz> starts = list.stream().filter(s -> s.getWorkType().equals(WorkNodeType.START.getId())).collect(Collectors.toList());
+
+        for (AfWorkCz start : starts) {
+            WorkNode WorkNode = new WorkNode();
+            WorkNode.setType(start.getType());
+            WorkNode.setRefId(start.getRefId());
+            WorkNode.setThen(workCzToThens(start, pidMap));
+            WorkNode.setCat(workCzToCat(start, pidMap));
+
+            res.add(WorkNode);
+        }
+
+
+        return res;
+    }
+
+    private List<WorkNode> workCzToThens(AfWorkCz start, Map<Long, List<AfWorkCz>> pidMap) {
+        List<AfWorkCz> afWorkCzs = pidMap.get(start.getId());
+        List<WorkNode> res = new ArrayList<>();
+        if (afWorkCzs != null) {
+            List<AfWorkCz> collect = afWorkCzs.stream().filter(s -> {
+                return s.getWorkType().equals(WorkNodeType.THEN.getId());
+            }).collect(Collectors.toList());
+
+            for (AfWorkCz afWorkCz : collect) {
+                WorkNode WorkNode = new WorkNode();
+                WorkNode.setType(afWorkCz.getType());
+                WorkNode.setRefId(afWorkCz.getRefId());
+                WorkNode.setThen(workCzToThens(afWorkCz, pidMap));
+                WorkNode.setCat(workCzToCat(afWorkCz, pidMap));
+                res.add(WorkNode);
+            }
+        }
+
+        return res;
+    }
+
+    private List<WorkNode> workCzToCat(AfWorkCz start, Map<Long, List<AfWorkCz>> pidMap) {
+        List<WorkNode> res = new ArrayList<>();
+        List<AfWorkCz> afWorkCzs = pidMap.get(start.getId());
+        if (afWorkCzs != null) {
+            List<AfWorkCz> collect = afWorkCzs.stream().filter(s -> {
+                return s.getWorkType().equals(WorkNodeType.CAT.getId());
+            }).collect(Collectors.toList());
+
+            for (AfWorkCz afWorkCz : collect) {
+                WorkNode WorkNode = new WorkNode();
+                WorkNode.setType(afWorkCz.getType());
+                WorkNode.setRefId(afWorkCz.getRefId());
+                WorkNode.setThen(workCzToThens(afWorkCz, pidMap));
+                WorkNode.setCat(workCzToCat(afWorkCz, pidMap));
+                res.add(WorkNode);
+            }
+        }
+
+        return res;
+    }
 
 }

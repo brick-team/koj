@@ -50,7 +50,11 @@ public class MysqlActionStorage implements ActionStorage {
 
     @Override
     public ActionEntity findById(Long refId) {
-        AfActionEntity byId = actionEntityRepository.getById(refId);
+        Optional<AfActionEntity> byId1 = actionEntityRepository.findById(refId);
+        if (!byId1.isPresent()) {
+            return null;
+        }
+        AfActionEntity byId = byId1.get();
         ActionEntity actionEntity = new ActionEntity();
         actionEntity.setId(refId.toString());
         actionEntity.setClazzStr(byId.getClazzStr());
@@ -62,9 +66,12 @@ public class MysqlActionStorage implements ActionStorage {
         ArrayList<ActionEntity.Param> params = new ArrayList<>();
         for (AfActionParamEntity afActionParamEntity : byActionId) {
             ActionEntity.Param param = new ActionEntity.Param();
+            param.setId(afActionParamEntity.getId().toString());
+
             param.setArgName(afActionParamEntity.getArgName());
             param.setIndex(afActionParamEntity.getIndex());
             param.setType(afActionParamEntity.getType());
+            params.add(param);
         }
         actionEntity.setParams(params);
 

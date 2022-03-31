@@ -26,6 +26,7 @@ import java.util.List;
  */
 @Data
 public class WorkNode {
+
     private String type;
     private Long refId;
     /**

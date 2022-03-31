@@ -42,6 +42,7 @@ public class ActionEntity implements ExecuteObject {
 
     @Data
     public static class Param {
+        private String id;
         private String argName;
         private String value;
         private String paramGroup;

@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MysqlWatcherStorage implements WatcherStorage {
@@ -98,15 +99,53 @@ public class MysqlWatcherStorage implements WatcherStorage {
 
     @Override
     public WatcherEntity findById(Long refId) {
-        AfWatcherEntity byId = afWatcherEntityRepository.getById(refId);
+        Optional<AfWatcherEntity> byId1 = afWatcherEntityRepository.findById(refId);
+        if (!byId1.isPresent()) {
+            return null;
+        }
+        AfWatcherEntity byId = byId1.get();
         WatcherEntity watcherEntity = new WatcherEntity();
         watcherEntity.setId(refId.toString());
         watcherEntity.setExId(byId.getExId().toString());
         watcherEntity.setCondition(byId.getCondition());
 
-        AfWatcherRsEntity byWatcherId = afWatcherRsEntityRepository.findByWatcherId(refId);
+        List<AfWatcherRsEntity> byWatcherId = afWatcherRsEntityRepository.findByWatcherId(refId);
+        ArrayList<WatcherEntity.Then> thens = new ArrayList<>();
+        ArrayList<WatcherEntity.Catch> catches = new ArrayList<>();
 
-        // todo: 处理then、catch
+        for (AfWatcherRsEntity afWatcherRsEntity : byWatcherId) {
+            Integer type = afWatcherRsEntity.getType();
+            String refType = afWatcherRsEntity.getRefType();
+            Long refId1 = afWatcherRsEntity.getRefId();
+            // 通过
+            if (type == 1) {
+                WatcherEntity.Then then = new WatcherEntity.Then();
+                if (refType.equals("action")) {
+                    then.setActionId(refId1.toString());
+                    thens.add(then);
+                }
+                else {
+                    then.setApiId(refId1.toString());
+                    thens.add(then);
+                }
+            }
+            // 不通过
+            else if (type == 2) {
+                WatcherEntity.Catch aCatch = new WatcherEntity.Catch();
+                if (refType.equals("action")) {
+                    aCatch.setActionId(refId1.toString());
+                    catches.add(aCatch);
+                }
+                else {
+                    aCatch.setApiId(refId1.toString());
+                    catches.add(aCatch);
+                }
+            }
+        }
+
+        watcherEntity.setThens(thens);
+        watcherEntity.setCatchs(catches);
+
 
 
         return watcherEntity;

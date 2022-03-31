@@ -16,9 +16,16 @@
 
 package com.github.brick.action.flow.storage.api;
 
+import com.github.brick.action.flow.method.req.WorkNode;
+
 import java.util.List;
 
 public interface WorkStorage {
 
+    void saveWorkNodes(List<WorkNode> workNodes, Long flowId);
+
+    void saveWorkNode(WorkNode workNode, Long flowId);
+
+    List<WorkNode> findByFlowId(Long flowId);
 
 }

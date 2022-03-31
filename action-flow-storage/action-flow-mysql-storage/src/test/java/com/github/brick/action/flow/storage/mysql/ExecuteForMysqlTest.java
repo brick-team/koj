@@ -14,26 +14,24 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.enums;
+package com.github.brick.action.flow.storage.mysql;
 
-/**
- * work节点类型
- */
-public enum WorkTypeModel implements Type {
+import com.github.brick.action.flow.storage.mysql.impl.CommonTest;
+import org.junit.Before;
+import org.junit.Test;
 
-    /**
-     * 动作
-     */
-    ACTION(),
-    /**
-     * 监控
-     */
-    WATCHER(),
-    API(),
-    ;
+public class ExecuteForMysqlTest extends CommonTest {
+    ExecuteForMysql executeForMysql;
 
-    @Override
-    public String type() {
-        return name();
+    @Before
+    public void init() {
+        executeForMysql = context.getBean(ExecuteForMysql.class);
+
+    }
+
+    @Test
+    public void execute() throws Exception {
+        executeForMysql.execute(3L, "");
+
     }
 }

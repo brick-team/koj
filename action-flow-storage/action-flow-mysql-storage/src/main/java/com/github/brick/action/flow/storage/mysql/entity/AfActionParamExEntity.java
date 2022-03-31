@@ -27,9 +27,10 @@ public class AfActionParamExEntity {
     @Id
     @Column(name = "id")
     private Long id;
+
     @Basic
     @Column(name = "action_param_id")
-    private String actionParamId;
+    private Long actionParamId;
     @Basic
     @Column(name = "param_group_id")
     private String paramGroupId;
@@ -38,16 +39,16 @@ public class AfActionParamExEntity {
     private String ex;
     @Basic
     @Column(name = "ex_id")
-    private String exId;
+    private Long exId;
     @Basic
     @Column(name = "format_id")
-    private String formatId;
+    private Long formatId;
     @Basic
     @Column(name = "value")
     private String value;
     @Basic
     @Column(name = "flow_id")
-    private String flowId;
+    private Long flowId;
 
     public Long getId() {
         return id;
@@ -57,11 +58,11 @@ public class AfActionParamExEntity {
         this.id = id;
     }
 
-    public String getActionParamId() {
+    public Long getActionParamId() {
         return actionParamId;
     }
 
-    public void setActionParamId(String actionParamId) {
+    public void setActionParamId(Long actionParamId) {
         this.actionParamId = actionParamId;
     }
 
@@ -81,19 +82,19 @@ public class AfActionParamExEntity {
         this.ex = ex;
     }
 
-    public String getExId() {
+    public Long getExId() {
         return exId;
     }
 
-    public void setExId(String exId) {
+    public void setExId(Long exId) {
         this.exId = exId;
     }
 
-    public String getFormatId() {
+    public Long getFormatId() {
         return formatId;
     }
 
-    public void setFormatId(String formatId) {
+    public void setFormatId(Long formatId) {
         this.formatId = formatId;
     }
 
@@ -105,11 +106,11 @@ public class AfActionParamExEntity {
         this.value = value;
     }
 
-    public String getFlowId() {
+    public Long getFlowId() {
         return flowId;
     }
 
-    public void setFlowId(String flowId) {
+    public void setFlowId(Long flowId) {
         this.flowId = flowId;
     }
 

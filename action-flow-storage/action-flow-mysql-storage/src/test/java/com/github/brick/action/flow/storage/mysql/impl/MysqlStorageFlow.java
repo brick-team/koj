@@ -18,14 +18,22 @@ package com.github.brick.action.flow.storage.mysql.impl;
 
 import com.github.brick.action.flow.method.entity.ActionEntity;
 import com.github.brick.action.flow.method.entity.ExtractEntity;
+import com.github.brick.action.flow.method.entity.FormatEntity;
 import com.github.brick.action.flow.method.entity.WatcherEntity;
+import com.github.brick.action.flow.method.entity.api.ApiEntity;
 import com.github.brick.action.flow.method.enums.FLowModel;
 import com.github.brick.action.flow.method.enums.HttpClientType;
 import com.github.brick.action.flow.method.enums.WorkNodeType;
+import com.github.brick.action.flow.method.enums.WorkTypeModel;
 import com.github.brick.action.flow.method.execute.impl.FlowExecuteImpl;
 import com.github.brick.action.flow.method.req.WorkNode;
+import com.github.brick.action.flow.storage.mysql.entity.AfActionParamExEntity;
+import com.github.brick.action.flow.storage.mysql.entity.AfParamEntity;
 import com.github.brick.action.flow.storage.mysql.entity.AfWorkCz;
-import com.github.brick.action.flow.storage.mysql.repository.*;
+import com.github.brick.action.flow.storage.mysql.repository.AfActionParamExEntityRepository;
+import com.github.brick.action.flow.storage.mysql.repository.AfApiParamExEntityRepository;
+import com.github.brick.action.flow.storage.mysql.repository.AfParamEntityRepository;
+import com.github.brick.action.flow.storage.mysql.repository.AfWorkCzRepository;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +48,9 @@ public class MysqlStorageFlow extends CommonTest {
     MysqlActionStorage actionStorage;
     MysqlActionParamStorage actionParamStorage;
     MysqlApiStorage apiStorage;
+    AfActionParamExEntityRepository afActionParamExEntityRepository;
     AfApiParamExEntityRepository paramExEntityRepository;
+    AfParamEntityRepository afParamEntityRepository;
     MysqlExtractStorage mysqlExtractStorage;
     FlowExecuteImpl flowExecute;
     MysqlWorkStorage mysqlWorkStorage;
@@ -48,6 +58,8 @@ public class MysqlStorageFlow extends CommonTest {
     Gson gson = new Gson();
 
     AfWorkCzRepository afWorkCzRepository;
+    MysqlWorkStorage workStorage;
+    MysqlFormatStorage mysqlFormatStorage;
 
     @Before
     public void init() {
@@ -64,10 +76,14 @@ public class MysqlStorageFlow extends CommonTest {
         mysqlResultStorage = context.getBean(MysqlResultStorage.class);
 
         afWorkCzRepository = context.getBean(AfWorkCzRepository.class);
+        workStorage = context.getBean(MysqlWorkStorage.class);
+        afActionParamExEntityRepository = context.getBean(AfActionParamExEntityRepository.class);
+        afParamEntityRepository = context.getBean(AfParamEntityRepository.class);
+        mysqlFormatStorage = context.getBean(MysqlFormatStorage.class);
     }
 
     @Test
-    public void saveActionEntity() {
+    public void step1() {
         ActionEntity login = new ActionEntity();
         login.setClazzStr("com.github.brick.action.flow.LoginAction");
         login.setMethodStr("login");
@@ -151,38 +167,166 @@ public class MysqlStorageFlow extends CommonTest {
                         String.valueOf(sendId)
                 }).collect(Collectors.toList()), new ArrayList<>(), new ArrayList<>());
 
+        mysqlFormatStorage.save("com.github.brick.action.flow.method.format.num.StringToIntegerFormat");
 
     }
-
 
 
     @Test
-    public void testWorkSave() {
+    public void step2() {
 
-        String s = "{\"type\":\"action\",\"refId\":1,\"cat\":[{\"type\":\"watcher\",\"refId\":11}],\"then\":[{\"type\":\"watcher\",\"refId\":2,\"then\":[{\"type\":\"watcher\",\"refId\":21,\"then\":[{\"type\":\"watcher\",\"refId\":221,\"then\":[{\"type\":\"watcher\",\"refId\":2221}]},{\"type\":\"watcher\",\"refId\":222,\"then\":[{\"type\":\"watcher\",\"refId\":2221},{\"type\":\"watcher\",\"refId\":2222}],\"cat\":[{\"type\":\"watcher\",\"refId\":2232,\"then\":[{\"type\":\"watcher\",\"refId\":22321}],\"cat\":[{\"type\":\"watcher\",\"refId\":22322}]}]}]}]}]}";
+        String s = "{\n" +
+                "  \"type\": \"action\",\n" +
+                "  \"refId\": 1,\n" +
+                "  \"cat\": [\n" +
+                "    {\n" +
+                "      \"type\": \"watcher\",\n" +
+                "      \"refId\": 1\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"then\": [\n" +
+                "    {\n" +
+                "      \"type\": \"watcher\",\n" +
+                "      \"refId\": 1,\n" +
+                "      \"then\": [\n" +
+                "        {\n" +
+                "          \"type\": \"watcher\",\n" +
+                "          \"refId\": 1,\n" +
+                "          \"then\": [\n" +
+                "            {\n" +
+                "              \"type\": \"watcher\",\n" +
+                "              \"refId\": 1,\n" +
+                "              \"then\": [\n" +
+                "                {\n" +
+                "                  \"type\": \"watcher\",\n" +
+                "                  \"refId\": 1\n" +
+                "                }\n" +
+                "              ]\n" +
+                "            }\n" +
+                "          ]\n" +
+                "        }\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
         WorkNode workNode = gson.fromJson(s, WorkNode.class);
 
-        // 完成 work 主表的写入
-        long workFlowId = 2L;
-        AfWorkCz entity1 = new AfWorkCz();
-        entity1.setFlowId(workFlowId);
-        entity1.setWorkType(WorkNodeType.START.getId());
 
-        entity1.setPid(null);
-        entity1.setType(workNode.getType());
-        entity1.setRefId(workNode.getRefId());
-
-        AfWorkCz save = afWorkCzRepository.save(entity1);
+        Long action1 = this.mysqlFlowStorage.save("tttt", null);
+        this.workStorage.saveWorkNode(workNode, action1);
 
 
-        // TODO: 2022/3/30 then cat 数据存储
-        List<WorkNode> cat = workNode.getCat();
-        handlerCat(cat, save.getId(),workFlowId);
-        List<WorkNode> then = workNode.getThen();
-        handlerThe(then, save.getId(),workFlowId);
+        AfParamEntity entity1 = new AfParamEntity();
+        entity1.setGroup("a");
+        entity1.setKey("username");
+        entity1.setValue("username");
 
-        System.out.println();
+        this.afParamEntityRepository.save(entity1);
+
+        AfParamEntity entity2 = new AfParamEntity();
+        entity2.setGroup("a");
+        entity2.setKey("password");
+        entity2.setValue("password");
+
+        this.afParamEntityRepository.save(entity2);
     }
+
+    @Test
+    public void step3() {
+        long flowId = 3L;
+        AfActionParamExEntity afActionParamExEntity1 = new AfActionParamExEntity();
+        afActionParamExEntity1.setActionParamId(1L);
+        afActionParamExEntity1.setEx("username");
+        afActionParamExEntity1.setParamGroupId("a");
+        afActionParamExEntity1.setFlowId(flowId);
+        afActionParamExEntityRepository.save(afActionParamExEntity1);
+
+        AfActionParamExEntity afActionParamExEntity2 = new AfActionParamExEntity();
+        afActionParamExEntity2.setActionParamId(2L);
+        afActionParamExEntity2.setEx("password");
+        afActionParamExEntity2.setParamGroupId("a");
+        afActionParamExEntity2.setFlowId(flowId);
+        afActionParamExEntityRepository.save(afActionParamExEntity2);
+
+
+        AfActionParamExEntity afActionParamExEntity4 = new AfActionParamExEntity();
+        afActionParamExEntity4.setActionParamId(3L);
+        afActionParamExEntity4.setParamGroupId("a");
+        afActionParamExEntity4.setEx("username");
+        afActionParamExEntity4.setFlowId(flowId);
+        afActionParamExEntityRepository.save(afActionParamExEntity4);
+
+        AfActionParamExEntity afActionParamExEntity5 = new AfActionParamExEntity();
+        afActionParamExEntity5.setActionParamId(4l);
+        afActionParamExEntity5.setFormatId(1L);
+        afActionParamExEntity5.setValue("10");
+        afActionParamExEntity5.setFlowId(flowId);
+        afActionParamExEntityRepository.save(afActionParamExEntity5);
+
+
+    }
+
+    @Test
+    public void step4() {
+        long flowId = 3L;
+        List<WorkNode> byFlowId = workStorage.findByFlowId(flowId);
+        List<AfParamEntity> allByFlowId = afParamEntityRepository.findAllByFlowId(flowId);
+
+
+        for (WorkNode workNode : byFlowId) {
+            // 搜索 action 、api 、watcher
+            String type = workNode.getType();
+            Long refId = workNode.getRefId();
+
+            WorkTypeModel workTypeModel = WorkTypeModel.valueOf(type.toUpperCase());
+
+            if (workTypeModel == WorkTypeModel.ACTION) {
+                ActionEntity byId = this.actionStorage.findById(refId);
+
+                for (ActionEntity.Param param : byId.getParams()) {
+                    AfActionParamExEntity byFlowIdAndId = this.afActionParamExEntityRepository.findByFlowIdAndActionParamId(flowId, Long.valueOf(param.getId()));
+
+                    // 静态值直接用于参数
+                    String value = byFlowIdAndId.getValue();
+                    param.setValue(value);
+
+                    String paramGroupId = byFlowIdAndId.getParamGroupId();
+                    param.setParamGroup(paramGroupId);
+
+                    String ex = byFlowIdAndId.getEx();
+                    param.setEx(ex);
+
+                    Long exId = byFlowIdAndId.getExId();
+                    if (exId != null) {
+
+                        param.setExId(exId.toString());
+                    }
+                    Long formatId = byFlowIdAndId.getFormatId();
+                    if (formatId != null) {
+
+                        FormatEntity formatEntity = new FormatEntity();
+                        formatEntity.setId(formatId.toString());
+                        formatEntity.setClassStr(this.mysqlFormatStorage.findById(formatId));
+                        param.setFormatEntity(formatEntity);
+                    }
+                }
+
+                System.out.println();
+            }
+            else if (workTypeModel == WorkTypeModel.WATCHER) {
+                WatcherEntity byId = this.mysqlWatcherStorage.findById(refId);
+                System.out.println();
+
+            }
+            else if (workTypeModel == WorkTypeModel.API) {
+                ApiEntity byId = this.apiStorage.findById(refId);
+
+                System.out.println();
+
+            }
+        }
+    }
+
 
     @Test
     public void testWorkRead() {
@@ -192,7 +336,7 @@ public class MysqlStorageFlow extends CommonTest {
 //        List<AfWorkCz> list = gson.fromJson(JSON, new TypeToken<List<AfWorkCz>>() {
 //        }.getType());
 
-        List<WorkNode> WorkNodes = new ArrayList<>();
+        List<WorkNode> res = new ArrayList<>();
 
 
         Map<Long, List<AfWorkCz>> pidMap = new HashMap<>();
@@ -218,11 +362,11 @@ public class MysqlStorageFlow extends CommonTest {
             WorkNode.setThen(workCzToThens(start, pidMap));
             WorkNode.setCat(workCzToCat(start, pidMap));
 
-            WorkNodes.add(WorkNode);
+            res.add(WorkNode);
         }
 
 
-        System.out.println(gson.toJson(WorkNodes));
+        System.out.println(gson.toJson(res));
 
     }
 

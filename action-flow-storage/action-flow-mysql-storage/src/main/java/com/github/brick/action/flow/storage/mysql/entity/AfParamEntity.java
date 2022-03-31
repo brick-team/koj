@@ -16,28 +16,38 @@
 
 package com.github.brick.action.flow.storage.mysql.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "af_param", schema = "action-flow", catalog = "")
 public class AfParamEntity {
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id")
+    @Column(name = "`id`")
     private Long id;
     @Basic
-    @Column(name = "group")
+    @Column(name = "`group`")
     private String group;
     @Basic
-    @Column(name = "key")
+    @Column(name = "`key`")
     private String key;
+
+    public Long getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(Long flow_id) {
+        this.flowId = flow_id;
+    }
+
     @Basic
-    @Column(name = "value")
+    @Column(name = "`value`")
     private String value;
+    @Basic
+    @Column(name = "`flow_id`")
+    private Long flowId;
+
 
     public Long getId() {
         return id;
