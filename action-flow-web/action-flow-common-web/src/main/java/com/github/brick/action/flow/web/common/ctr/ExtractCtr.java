@@ -17,9 +17,10 @@
 package com.github.brick.action.flow.web.common.ctr;
 
 /**
- * action flow 设置控制器功能:
- * 1. 用于配置工作流程
+ * 数据提取器相关控制器，功能:
+ * 1. 设置提取器
+ * 2. 模拟提取器
+ *
  */
-public interface ActionFlowSettingCtr {
-
+public interface ExtractCtr {
 }

@@ -16,10 +16,22 @@
 
 package com.github.brick.action.flow.web.common.ctr;
 
+import java.util.Map;
+
 /**
- * action flow 设置控制器功能:
- * 1. 用于配置工作流程
+ * 函数控制器，功能:
+ * 1. 函数数据CRUD
+ * 2. 函数模拟执行（模拟执行函数必须在本地）
  */
-public interface ActionFlowSettingCtr {
+public interface MethodCtr {
+
+
+    /**
+     * 处理java函数
+     * @param clazz 全类名
+     * @param method 函数名称
+     * @param types 参数信息，key: 索引，value：参数类型（类全名)
+     */
+    boolean handler(String clazz, String method, Map<Integer, String> types);
 
 }

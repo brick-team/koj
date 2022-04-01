@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 31/03/2022 15:56:46
+ Date: 01/04/2022 14:26:27
 */
 
 SET NAMES utf8mb4;
@@ -96,12 +96,16 @@ CREATE TABLE `af_api` (
   `method` varchar(255) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_api
 -- ----------------------------
 BEGIN;
+INSERT INTO `af_api` (`id`, `desca`, `method`, `url`) VALUES (1, '登陆', 'post', 'http://localhost:8080/login');
+INSERT INTO `af_api` (`id`, `desca`, `method`, `url`) VALUES (2, '获取用户信息', 'get', 'http://localhost:8080/user_info');
+INSERT INTO `af_api` (`id`, `desca`, `method`, `url`) VALUES (3, '登陆', 'post', 'http://localhost:8080/login');
+INSERT INTO `af_api` (`id`, `desca`, `method`, `url`) VALUES (4, '获取用户信息', 'get', 'http://localhost:8080/user_info');
 COMMIT;
 
 -- ----------------------------
@@ -116,12 +120,18 @@ CREATE TABLE `af_api_param` (
   `pid` bigint DEFAULT NULL,
   `require` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_api_param
 -- ----------------------------
 BEGIN;
+INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (1, 1, 'formData', 'username', NULL, 1);
+INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (2, 1, 'formData', 'password', NULL, 1);
+INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (3, 2, 'header', 'token', NULL, 1);
+INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (4, 3, 'formData', 'username', NULL, 1);
+INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (5, 3, 'formData', 'password', NULL, 1);
+INSERT INTO `af_api_param` (`id`, `api_id`, `in`, `name`, `pid`, `require`) VALUES (6, 4, 'header', 'token', NULL, 1);
 COMMIT;
 
 -- ----------------------------
@@ -133,16 +143,19 @@ CREATE TABLE `af_api_param_ex` (
   `api_param_id` bigint DEFAULT NULL,
   `el` varchar(255) DEFAULT NULL,
   `ex` varchar(255) DEFAULT NULL,
-  `ex_id` varchar(255) DEFAULT NULL,
+  `ex_id` bigint DEFAULT NULL,
   `flow_id` bigint DEFAULT NULL,
   `param_group` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_api_param_ex
 -- ----------------------------
 BEGIN;
+INSERT INTO `af_api_param_ex` (`id`, `api_param_id`, `el`, `ex`, `ex_id`, `flow_id`, `param_group`) VALUES (1, 4, NULL, 'username', NULL, 9, 'a');
+INSERT INTO `af_api_param_ex` (`id`, `api_param_id`, `el`, `ex`, `ex_id`, `flow_id`, `param_group`) VALUES (2, 5, NULL, 'password', NULL, 9, 'a');
+INSERT INTO `af_api_param_ex` (`id`, `api_param_id`, `el`, `ex`, `ex_id`, `flow_id`, `param_group`) VALUES (3, 6, NULL, NULL, 5, 9, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -156,7 +169,7 @@ CREATE TABLE `af_extract` (
   `from_action` bigint DEFAULT NULL,
   `from_api` bigint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_extract
@@ -165,6 +178,8 @@ BEGIN;
 INSERT INTO `af_extract` (`id`, `el`, `el_type`, `from_action`, `from_api`) VALUES (1, '$.username', 'JSON_PATH', 1, NULL);
 INSERT INTO `af_extract` (`id`, `el`, `el_type`, `from_action`, `from_api`) VALUES (2, '$.login_time', 'JSON_PATH', 1, NULL);
 INSERT INTO `af_extract` (`id`, `el`, `el_type`, `from_action`, `from_api`) VALUES (3, '$.age', 'JSON_PATH', 1, NULL);
+INSERT INTO `af_extract` (`id`, `el`, `el_type`, `from_action`, `from_api`) VALUES (4, '$.token', 'JSON_PATH', NULL, 1);
+INSERT INTO `af_extract` (`id`, `el`, `el_type`, `from_action`, `from_api`) VALUES (5, '$.token', 'JSON_PATH', NULL, 3);
 COMMIT;
 
 -- ----------------------------
@@ -176,7 +191,7 @@ CREATE TABLE `af_flow` (
   `name` varchar(255) DEFAULT NULL,
   `works` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_flow
@@ -189,6 +204,8 @@ INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (4, 'tttt', NULL);
 INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (5, 'tttt', NULL);
 INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (6, 'tttt', NULL);
 INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (7, 'tttt', NULL);
+INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (8, '获取用户信息', '');
+INSERT INTO `af_flow` (`id`, `name`, `works`) VALUES (9, '获取用户信息', '');
 COMMIT;
 
 -- ----------------------------
@@ -225,9 +242,9 @@ CREATE TABLE `af_param` (
 -- Records of af_param
 -- ----------------------------
 BEGIN;
-INSERT INTO `af_param` (`id`, `group`, `key`, `value`, `flow_id`) VALUES (1, 'a', 'password', 'password', 3);
-INSERT INTO `af_param` (`id`, `group`, `key`, `value`, `flow_id`) VALUES (2, 'a', 'username', 'username', 3);
-INSERT INTO `af_param` (`id`, `group`, `key`, `value`, `flow_id`) VALUES (3, 'a', 'password', 'password', 3);
+INSERT INTO `af_param` (`id`, `group`, `key`, `value`, `flow_id`) VALUES (1, 'a', 'password', 'password', 9);
+INSERT INTO `af_param` (`id`, `group`, `key`, `value`, `flow_id`) VALUES (2, 'a', 'username', 'username', 9);
+INSERT INTO `af_param` (`id`, `group`, `key`, `value`, `flow_id`) VALUES (3, 'a', 'password', 'password', 9);
 COMMIT;
 
 -- ----------------------------
@@ -336,13 +353,14 @@ CREATE TABLE `af_work_cz` (
   `type` varchar(255) DEFAULT NULL,
   `work_type` bigint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of af_work_cz
 -- ----------------------------
 BEGIN;
 INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (59, 6, 58, 1, 'watcher', 2);
+INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (67, 9, NULL, 4, 'api', 1);
 INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (66, 7, 65, 1, 'watcher', 2);
 INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (65, 7, 64, 1, 'watcher', 2);
 INSERT INTO `af_work_cz` (`id`, `flow_id`, `pid`, `ref_id`, `type`, `work_type`) VALUES (64, 7, 63, 1, 'watcher', 2);

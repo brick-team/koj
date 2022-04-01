@@ -17,9 +17,9 @@
 package com.github.brick.action.flow.web.common.ctr;
 
 /**
- * action flow 设置控制器功能:
- * 1. 用于配置工作流程
+ * 结果器控制器
+ * 1. 结果组装信息CRUD
+ * 2. 模拟组装结果
  */
-public interface ActionFlowSettingCtr {
-
+public interface ResultCtr {
 }

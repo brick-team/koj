@@ -16,10 +16,34 @@
 
 package com.github.brick.action.flow.web.common.ctr;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
- * action flow 设置控制器功能:
- * 1. 用于配置工作流程
+ * swagger 文件导入
  */
-public interface ActionFlowSettingCtr {
+public interface SwaggerCtr {
+    /**
+     * 处理swagger数据
+     *
+     * @param swaggerData swagger文件内容
+     * @return true 成功 ，false 失败
+     */
+    boolean handlerWithData(String swaggerData);
+
+    /**
+     * 处理上传的swagger文件
+     *
+     * @param file swagger文件
+     * @return true 成功 ，false 失败
+     */
+    boolean handlerWithFile(MultipartFile file);
+
+    /**
+     * 处理swagger地址
+     *
+     * @param url swagger访问地址
+     * @return true 成功 ，false 失败
+     */
+    boolean handlerWithUrl(String url);
 
 }

@@ -16,10 +16,11 @@
 
 package com.github.brick.action.flow.web.common.ctr;
 
-/**
- * action flow 设置控制器功能:
- * 1. 用于配置工作流程
- */
-public interface ActionFlowSettingCtr {
-
+public interface FormatCtr {
+    /**
+     * 处理格式化函数
+     *
+     * @param clazz 类全名(类需要实现 {@link  com.github.brick.action.flow.method.format.Format} )
+     */
+    boolean handler(String clazz);
 }

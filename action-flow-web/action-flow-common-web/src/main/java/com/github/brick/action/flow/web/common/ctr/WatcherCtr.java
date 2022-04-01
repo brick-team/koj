@@ -17,9 +17,8 @@
 package com.github.brick.action.flow.web.common.ctr;
 
 /**
- * action flow 设置控制器功能:
- * 1. 用于配置工作流程
+ * 观察控制器
+ * 1. 观察器CRUD
  */
-public interface ActionFlowSettingCtr {
-
+public interface WatcherCtr {
 }

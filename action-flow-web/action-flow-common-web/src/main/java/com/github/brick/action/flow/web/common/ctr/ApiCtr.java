@@ -17,9 +17,10 @@
 package com.github.brick.action.flow.web.common.ctr;
 
 /**
- * action flow 设置控制器功能:
- * 1. 用于配置工作流程
+ * api 接口控制器，功能
+ * 1. 设置 api 接口 和 接口参数
+ * 2. 查看 api 接口 和 接口参数
+ * 3. 模拟调用 api 接口
  */
-public interface ActionFlowSettingCtr {
-
+public interface ApiCtr {
 }

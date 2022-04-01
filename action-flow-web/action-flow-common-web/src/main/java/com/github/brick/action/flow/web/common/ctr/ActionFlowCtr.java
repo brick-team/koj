@@ -22,15 +22,6 @@ import java.util.Map;
  * action flow 执行控制器
  */
 public interface ActionFlowCtr {
-    /**
-     * 核心执行器: 根据分组id和流程id执行
-     *
-     * @param groupId 分组id
-     * @param flowId  流程id
-     * @param param   外部参数
-     * @return 执行结果
-     */
-    Object execute(String groupId, String flowId, Map<String, String> param);
 
 
     /**
