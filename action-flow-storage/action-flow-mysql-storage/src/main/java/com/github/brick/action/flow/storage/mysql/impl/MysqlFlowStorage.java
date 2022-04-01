@@ -55,7 +55,7 @@ public class MysqlFlowStorage implements FlowStorage {
             AfApiParamExEntity entity = new AfApiParamExEntity();
             entity.setParamGroup(apiParamEntity.getParamGroup());
             entity.setEx(apiParamEntity.getEx());
-            entity.setExId(apiParamEntity.getExId());
+            entity.setExId(Long.valueOf(apiParamEntity.getExId()));
             entity.setEl(apiParamEntity.getEl());
             entity.setFlowId(save);
             entity.setApiParamId(apiParamEntity.getId());

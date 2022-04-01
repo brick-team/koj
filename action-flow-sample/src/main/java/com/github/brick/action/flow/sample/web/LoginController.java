@@ -52,6 +52,7 @@ public class LoginController {
         map.put("token", value);
         UserInfo value1 = new UserInfo();
         value1.setUsername(username);
+        value1.setToken(value);
 
         userInfoMap.put(value, value1);
         return map;
@@ -78,6 +79,7 @@ public class LoginController {
     @Data
     public static class UserInfo {
         private String username;
+        private String token;
 
     }
 }

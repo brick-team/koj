@@ -37,7 +37,7 @@ public class AfApiParamExEntity {
     private String ex;
     @Basic
     @Column(name = "ex_id")
-    private String exId;
+    private Long exId;
     @Basic
     @Column(name = "el")
     private String el;
@@ -81,11 +81,11 @@ public class AfApiParamExEntity {
         this.ex = ex;
     }
 
-    public String getExId() {
+    public Long getExId() {
         return exId;
     }
 
-    public void setExId(String exId) {
+    public void setExId(Long exId) {
         this.exId = exId;
     }
 

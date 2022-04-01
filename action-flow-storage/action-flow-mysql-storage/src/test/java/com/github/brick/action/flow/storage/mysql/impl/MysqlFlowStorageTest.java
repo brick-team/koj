@@ -167,7 +167,7 @@ public class MysqlFlowStorageTest extends CommonTest {
     private void handlerOneApiValue(String flowID, Map<String, ExtractEntity> exMap, ApiParamEntity param, Map<String, ApiEntity> apiEntityMap) {
         Long id = param.getId();
         AfApiParamExEntity byApiParamIdAndFlowId = paramExEntityRepository.findByApiParamIdAndFlowId(id, Long.valueOf(flowID));
-        String exId = byApiParamIdAndFlowId.getExId();
+        Long exId = byApiParamIdAndFlowId.getExId();
         if (exId != null) {
 
             ExtractEntity extractEntity = mysqlExtractStorage.findById(Long.valueOf(exId));

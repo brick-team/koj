@@ -22,8 +22,11 @@ import com.github.brick.action.flow.method.entity.FormatEntity;
 import com.github.brick.action.flow.method.entity.WatcherEntity;
 import com.github.brick.action.flow.method.entity.api.ApiEntity;
 import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
+import com.github.brick.action.flow.method.entity.api.ParamIn;
 import com.github.brick.action.flow.method.enums.WorkTypeModel;
+import com.github.brick.action.flow.method.execute.ApiExecute;
 import com.github.brick.action.flow.method.execute.MethodExecute;
+import com.github.brick.action.flow.method.execute.impl.ApiExecuteImpl;
 import com.github.brick.action.flow.method.execute.impl.MethodExecuteImpl;
 import com.github.brick.action.flow.method.extract.Extract;
 import com.github.brick.action.flow.method.extract.ExtractImpl;
@@ -31,6 +34,7 @@ import com.github.brick.action.flow.method.format.Format;
 import com.github.brick.action.flow.method.req.WorkNode;
 import com.github.brick.action.flow.storage.api.*;
 import com.github.brick.action.flow.storage.mysql.entity.AfActionParamExEntity;
+import com.github.brick.action.flow.storage.mysql.entity.AfApiParamExEntity;
 import com.github.brick.action.flow.storage.mysql.entity.AfParamEntity;
 import com.github.brick.action.flow.storage.mysql.repository.AfActionParamExEntityRepository;
 import com.github.brick.action.flow.storage.mysql.repository.AfApiParamExEntityRepository;
@@ -84,6 +88,9 @@ public class ExecuteForMysql {
     Extract extract = new ExtractImpl();
     SpelExpressionParser parser = new SpelExpressionParser();
     Gson gson = new Gson();
+    ApiExecute apiExecute = new ApiExecuteImpl();
+    @Autowired
+    private AfApiParamExEntityRepository afApiParamExEntityRepository;
 
     /**
      * todo: 核心数据结构需要抽象
@@ -167,16 +174,101 @@ public class ExecuteForMysql {
             }
         }
         else if (workTypeModel == WorkTypeModel.API) {
-            ApiEntity byId = this.apiStorage.findById(refId);
             // TODO: 2022/3/31 API接口处理
-            for (ApiParamEntity param : byId.getParams()) {
-                AfActionParamExEntity afActionParamExEntity = this.afActionParamExEntityRepository.findByFlowIdAndActionParamId(flowId, param.getId());
 
+            String execute = handlerApi(flowId, resultData, refId, paramsFromDB, jsonData);
+            resultData.put(workNode.getId(), execute);
+        }
+    }
+
+    private String handlerApi(long flowId, Map<Long, Object> resultData, Long refId, Map<String, Map<String, String>> paramsFromDB, String jsonData) throws Exception {
+        ApiEntity byId = this.apiStorage.findById(refId);
+        Map<String, String> formData = new HashMap<>();
+        Map<String, String> pathData = new HashMap<>();
+        Map<String, String> headers = new HashMap<>();
+        Map<String, String> queryParam = new HashMap<>();
+        Map<String, String> bodyData = new HashMap<>();
+
+        String body = null;
+
+        for (ApiParamEntity param : byId.getParams()) {
+            ParamIn in = param.getIn();
+
+
+            AfApiParamExEntity afActionParamExEntity = this.afApiParamExEntityRepository.findByFlowIdAndApiParamId(flowId, param.getId());
+            String paramGroup = afActionParamExEntity.getParamGroup();
+            if (paramGroup != null) {
+                String ex = afActionParamExEntity.getEx();
+                List<AfParamEntity> allByFlowId = this.afParamEntityRepository.findAllByFlowId(flowId);
+                for (AfParamEntity afParamEntity : allByFlowId) {
+                    String group = afParamEntity.getGroup();
+                    if (group.equals(paramGroup)) {
+                        String key = afParamEntity.getKey();
+                        String value = afParamEntity.getValue();
+                        if (in == ParamIn.header) {
+                            headers.put(key, value);
+                        }
+                        else if (in == ParamIn.formData) {
+                            formData.put(key, value);
+                        }
+                        else if (in == ParamIn.body) {
+                            bodyData.put(key, value);
+                        }
+                        else if (in == ParamIn.path) {
+                            pathData.put(key, value);
+                        }
+                        else if (in == ParamIn.query) {
+                            queryParam.put(key, value);
+                        }
+                    }
+                }
+            }
+
+
+            Long exId = afActionParamExEntity.getExId();
+            if (exId != null) {
+                ExtractEntity extractEntity = this.mysqlExtractStorage.findById(exId);
+
+                String el = extractEntity.getEl();
+                String fromAction = extractEntity.getFromAction();
+                String fromApi = extractEntity.getFromApi();
+                Object execute = null;
+                if (fromApi != null) {
+                    execute = handlerApi(flowId, resultData, Long.valueOf(fromApi), paramsFromDB, jsonData);
+                }
+                if (fromAction != null) {
+                    execute = executeAction(flowId, jsonData, paramsFromDB, resultData, refId, null);
+                }
+
+
+                if (in == ParamIn.header) {
+                    headers.put(param.getName(), (String) this.extract.extract(execute, el));
+                }
+                else if (in == ParamIn.formData) {
+                    formData.put(param.getName(), (String) this.extract.extract(execute, el));
+                }
+
+                else if (in == ParamIn.body) {
+                    bodyData.put(param.getName(), (String) this.extract.extract(execute, el));
+                }
+                else if (in == ParamIn.path) {
+                    pathData.put(param.getName(), (String) this.extract.extract(execute, el));
+                }
+                else if (in == ParamIn.query) {
+                    queryParam.put(param.getName(), (String) this.extract.extract(execute, el));
+                }
 
             }
-            System.out.println();
 
         }
+
+        String execute = this.apiExecute.execute(byId.getUrl(), byId.getMethod(),
+                queryParam,
+                headers,
+                formData,
+                body);
+
+        return execute;
     }
 
 
@@ -303,7 +395,9 @@ public class ExecuteForMysql {
 
         Object execute = methodExecute.execute(byId.getClazzStr(), byId.getMethodStr(), types.toArray(new String[0]), collect);
         logger.info("执行 {} {} 结果 {}", byId.getClazzStr(), byId.getMethodStr(), execute);
-        resultData.put(workNode.getId(), execute);
+        if (workNode != null) {
+            resultData.put(workNode.getId(), execute);
+        }
         return execute;
 
     }

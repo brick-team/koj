@@ -16,5 +16,91 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
-public class ApiDataStorage {
+import com.github.brick.action.flow.method.entity.FlowEntity;
+import com.github.brick.action.flow.method.entity.api.ParamIn;
+import com.github.brick.action.flow.method.enums.ExtractModel;
+import com.github.brick.action.flow.method.req.WorkNode;
+import com.github.brick.action.flow.storage.api.*;
+import com.github.brick.action.flow.storage.mysql.ExecuteForMysql;
+import com.github.brick.action.flow.storage.mysql.entity.AfApiParamExEntity;
+import com.github.brick.action.flow.storage.mysql.repository.AfApiParamExEntityRepository;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+public class ApiDataStorage extends CommonTest {
+
+    ApiStorage apiStorage;
+    ApiParamStorage apiParamStorage;
+    ExtractStorage extractStorage;
+    FlowStorage flowStorage;
+    WorkStorage workStorage;
+    AfApiParamExEntityRepository apiParamExEntityRepository;
+    ExecuteForMysql executeForMysql;
+
+    @Before
+    public void init() {
+        apiStorage = context.getBean(ApiStorage.class);
+        apiParamStorage = context.getBean(ApiParamStorage.class);
+        extractStorage = context.getBean(ExtractStorage.class);
+        flowStorage = context.getBean(FlowStorage.class);
+        workStorage = context.getBean(WorkStorage.class);
+        apiParamExEntityRepository = context.getBean(AfApiParamExEntityRepository.class);
+        executeForMysql = context.getBean(ExecuteForMysql.class);
+    }
+
+    @Test
+    public void step1() {
+        Long loginId = apiStorage.save("http://localhost:8080/login", "post", "登陆");
+        apiParamStorage.save(loginId, null, ParamIn.formData.name(), "username", true);
+        apiParamStorage.save(loginId, null, ParamIn.formData.name(), "password", true);
+        Long userInfoId = apiStorage.save("http://localhost:8080/user_info", "get", "获取用户信息");
+        apiParamStorage.save(userInfoId, null, ParamIn.header.name(), "token", true);
+        extractStorage.save(null, loginId, "$.token", ExtractModel.JSON_PATH.name());
+
+
+        Long getUserInfoFlow = flowStorage.save("获取用户信息", new ArrayList<>());
+
+        WorkNode workNode = new WorkNode();
+        workNode.setType("api");
+        workNode.setRefId(userInfoId);
+        workStorage.saveWorkNode(workNode, getUserInfoFlow);
+
+    }
+
+
+    @Test
+    public void step2() {
+        AfApiParamExEntity entity1 = new AfApiParamExEntity();
+        entity1.setApiParamId(4L);
+        entity1.setParamGroup("a");
+        entity1.setEx("username");
+        entity1.setFlowId(9L);
+
+        apiParamExEntityRepository.save(entity1);
+
+        AfApiParamExEntity entity2 = new AfApiParamExEntity();
+        entity2.setApiParamId(5L);
+        entity2.setParamGroup("a");
+        entity2.setEx("password");
+        entity2.setFlowId(9L);
+        apiParamExEntityRepository.save(entity2);
+
+        AfApiParamExEntity entity3 = new AfApiParamExEntity();
+        entity3.setApiParamId(6L);
+        entity3.setExId(5L);
+        entity3.setFlowId(9L);
+        apiParamExEntityRepository.save(entity3);
+
+    }
+
+    @Test
+    public void step3() throws Exception {
+        executeForMysql.execute(9L, "");
+
+    }
+
+
+
 }

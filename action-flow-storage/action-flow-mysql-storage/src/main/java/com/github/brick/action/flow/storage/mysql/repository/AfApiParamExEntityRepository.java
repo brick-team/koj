@@ -16,6 +16,7 @@
 
 package com.github.brick.action.flow.storage.mysql.repository;
 
+import com.github.brick.action.flow.storage.mysql.entity.AfActionParamExEntity;
 import com.github.brick.action.flow.storage.mysql.entity.AfApiParamExEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -24,4 +25,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AfApiParamExEntityRepository extends JpaRepository<AfApiParamExEntity, Long>, JpaSpecificationExecutor<AfApiParamExEntity> {
     AfApiParamExEntity findByApiParamIdAndFlowId(long paramId, Long flowId);
+
+    AfApiParamExEntity findByFlowIdAndApiParamId(long flowId, Long id);
 }
