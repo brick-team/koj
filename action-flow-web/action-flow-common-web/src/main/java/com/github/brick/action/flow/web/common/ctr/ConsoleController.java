@@ -16,8 +16,13 @@
 
 package com.github.brick.action.flow.web.common.ctr;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class IndexController {
+public class ConsoleController {
+    @GetMapping("/console")
+    public String console() {
+        return "console";
+    }
 }
