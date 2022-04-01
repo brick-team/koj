@@ -42,12 +42,6 @@ public interface ApiExecute {
     ) throws IOException;
 
 
-    /**
-     * http 请求处理器
-     *
-     * @param apiEntity api 实体
-     * @return http 响应结果
-     */
-    String execute(ApiEntity apiEntity, String jsonData);
+
 
 }

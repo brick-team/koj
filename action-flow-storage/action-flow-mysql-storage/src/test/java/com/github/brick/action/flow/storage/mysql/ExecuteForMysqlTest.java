@@ -17,8 +17,12 @@
 package com.github.brick.action.flow.storage.mysql;
 
 import com.github.brick.action.flow.storage.mysql.impl.CommonTest;
+import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExecuteForMysqlTest extends CommonTest {
     ExecuteForMysql executeForMysql;
@@ -29,9 +33,18 @@ public class ExecuteForMysqlTest extends CommonTest {
 
     }
 
+    Gson gson = new Gson();
     @Test
     public void execute() throws Exception {
-        executeForMysql.execute(3L, "");
+
+        Map<String, Map> data = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
+        map.put("username", "zhangsan");
+        map.put("password", "123");
+        data.put("a", map);
+
+
+        executeForMysql.execute(3L, gson.toJson(data));
 
     }
 }

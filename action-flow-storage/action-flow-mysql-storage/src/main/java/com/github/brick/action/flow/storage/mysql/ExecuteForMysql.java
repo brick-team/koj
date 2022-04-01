@@ -237,7 +237,10 @@ public class ExecuteForMysql {
                     execute = handlerApi(flowId, resultData, Long.valueOf(fromApi), paramsFromDB, jsonData);
                 }
                 if (fromAction != null) {
-                    execute = executeAction(flowId, jsonData, paramsFromDB, resultData, refId, null);
+                    execute = executeAction(flowId, jsonData, paramsFromDB, resultData, Long.valueOf(fromAction), null);
+                }
+                if (execute == null) {
+                    execute = jsonData;
                 }
 
 
@@ -247,7 +250,6 @@ public class ExecuteForMysql {
                 else if (in == ParamIn.formData) {
                     formData.put(param.getName(), (String) this.extract.extract(execute, el));
                 }
-
                 else if (in == ParamIn.body) {
                     bodyData.put(param.getName(), (String) this.extract.extract(execute, el));
                 }
@@ -320,6 +322,12 @@ public class ExecuteForMysql {
                 String actionId = then1.getActionId();
                 executeAction(flowId, jsonData, paramsFromDB, resultData, Long.valueOf(actionId), workNode);
                 String apiId = then1.getApiId();
+                handlerApi(flowId,
+                        resultData,
+                        Long.valueOf(apiId),
+                        paramsFromDB,
+                        jsonData);
+
             }
         }
         else {
@@ -327,6 +335,11 @@ public class ExecuteForMysql {
                 String actionId = aCatch.getActionId();
                 executeAction(flowId, jsonData, paramsFromDB, resultData, Long.valueOf(actionId), workNode);
                 String apiId = aCatch.getApiId();
+                handlerApi(flowId,
+                        resultData,
+                        Long.valueOf(apiId),
+                        paramsFromDB,
+                        jsonData);
             }
         }
     }
@@ -361,8 +374,7 @@ public class ExecuteForMysql {
             if (exId != null) {
                 param.setExId(exId.toString());
                 // todo: 根据exId提取数据
-                data = exID();
-
+                data = exID(exId, jsonData, flowId, resultData, paramsFromDB);
             }
             Long formatId = byFlowIdAndId.getFormatId();
             if (formatId != null) {
@@ -402,14 +414,34 @@ public class ExecuteForMysql {
 
     }
 
-    private Object exID() {
+    private Object exID(Long exId, String jsonData, long flowId, Map<Long, Object> resultData, Map<String, Map<String, String>> paramsFromDB) throws Exception {
+        ExtractEntity extractEntity = this.mysqlExtractStorage.findById(exId);
 
-        return null;
+        String el = extractEntity.getEl();
+        String fromAction = extractEntity.getFromAction();
+        String fromApi = extractEntity.getFromApi();
+        Object execute = null;
+        if (fromApi != null) {
+            execute = handlerApi(flowId, resultData, Long.valueOf(fromApi), paramsFromDB, jsonData);
+        }
+        if (fromAction != null) {
+            execute = executeAction(flowId, jsonData, paramsFromDB, resultData, Long.valueOf(fromAction), null);
+        }
+        if (execute == null) {
+            execute = jsonData;
+        }
+
+        return this.extract.extract(execute, el);
     }
 
     private Object exData(String paramGroupId, String ex, Map<String, Map<String, String>> paramsFromDB, String jsonData) {
         // 直接从数据库参数表中获取
         // todo: jsonData 数据提取
+        Object extract = this.extract.extract(jsonData, "$." + paramGroupId + "." + ex);
+        if (extract != null) {
+            return extract;
+        }
+
         return paramsFromDB.get(paramGroupId).get(ex);
     }
 
