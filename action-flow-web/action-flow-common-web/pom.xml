@@ -106,11 +106,12 @@
                             <resources>
                                 <resource>
                                     <!-- 从前端打包的目录dist进行指定文件、文件夹内容的复制-->
-                                    <directory>${project.parent.basedir}/action-flow-ui/build</directory>
+                                    <directory>${project.parent.basedir}/action-flow-ui/dist</directory>
                                     <includes>
                                         <!-- 具体根据实际前端代码、及目录结构进行配置-->
                                         <include>css/</include>
                                         <include>static/</include>
+                                        <include>js/</include>
                                         <include>favicon.ico</include>
                                         <include>index.html</include>
                                         <include>*.png</include>
