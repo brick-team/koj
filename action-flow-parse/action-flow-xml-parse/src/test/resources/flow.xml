@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<action-flow>
+    <actions>
+        <action id="rest_api_1" type="rest_api" url="" method="">
+            <param in="参数位置(body，url，formData" name="" require="true" value="">
+                <extract fromAction="" el="" elType=""/>
+            </param>
+        </action>
+        <action id="java_method_1" type="java_method" className="" method="">
+            <param index="0" type="java.lang.String" name="" value=""/>
+        </action>
+    </actions>
+
+    <results>
+        <result id="1">
+            <fields>
+                <field>
+                    <fieldName>User</fieldName>
+                    <type>object</type>
+                    <extract el="" step=""/>
+                    <properties>
+                        <fields>
+                            <field>
+                                <fieldName>name</fieldName>
+                                <type>String</type>
+                                <extract el="" step="" elType=""/>
+                            </field>
+                            <filed>
+                                <fieldName>age</fieldName>
+                                <type>int</type>
+                                <extract el="" step="" elType=""/>
+                            </filed>
+                        </fields>
+                    </properties>
+                </field>
+
+                <filed>
+                    <fieldName>token</fieldName>
+                    <type>String</type>
+                    <extract el="" step="" elType=""/>
+                </filed>
+            </fields>
+        </result>
+
+    </results>
+
+    <flows>
+        <flow id="1">
+            <work step="1" ref_id="rest_api_1">
+                <watcher condition="($.age>10)" elType="">
+                    <then>
+                        <work step="2" ref_id="java_method_1"/>
+                        <work step="3" ref_id="java_method_1"/>
+                    </then>
+                    <cat>
+                        <work step="4" ref_id="java_method_1"/>
+                        <work step="5" ref_id="java_method_1"/>
+                    </cat>
+                </watcher>
+            </work>
+        </flow>
+    </flows>
+
+
+</action-flow>

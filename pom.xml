@@ -35,6 +35,7 @@
         <module>action-flow-spring</module>
         <module>action-flow-execute</module>
         <module>action-flow-web</module>
+        <module>action-flow-document</module>
     </modules>
 
     <properties>
@@ -43,6 +44,12 @@
         <spring.version>5.3.16</spring.version>
         <jackson.version>2.13.2</jackson.version>
         <spring-boot.version>2.6.5</spring-boot.version>
+        <asciidoctor.maven.plugin.version>2.2.1</asciidoctor.maven.plugin.version>
+        <asciidoctorj.version>2.5.2</asciidoctorj.version>
+        <asciidoctorj.pdf.version>1.5.0-alpha-zh.16</asciidoctorj.pdf.version>
+        <jruby.version>9.2.17.0</jruby.version>
+        <skipDocs>false</skipDocs>
+
     </properties>
 
     <dependencyManagement>

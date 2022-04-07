@@ -1,0 +1,20 @@
+{
+  "filed_name": "pet",
+  "type": "object",
+  "properties": [
+    {
+      "filed_name": "name",
+      "type": "string"
+    },
+    {
+      "filed_name": "langure",
+      "type": "object",
+      "properties": [
+        {
+          "filed_name": "name",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}

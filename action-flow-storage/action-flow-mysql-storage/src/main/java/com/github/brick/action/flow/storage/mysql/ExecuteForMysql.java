@@ -29,7 +29,7 @@ import com.github.brick.action.flow.method.execute.MethodExecute;
 import com.github.brick.action.flow.method.execute.impl.ApiExecuteImpl;
 import com.github.brick.action.flow.method.execute.impl.MethodExecuteImpl;
 import com.github.brick.action.flow.method.extract.Extract;
-import com.github.brick.action.flow.method.extract.ExtractImpl;
+import com.github.brick.action.flow.method.extract.JsonPathExtract;
 import com.github.brick.action.flow.method.format.Format;
 import com.github.brick.action.flow.method.req.WorkNode;
 import com.github.brick.action.flow.storage.api.*;
@@ -85,7 +85,7 @@ public class ExecuteForMysql {
     @Autowired
     FormatStorage mysqlFormatStorage;
     MethodExecute methodExecute = new MethodExecuteImpl();
-    Extract extract = new ExtractImpl();
+    Extract extract = new JsonPathExtract();
     SpelExpressionParser parser = new SpelExpressionParser();
     Gson gson = new Gson();
     ApiExecute apiExecute = new ApiExecuteImpl();

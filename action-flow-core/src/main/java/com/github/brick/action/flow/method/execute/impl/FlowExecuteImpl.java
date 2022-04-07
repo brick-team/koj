@@ -26,7 +26,7 @@ import com.github.brick.action.flow.method.enums.FLowModel;
 import com.github.brick.action.flow.method.enums.HttpClientType;
 import com.github.brick.action.flow.method.execute.FlowExecute;
 import com.github.brick.action.flow.method.extract.Extract;
-import com.github.brick.action.flow.method.extract.ExtractImpl;
+import com.github.brick.action.flow.method.extract.JsonPathExtract;
 import com.github.brick.action.flow.method.factory.ActionFlowParseApiFactory;
 import com.github.brick.action.flow.method.factory.Factory;
 import com.github.brick.action.flow.method.factory.HttpWorkerFactory;
@@ -58,7 +58,7 @@ public class FlowExecuteImpl implements FlowExecute {
     ActionFlowMethodParseApi actionFlowMethodParseApi;
 
     SpelExpressionParser parser = new SpelExpressionParser();
-    Extract extract = new ExtractImpl();
+    Extract extract = new JsonPathExtract();
     /**
      * ActionFlowParseApi factory
      */

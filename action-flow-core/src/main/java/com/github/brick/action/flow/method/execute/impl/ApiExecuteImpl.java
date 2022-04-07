@@ -20,7 +20,7 @@ import com.github.brick.action.flow.execute.http.HttpWorker;
 import com.github.brick.action.flow.method.enums.HttpClientType;
 import com.github.brick.action.flow.method.execute.ApiExecute;
 import com.github.brick.action.flow.method.extract.Extract;
-import com.github.brick.action.flow.method.extract.ExtractImpl;
+import com.github.brick.action.flow.method.extract.JsonPathExtract;
 import com.github.brick.action.flow.method.factory.Factory;
 import com.github.brick.action.flow.method.factory.HttpWorkerFactory;
 
@@ -30,7 +30,7 @@ import java.util.Map;
 public class ApiExecuteImpl implements ApiExecute {
     Factory<HttpClientType, HttpWorker> httpWorkerFactory =
             new HttpWorkerFactory();
-    Extract extract = new ExtractImpl();
+    Extract extract = new JsonPathExtract();
     HttpWorker gen = httpWorkerFactory.gen(HttpClientType.OKHTTP);
 
     @Override

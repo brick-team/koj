@@ -19,7 +19,7 @@ package com.github.brick.action.flow.method.execute.impl;
 import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
 import com.github.brick.action.flow.method.entity.api.ParamIn;
 import com.github.brick.action.flow.method.extract.Extract;
-import com.github.brick.action.flow.method.extract.ExtractImpl;
+import com.github.brick.action.flow.method.extract.JsonPathExtract;
 import com.google.gson.Gson;
 import net.minidev.json.JSONArray;
 
@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class HandlerApiParamEntity {
     Gson gson = new Gson();
-    Extract extract = new ExtractImpl();
+    Extract extract = new JsonPathExtract();
 
     public void handler(List<ApiParamEntity> apiParamEntities, Map data) {
         for (ApiParamEntity apiParamEntity : apiParamEntities) {

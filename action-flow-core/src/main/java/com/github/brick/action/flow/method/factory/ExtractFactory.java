@@ -18,7 +18,7 @@ package com.github.brick.action.flow.method.factory;
 
 import com.github.brick.action.flow.method.enums.ExtractModel;
 import com.github.brick.action.flow.method.extract.Extract;
-import com.github.brick.action.flow.method.extract.ExtractImpl;
+import com.github.brick.action.flow.method.extract.JsonPathExtract;
 
 public class ExtractFactory<Type extends com.github.brick.action.flow.method.enums.Type, T>
         implements Factory<ExtractModel, Extract> {
@@ -27,7 +27,7 @@ public class ExtractFactory<Type extends com.github.brick.action.flow.method.enu
         Extract extract = null;
         switch (type) {
             case JSON_PATH:
-                extract = new ExtractImpl();
+                extract = new JsonPathExtract();
                 break;
             default:
                 throw new IllegalArgumentException("参数异常，无法生成数据提取器");
