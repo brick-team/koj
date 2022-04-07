@@ -99,7 +99,7 @@ public class HandlerApiParamEntityTest {
         ApiEntity apiEntity = new ApiEntity();
         apiEntity.setParams(apiParamEntities);
 
-        apiExecute.execute(apiEntity, "");
+//        apiExecute.execute(apiEntity, "");
     }
 
     ApiExecute apiExecute = new ApiExecuteImpl();

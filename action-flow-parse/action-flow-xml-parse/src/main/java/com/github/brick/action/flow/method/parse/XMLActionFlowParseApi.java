@@ -20,11 +20,12 @@ import com.github.brick.action.flow.method.entity.*;
 import com.github.brick.action.flow.method.entity.api.ApisEntity;
 import com.github.brick.action.flow.method.parse.xml.*;
 import com.github.brick.action.flow.parse.api.ActionFlowMethodParseApi;
+import com.github.brick.action.flow.parse.api.ActionFlowParseApi;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-public class XMLActionFlowMethodParseApi implements ActionFlowMethodParseApi {
+public class XMLActionFlowParseApi implements ActionFlowMethodParseApi {
     private final ResultParse resultParse = new ResultParse();
     private final ParamsParse paramsParse = new ParamsParse();
     private final ActionsParse actionsParse = new ActionsParse();

@@ -14,12 +14,18 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.parse.api;
+package com.github.brick.action.flow.method.enums;
 
-import com.github.brick.action.flow.method.entity.ActionEntity;
-import com.github.brick.action.flow.method.entity.AllEntity;
-import com.github.brick.action.flow.model.xml.ActionFlowXML;
+import lombok.Getter;
 
-public interface ActionFlowMethodParseApi extends ActionFlowParseApi<AllEntity> {
+@Getter
+public enum ActionType implements Type {
+    REST_API,
+    JAVA_METHOD,
+    ;
 
+    @Override
+    public String type() {
+        return name();
+    }
 }

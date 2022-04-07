@@ -14,12 +14,34 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.parse.api;
+package com.github.brick.action.flow.model.xml;
 
-import com.github.brick.action.flow.method.entity.ActionEntity;
-import com.github.brick.action.flow.method.entity.AllEntity;
-import com.github.brick.action.flow.model.xml.ActionFlowXML;
+import com.github.brick.action.flow.method.enums.ActionType;
+import lombok.Data;
 
-public interface ActionFlowMethodParseApi extends ActionFlowParseApi<AllEntity> {
+import java.util.List;
+
+@Data
+public class ActionXML {
+    private String id;
+    private ActionType type;
+
+    private ForRestApi restApi;
+    private ForJavaMethod javaMethod;
+
+    @Data
+    public static class ForRestApi {
+        private String url;
+        private String method;
+        private List<ParamXML> param;
+    }
+
+    @Data
+    public static class ForJavaMethod {
+        private String className;
+        private String method;
+        private List<ParamXML> param;
+
+    }
 
 }

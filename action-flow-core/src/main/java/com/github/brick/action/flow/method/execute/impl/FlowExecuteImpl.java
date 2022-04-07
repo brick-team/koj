@@ -31,7 +31,7 @@ import com.github.brick.action.flow.method.factory.ActionFlowParseApiFactory;
 import com.github.brick.action.flow.method.factory.Factory;
 import com.github.brick.action.flow.method.factory.HttpWorkerFactory;
 import com.github.brick.action.flow.method.format.Format;
-import com.github.brick.action.flow.parse.api.ActionFlowMethodParseApi;
+import com.github.brick.action.flow.parse.api.ActionFlowParseApi;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,14 +55,14 @@ import java.util.stream.Collectors;
 
 public class FlowExecuteImpl implements FlowExecute {
     private static final Logger logger = LoggerFactory.getLogger(FlowExecuteImpl.class);
-    ActionFlowMethodParseApi actionFlowMethodParseApi;
+    ActionFlowParseApi<AllEntity> actionFlowParseApi;
 
     SpelExpressionParser parser = new SpelExpressionParser();
     Extract extract = new JsonPathExtract();
     /**
      * ActionFlowParseApi factory
      */
-    Factory<FLowModel, ActionFlowMethodParseApi> actionFlowParseApiFactory =
+    Factory<FLowModel, ActionFlowParseApi> actionFlowParseApiFactory =
             new ActionFlowParseApiFactory<>();
 
 
@@ -80,7 +80,7 @@ public class FlowExecuteImpl implements FlowExecute {
 
         AllEntity parse = null;
         try {
-            parse = actionFlowMethodParseApi.parse(file);
+            parse = actionFlowParseApi.parse(file);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -91,7 +91,7 @@ public class FlowExecuteImpl implements FlowExecute {
     }
 
     public void init(FLowModel module, HttpClientType type) {
-        this.actionFlowMethodParseApi = actionFlowParseApiFactory.gen(module);
+        this.actionFlowParseApi = actionFlowParseApiFactory.gen(module);
         this.httpWorker = httpWorkerFactory.gen(type);
     }
 

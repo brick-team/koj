@@ -14,12 +14,15 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.parse.api;
+package com.github.brick.action.flow.parse.xml;
 
-import com.github.brick.action.flow.method.entity.ActionEntity;
-import com.github.brick.action.flow.method.entity.AllEntity;
-import com.github.brick.action.flow.model.xml.ActionFlowXML;
+import org.junit.Test;
 
-public interface ActionFlowMethodParseApi extends ActionFlowParseApi<AllEntity> {
+import static org.junit.Assert.*;
 
+public class ExtractXMLParseTest extends XMLParseCommonTest {
+
+    @Test
+    public void parse() {
+    }
 }

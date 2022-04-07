@@ -3,7 +3,11 @@
 <action-flow>
     <actions>
         <action id="rest_api_1" type="rest_api" url="" method="">
-            <param in="参数位置(body，url，formData" name="" require="true" value="">
+            <param in="body" name="" require="true" value="">
+                <extract fromAction="" el="" elType=""/>
+            </param>
+
+            <param in="header" name="" require="true" value="">
                 <extract fromAction="" el="" elType=""/>
             </param>
         </action>
@@ -15,31 +19,42 @@
     <results>
         <result id="1">
             <fields>
-                <field>
-                    <fieldName>User</fieldName>
+                <field id="111">
+                    <fieldName>O1</fieldName>
                     <type>object</type>
                     <extract el="" step=""/>
                     <properties>
                         <fields>
                             <field>
-                                <fieldName>name</fieldName>
+                                <fieldName>f1</fieldName>
                                 <type>String</type>
                                 <extract el="" step="" elType=""/>
                             </field>
-                            <filed>
-                                <fieldName>age</fieldName>
-                                <type>int</type>
+                            <field>
+                                <fieldName>f2</fieldName>
+                                <type>object</type>
                                 <extract el="" step="" elType=""/>
-                            </filed>
+                                <properties>
+                                    <fields>
+                                        <field>
+                                            <fieldName>f3</fieldName>
+                                            <type>String</type>
+                                            <extract el="" step="" elType=""/>
+                                        </field>
+                                        <field>
+                                            <fieldName>f4</fieldName>
+                                            <type>Integer</type>
+                                            <extract el="" step="" elType=""/>
+                                        </field>
+                                    </fields>
+                                </properties>
+
+                            </field>
                         </fields>
                     </properties>
                 </field>
 
-                <filed>
-                    <fieldName>token</fieldName>
-                    <type>String</type>
-                    <extract el="" step="" elType=""/>
-                </filed>
+
             </fields>
         </result>
 

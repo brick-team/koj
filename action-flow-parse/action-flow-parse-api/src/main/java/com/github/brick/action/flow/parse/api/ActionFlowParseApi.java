@@ -16,10 +16,10 @@
 
 package com.github.brick.action.flow.parse.api;
 
-import com.github.brick.action.flow.method.entity.ActionEntity;
-import com.github.brick.action.flow.method.entity.AllEntity;
-import com.github.brick.action.flow.model.xml.ActionFlowXML;
+/**
+ * 核心解析类
+ */
+public interface ActionFlowParseApi<T> {
 
-public interface ActionFlowMethodParseApi extends ActionFlowParseApi<AllEntity> {
-
+    T parse(String file) throws Exception;
 }

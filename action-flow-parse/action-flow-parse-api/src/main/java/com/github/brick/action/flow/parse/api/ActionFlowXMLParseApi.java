@@ -16,10 +16,10 @@
 
 package com.github.brick.action.flow.parse.api;
 
-import com.github.brick.action.flow.method.entity.ActionEntity;
-import com.github.brick.action.flow.method.entity.AllEntity;
 import com.github.brick.action.flow.model.xml.ActionFlowXML;
 
-public interface ActionFlowMethodParseApi extends ActionFlowParseApi<AllEntity> {
+import java.awt.image.ImageConsumer;
+
+public interface ActionFlowXMLParseApi extends ActionFlowParseApi<ActionFlowXML> {
 
 }

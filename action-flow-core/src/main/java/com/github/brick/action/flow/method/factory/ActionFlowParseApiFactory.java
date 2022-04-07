@@ -17,21 +17,21 @@
 package com.github.brick.action.flow.method.factory;
 
 import com.github.brick.action.flow.method.enums.FLowModel;
-import com.github.brick.action.flow.method.parse.XMLActionFlowMethodParseApi;
-import com.github.brick.action.flow.parse.api.ActionFlowMethodParseApi;
+import com.github.brick.action.flow.method.parse.XMLActionFlowParseApi;
+import com.github.brick.action.flow.parse.api.ActionFlowParseApi;
 
 public class ActionFlowParseApiFactory<Type extends com.github.brick.action.flow.method.enums.Type, T>
-        implements Factory<FLowModel, ActionFlowMethodParseApi> {
+        implements Factory<FLowModel, ActionFlowParseApi> {
 
 
     @Override
-    public ActionFlowMethodParseApi gen(FLowModel type) {
-        ActionFlowMethodParseApi actionFlowMethodParseApi = null;
+    public ActionFlowParseApi gen(FLowModel type) {
+        ActionFlowParseApi actionFlowParseApi = null;
         if (type == FLowModel.XML) {
-            actionFlowMethodParseApi = new XMLActionFlowMethodParseApi();
+            actionFlowParseApi = new XMLActionFlowParseApi();
         } else {
             throw new IllegalArgumentException("参数异常，无法生成文件解析器");
         }
-        return actionFlowMethodParseApi;
+        return actionFlowParseApi;
     }
 }

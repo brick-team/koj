@@ -14,12 +14,15 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.parse.api;
+package com.github.brick.action.flow.model.xml;
 
-import com.github.brick.action.flow.method.entity.ActionEntity;
-import com.github.brick.action.flow.method.entity.AllEntity;
-import com.github.brick.action.flow.model.xml.ActionFlowXML;
+import com.github.brick.action.flow.method.enums.ExtractModel;
+import lombok.Data;
 
-public interface ActionFlowMethodParseApi extends ActionFlowParseApi<AllEntity> {
-
+@Data
+public class ExtractXML {
+    private String el;
+    private ExtractModel elType;
+    private String step;
+    private String fromAction;
 }
