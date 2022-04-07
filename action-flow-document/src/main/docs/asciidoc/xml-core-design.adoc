@@ -63,7 +63,7 @@ Doc Writer https://github.com/brick-team[brick-team]
                     </properties>
                 </field>
 
-                <filed>
+                <field>
                     <fieldName>token</fieldName>
                     <type>String</type>
                     <extract el="" step="" elType=""/>
