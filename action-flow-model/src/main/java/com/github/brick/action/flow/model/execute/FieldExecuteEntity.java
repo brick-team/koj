@@ -14,14 +14,18 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.xml;
+package com.github.brick.action.flow.model.execute;
 
-import com.github.brick.action.flow.model.execute.WorkExecuteEntity;
+import com.github.brick.action.flow.method.enums.FieldType;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class WorkXML extends WorkExecuteEntity {
+public class FieldExecuteEntity {
+    private String fieldName;
+    private FieldType type;
+    private ExtractExecuteEntity extract;
+    private List<FieldExecuteEntity> properties;
 
 }

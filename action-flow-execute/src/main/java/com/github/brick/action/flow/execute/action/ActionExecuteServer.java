@@ -14,14 +14,11 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.xml;
+package com.github.brick.action.flow.execute.action;
 
-import com.github.brick.action.flow.model.execute.WorkExecuteEntity;
-import lombok.Data;
+import com.github.brick.action.flow.execute.ExecuteServer;
 
-import java.util.List;
+public interface ActionExecuteServer extends ExecuteServer {
 
-@Data
-public class WorkXML extends WorkExecuteEntity {
 
 }

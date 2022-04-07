@@ -16,12 +16,12 @@
 
 package com.github.brick.action.flow.model.xml;
 
+import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class FlowXML {
+public class FlowXML extends FlowExecuteEntity {
     private String id;
-    private List<WorkXML> works;
 }

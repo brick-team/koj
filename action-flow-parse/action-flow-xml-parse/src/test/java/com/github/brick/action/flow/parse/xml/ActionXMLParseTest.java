@@ -16,6 +16,7 @@
 
 package com.github.brick.action.flow.parse.xml;
 
+import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
 import com.github.brick.action.flow.model.xml.ActionXML;
 import org.junit.Test;
 
@@ -27,7 +28,7 @@ public class ActionXMLParseTest extends XMLParseCommonTest {
 
     @Test
     public void parse() throws Exception {
-        List<ActionXML> parse = actionXMLParse.parse(rootElement);
+        List<ActionExecuteEntity> parse = actionXMLParse.parse(rootElement);
         log(parse);
     }
 }

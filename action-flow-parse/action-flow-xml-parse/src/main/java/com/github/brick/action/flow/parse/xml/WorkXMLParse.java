@@ -17,6 +17,8 @@
 package com.github.brick.action.flow.parse.xml;
 
 
+import com.github.brick.action.flow.model.execute.WatcherExecuteEntity;
+import com.github.brick.action.flow.model.execute.WorkExecuteEntity;
 import com.github.brick.action.flow.model.xml.WatcherXML;
 import com.github.brick.action.flow.model.xml.WorkXML;
 import org.dom4j.Element;
@@ -38,12 +40,12 @@ public class WorkXMLParse implements ParseXML<WorkXML> {
         WorkXML workXML = new WorkXML();
         workXML.setStep(element.attributeValue(STEP_ATTR));
         workXML.setRefId(element.attributeValue(REF_ID_ATTR));
-        ArrayList<WatcherXML> watchers = new ArrayList<>();
+        ArrayList<WatcherExecuteEntity> watchers = new ArrayList<>();
         List<Element> watcher = element.elements(WATCHER_ATTR);
 
         for (Element element1 : watcher) {
             WatcherXML parse = watcherXMLParse.parse(element1);
-            ArrayList<WorkXML> then1 = new ArrayList<>();
+            ArrayList<WorkExecuteEntity> then1 = new ArrayList<>();
             Element then = element1.element(THEN_ATTR);
             if (then != null) {
                 List<Element> work = then.elements(WORK_ATTR);
@@ -55,7 +57,7 @@ public class WorkXMLParse implements ParseXML<WorkXML> {
             parse.setThen(then1);
 
 
-            ArrayList<WorkXML> cat1 = new ArrayList<>();
+            ArrayList<WorkExecuteEntity> cat1 = new ArrayList<>();
             Element cat = element1.element(CAT_ATTR);
             if (cat != null) {
                 List<Element> work = cat.elements(WORK_ATTR);

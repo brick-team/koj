@@ -14,14 +14,26 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.xml;
+package com.github.brick.action.flow.model.execute;
 
-import com.github.brick.action.flow.model.execute.WorkExecuteEntity;
+import com.github.brick.action.flow.method.enums.ExtractModel;
 import lombok.Data;
 
-import java.util.List;
-
+import java.io.Serializable;
 @Data
-public class WorkXML extends WorkExecuteEntity {
+public class ExtractExecuteEntity implements RefId<String> {
+    private String el;
+    private ExtractModel elType;
+    private String step;
+    private Serializable fromAction;
 
+    @Override
+    public String getRefId() {
+        return (String) fromAction;
+    }
+
+    @Override
+    public void setRefId(String id) {
+        this.fromAction = id;
+    }
 }

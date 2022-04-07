@@ -16,6 +16,8 @@
 
 package com.github.brick.action.flow.parse.xml;
 
+import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
+import com.github.brick.action.flow.model.execute.WorkExecuteEntity;
 import com.github.brick.action.flow.model.xml.FlowXML;
 import com.github.brick.action.flow.model.xml.WorkXML;
 import org.dom4j.Element;
@@ -23,7 +25,7 @@ import org.dom4j.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlowXMLParse implements ParseXML<List<FlowXML>> {
+public class FlowXMLParse implements ParseXML<List<FlowExecuteEntity>> {
     private static final String FLOWS_NODE = "flows";
     private static final String FLOW_NODE = "flow";
     private static final String WORK_NODE = "work";
@@ -31,10 +33,10 @@ public class FlowXMLParse implements ParseXML<List<FlowXML>> {
     private final WorkXMLParse workXMLParse = new WorkXMLParse();
 
     @Override
-    public List<FlowXML> parse(Element element) throws Exception {
+    public List<FlowExecuteEntity> parse(Element element) throws Exception {
         Element flows = element.element(FLOWS_NODE);
         List<Element> flow = flows.elements(FLOW_NODE);
-        List<FlowXML> res = new ArrayList<>();
+        List<FlowExecuteEntity> res = new ArrayList<>();
 
         for (Element element1 : flow) {
             FlowXML flowXML = new FlowXML();
@@ -43,7 +45,7 @@ public class FlowXMLParse implements ParseXML<List<FlowXML>> {
 
             List<Element> work = element1.elements(WORK_NODE);
 
-            ArrayList<WorkXML> works = new ArrayList<>();
+            ArrayList<WorkExecuteEntity> works = new ArrayList<>();
             for (Element element2 : work) {
                 works.add(workXMLParse.parse(element2));
             }

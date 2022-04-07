@@ -14,14 +14,12 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.xml;
+package com.github.brick.action.flow.model.execute;
 
-import com.github.brick.action.flow.model.execute.WorkExecuteEntity;
-import lombok.Data;
+import java.io.Serializable;
 
-import java.util.List;
+public interface RefId<Serializable> {
+    Serializable getRefId();
 
-@Data
-public class WorkXML extends WorkExecuteEntity {
-
+    void setRefId(Serializable id);
 }

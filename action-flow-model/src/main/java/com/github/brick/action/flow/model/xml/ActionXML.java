@@ -17,31 +17,14 @@
 package com.github.brick.action.flow.model.xml;
 
 import com.github.brick.action.flow.method.enums.ActionType;
+import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class ActionXML {
+public class ActionXML extends ActionExecuteEntity {
     private String id;
-    private ActionType type;
 
-    private ForRestApi restApi;
-    private ForJavaMethod javaMethod;
-
-    @Data
-    public static class ForRestApi {
-        private String url;
-        private String method;
-        private List<ParamXML> param;
-    }
-
-    @Data
-    public static class ForJavaMethod {
-        private String className;
-        private String method;
-        private List<ParamXML> param;
-
-    }
 
 }

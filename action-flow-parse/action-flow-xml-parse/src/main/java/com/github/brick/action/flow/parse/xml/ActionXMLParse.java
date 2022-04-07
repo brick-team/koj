@@ -17,6 +17,8 @@
 package com.github.brick.action.flow.parse.xml;
 
 import com.github.brick.action.flow.method.enums.ActionType;
+import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
 import com.github.brick.action.flow.model.xml.ActionXML;
 import com.github.brick.action.flow.model.xml.ParamXML;
 import org.dom4j.Element;
@@ -24,7 +26,7 @@ import org.dom4j.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActionXMLParse implements ParseXML<List<ActionXML>> {
+public class ActionXMLParse implements ParseXML<List<ActionExecuteEntity>> {
     private static final String ACTIONS_NODE = "actions";
     private static final String ACTION_NODE = "action";
     private static final String ID_ATTR = "id";
@@ -37,11 +39,11 @@ public class ActionXMLParse implements ParseXML<List<ActionXML>> {
     ParamXMLForJavaMethodParse paramXMLForJavaMethodParse = new ParamXMLForJavaMethodParse();
 
     @Override
-    public List<ActionXML> parse(Element element) throws Exception {
+    public List<ActionExecuteEntity> parse(Element element) throws Exception {
         Element actions = element.element(ACTIONS_NODE);
 
         List<Element> action = actions.elements(ACTION_NODE);
-        List<ActionXML> result = new ArrayList<>();
+        List<ActionExecuteEntity> result = new ArrayList<>();
 
         for (Element elm : action) {
             handlerAction(result, elm);
@@ -49,7 +51,7 @@ public class ActionXMLParse implements ParseXML<List<ActionXML>> {
         return result;
     }
 
-    private void handlerAction(List<ActionXML> result, Element elm) throws Exception {
+    private void handlerAction(List<ActionExecuteEntity> result, Element elm) throws Exception {
         ActionXML actionXML = new ActionXML();
         String id = elm.attributeValue(ID_ATTR);
         actionXML.setId(id);
@@ -66,7 +68,7 @@ public class ActionXMLParse implements ParseXML<List<ActionXML>> {
         result.add(actionXML);
     }
 
-    private void handlerJavaMethod(Element elm, ActionXML actionXML) throws Exception {
+    private void handlerJavaMethod(Element elm, ActionExecuteEntity actionXML) throws Exception {
         ActionXML.ForJavaMethod javaMethod = new ActionXML.ForJavaMethod();
         String method = elm.attributeValue(METHOD_ATTR);
         javaMethod.setMethod(method);
@@ -74,7 +76,7 @@ public class ActionXMLParse implements ParseXML<List<ActionXML>> {
         String className = elm.attributeValue(CLASS_NAME_ATTR);
         javaMethod.setClassName(className);
         actionXML.setJavaMethod(javaMethod);
-        ArrayList<ParamXML> methodParam = new ArrayList<>();
+        ArrayList<ParamExecuteEntity> methodParam = new ArrayList<>();
         List<Element> param = elm.elements(PARAM_NODE);
 
         for (Element paramElement : param) {
@@ -84,14 +86,14 @@ public class ActionXMLParse implements ParseXML<List<ActionXML>> {
         javaMethod.setParam(methodParam);
     }
 
-    private void handlerRestApi(Element elm, ActionXML actionXML) throws Exception {
+    private void handlerRestApi(Element elm, ActionExecuteEntity actionXML) throws Exception {
         ActionXML.ForRestApi restApi = new ActionXML.ForRestApi();
         String method = elm.attributeValue(METHOD_ATTR);
         // TODO: 2022/4/7 get post delete put 校验
         restApi.setMethod(method);
         String url = elm.attributeValue(URL_ATTR);
         restApi.setUrl(url);
-        ArrayList<ParamXML> apiParam = new ArrayList<>();
+        ArrayList<ParamExecuteEntity> apiParam = new ArrayList<>();
 
         List<Element> param = elm.elements(PARAM_NODE);
 

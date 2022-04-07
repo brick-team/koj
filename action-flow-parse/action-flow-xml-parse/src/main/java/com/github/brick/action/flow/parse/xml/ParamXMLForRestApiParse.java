@@ -17,9 +17,9 @@
 package com.github.brick.action.flow.parse.xml;
 
 import com.github.brick.action.flow.method.entity.api.ParamIn;
+import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
 import com.github.brick.action.flow.model.xml.ExtractXML;
 import com.github.brick.action.flow.model.xml.ParamXML;
-import com.github.brick.action.flow.model.xml.ParamXML.ForRestApi;
 import org.dom4j.Element;
 
 public class ParamXMLForRestApiParse implements ParseXML<ParamXML> {
@@ -39,7 +39,7 @@ public class ParamXMLForRestApiParse implements ParseXML<ParamXML> {
 
         ParamXML paramXML = new ParamXML();
 
-        ForRestApi restApi = new ForRestApi();
+        ParamExecuteEntity.ForRestApi restApi = new ParamExecuteEntity.ForRestApi();
         restApi.setIn(ParamIn.valueOf(in.toLowerCase()));
         restApi.setName(name);
         restApi.setRequire(Boolean.parseBoolean(require));

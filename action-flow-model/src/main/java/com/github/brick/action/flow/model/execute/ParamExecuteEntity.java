@@ -14,11 +14,36 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.xml;
+package com.github.brick.action.flow.model.execute;
 
 import com.github.brick.action.flow.method.entity.api.ParamIn;
-import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
 import lombok.Data;
 
-public class ParamXML extends ParamExecuteEntity {
+@Data
+public class ParamExecuteEntity {
+
+    private ForRestApi restApi;
+    private ForJavaMethod javaMethod;
+
+    @Data
+    public static class ForRestApi {
+        private ParamIn in;
+        private String name;
+        private boolean require;
+        private String value;
+        private ExtractExecuteEntity extract;
+
+    }
+
+    @Data
+    public static class ForJavaMethod {
+
+        private Integer index;
+        private String type;
+        private String name;
+        private String value;
+        private ExtractExecuteEntity extract;
+
+    }
+
 }

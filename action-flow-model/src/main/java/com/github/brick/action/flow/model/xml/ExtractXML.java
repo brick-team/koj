@@ -16,13 +16,8 @@
 
 package com.github.brick.action.flow.model.xml;
 
-import com.github.brick.action.flow.method.enums.ExtractModel;
-import lombok.Data;
+import com.github.brick.action.flow.model.execute.ExtractExecuteEntity;
 
-@Data
-public class ExtractXML {
-    private String el;
-    private ExtractModel elType;
-    private String step;
-    private String fromAction;
+public class ExtractXML extends ExtractExecuteEntity {
+
 }

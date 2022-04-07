@@ -17,6 +17,7 @@
 package com.github.brick.action.flow.parse.xml;
 
 import com.github.brick.action.flow.method.enums.FieldType;
+import com.github.brick.action.flow.model.execute.FieldExecuteEntity;
 import com.github.brick.action.flow.model.xml.ExtractXML;
 import com.github.brick.action.flow.model.xml.FieldXML;
 import org.dom4j.Element;
@@ -54,7 +55,7 @@ public class FieldXMLParse implements ParseXML<FieldXML> {
 
             Element fields = properties.element(FIELDS_NODE);
             List<Element> field = fields.elements(FIELD_NODE);
-            List<FieldXML> prop = new ArrayList<>();
+            List<FieldExecuteEntity> prop = new ArrayList<>();
             for (Element element1 : field) {
                 Element fieldName = element1.element(FIELD_NAME_NODE);
                 System.out.println(fieldName.getTextTrim());

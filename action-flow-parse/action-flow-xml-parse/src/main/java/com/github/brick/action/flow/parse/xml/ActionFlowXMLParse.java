@@ -27,7 +27,7 @@ public class ActionFlowXMLParse implements ParseXML<ActionFlowXML> {
     @Override
     public ActionFlowXML parse(Element element) throws Exception {
         ActionFlowXML actionFlowXML = new ActionFlowXML();
-        actionFlowXML.setActions(actionXMLParse.parse(element));
+        actionFlowXML.setActions( actionXMLParse.parse(element));
 
         actionFlowXML.setResults(resultXMLParse.parse(element));
         actionFlowXML.setFlows(flowXMLParse.parse(element));

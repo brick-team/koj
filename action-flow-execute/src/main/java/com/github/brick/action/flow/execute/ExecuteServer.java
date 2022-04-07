@@ -19,5 +19,4 @@ package com.github.brick.action.flow.execute;
 import com.github.brick.action.flow.method.entity.ExecuteObject;
 
 public interface ExecuteServer {
-    String execute(ExecuteObject entity);
 }

@@ -16,9 +16,9 @@
 
 package com.github.brick.action.flow.parse.xml;
 
+import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
 import com.github.brick.action.flow.model.xml.ExtractXML;
 import com.github.brick.action.flow.model.xml.ParamXML;
-import com.github.brick.action.flow.model.xml.ParamXML.ForJavaMethod;
 import lombok.Data;
 import org.dom4j.Element;
 
@@ -44,7 +44,7 @@ public class ParamXMLForJavaMethodParse implements ParseXML<ParamXML> {
         ExtractXML extract = extractXMLParse.parse(element.element(EXTRACT_NODE));
 
 
-        ForJavaMethod javaMethod = new ForJavaMethod();
+        ParamExecuteEntity.ForJavaMethod javaMethod = new ParamExecuteEntity.ForJavaMethod();
         String index = element.attributeValue(INDEX_ATTR);
         String type = element.attributeValue(TYPE_ATTR);
 

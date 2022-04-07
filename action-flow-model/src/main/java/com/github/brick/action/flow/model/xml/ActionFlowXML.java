@@ -16,14 +16,10 @@
 
 package com.github.brick.action.flow.model.xml;
 
+import com.github.brick.action.flow.model.execute.ActionFlowExecuteEntity;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class ActionFlowXML {
-    List<ActionXML> actions;
-    List<ResultXML> results;
-    List<FlowXML> flows;
+public class ActionFlowXML extends ActionFlowExecuteEntity {
 
 }

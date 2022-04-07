@@ -16,12 +16,12 @@
 
 package com.github.brick.action.flow.model.xml;
 
+import com.github.brick.action.flow.model.execute.ResultExecuteEntity;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class ResultXML {
+public class ResultXML extends ResultExecuteEntity {
     private String id;
-    private List<FieldXML> fields;
 }

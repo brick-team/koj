@@ -16,6 +16,8 @@
 
 package com.github.brick.action.flow.parse.xml;
 
+import com.github.brick.action.flow.model.execute.FieldExecuteEntity;
+import com.github.brick.action.flow.model.execute.ResultExecuteEntity;
 import com.github.brick.action.flow.model.xml.FieldXML;
 import com.github.brick.action.flow.model.xml.ResultXML;
 import org.dom4j.Element;
@@ -23,7 +25,7 @@ import org.dom4j.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResultXMLParse implements ParseXML<List<ResultXML>> {
+public class ResultXMLParse implements ParseXML<List<ResultExecuteEntity>> {
     private static final String RESULT_NODE = "result";
     private static final String RESULTS_NODE = "results";
     private static final String ID_ATTR = "id";
@@ -32,15 +34,15 @@ public class ResultXMLParse implements ParseXML<List<ResultXML>> {
     private final FieldXMLParse fieldXMLParse = new FieldXMLParse();
 
     @Override
-    public List<ResultXML> parse(Element element) throws Exception {
+    public List<ResultExecuteEntity> parse(Element element) throws Exception {
         Element results = element.element(RESULTS_NODE);
         List<Element> result = results.elements(RESULT_NODE);
-        List<ResultXML> resultList = new ArrayList<>();
+        List<ResultExecuteEntity> resultList = new ArrayList<>();
         for (Element element1 : result) {
             String id = element1.attributeValue(ID_ATTR);
             ResultXML resultXML = new ResultXML();
             resultXML.setId(id);
-            ArrayList<FieldXML> fields = new ArrayList<>();
+            ArrayList<FieldExecuteEntity> fields = new ArrayList<>();
             Element fields1 = element1.element(FIELDS_NODE);
             List<Element> field = fields1.elements(FIELD_NODE);
             for (Element element2 : field) {

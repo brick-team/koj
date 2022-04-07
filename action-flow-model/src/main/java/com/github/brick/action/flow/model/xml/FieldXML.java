@@ -16,15 +16,7 @@
 
 package com.github.brick.action.flow.model.xml;
 
-import com.github.brick.action.flow.method.enums.FieldType;
-import lombok.Data;
+import com.github.brick.action.flow.model.execute.FieldExecuteEntity;
 
-import java.util.List;
-
-@Data
-public class FieldXML {
-    private String fieldName;
-    private FieldType type;
-    private ExtractXML extract;
-    private List<FieldXML> properties;
+public class FieldXML extends FieldExecuteEntity {
 }

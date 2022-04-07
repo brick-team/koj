@@ -16,15 +16,7 @@
 
 package com.github.brick.action.flow.model.xml;
 
-import com.github.brick.action.flow.method.enums.ExtractModel;
-import lombok.Data;
+import com.github.brick.action.flow.model.execute.WatcherExecuteEntity;
 
-import java.util.List;
-
-@Data
-public class WatcherXML {
-    private String condition;
-    private ExtractModel elType;
-    private List<WorkXML> then;
-    private List<WorkXML> cat;
+public class WatcherXML extends WatcherExecuteEntity {
 }
