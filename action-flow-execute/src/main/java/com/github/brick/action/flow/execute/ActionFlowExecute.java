@@ -44,9 +44,9 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ActionFlowXMLExecute {
+public class ActionFlowExecute {
     public static final String DROOL = "$.";
-    private static final Logger logger = LoggerFactory.getLogger(ActionFlowXMLExecute.class);
+    private static final Logger logger = LoggerFactory.getLogger(ActionFlowExecute.class);
     static SpelExpressionParser parser = new SpelExpressionParser();
     private final ActionExecuteEntityStorage actionExecuteEntityStorage;
     private final FlowExecuteEntityStorage flowExecuteEntityStorage;
@@ -56,8 +56,8 @@ public class ActionFlowXMLExecute {
     Gson gson = new Gson();
     JDKExecuteService jdkExecuteService = new JDKExecuteServiceImpl();
 
-    public ActionFlowXMLExecute(String fileName,
-                                ActionExecuteEntityStorage actionExecuteEntityStorage, FlowExecuteEntityStorage flowExecuteEntityStorage, ResultExecuteEntityStorage resultExecuteEntityStorage) {
+    public ActionFlowExecute(String fileName,
+                             ActionExecuteEntityStorage actionExecuteEntityStorage, FlowExecuteEntityStorage flowExecuteEntityStorage, ResultExecuteEntityStorage resultExecuteEntityStorage) {
         this.fileName = fileName;
         this.actionExecuteEntityStorage = actionExecuteEntityStorage;
         this.flowExecuteEntityStorage = flowExecuteEntityStorage;
@@ -134,10 +134,7 @@ public class ActionFlowXMLExecute {
             for (WatcherExecuteEntity watcher : watchers) {
                 ExtractModel elType = watcher.getElType();
                 String condition = watcher.getCondition();
-
-
                 handlerLeftRight(condition, elType, o);
-
             }
         }
 
@@ -208,6 +205,12 @@ public class ActionFlowXMLExecute {
             else if (in == ParamIn.query) {
                 handlerDataMap(value, extract, jsonData, queryParam, name);
             }
+
+            // todo: 子集参数处理
+            List<ParamExecuteEntity.ForRestApi> restApis = restApi1.getRestApis();
+
+
+
         }
 
 

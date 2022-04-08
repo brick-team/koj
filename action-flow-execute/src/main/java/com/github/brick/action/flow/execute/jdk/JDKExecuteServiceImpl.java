@@ -42,9 +42,22 @@ public class JDKExecuteServiceImpl implements JDKExecuteService {
         return execute(aClass, method, methodParamType, args);
     }
 
+    /**
+     * methodParamType.len >= args.len
+     */
     @Override
     public Object execute(Class<?> clazz, String method, Class<?>[] methodParamType, Object... args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Method declaredMethod = clazz.getDeclaredMethod(method, methodParamType);
+
+        for (int i = 0; i < methodParamType.length; i++) {
+            Class<?> aClass = methodParamType[i];
+            Object arg = args[i];
+            // todo 类型转换
+
+            if (arg instanceof String) {
+
+            }
+        }
         Constructor<?> constructor = clazz.getConstructor();
         Object o = constructor.newInstance();
         return execute(o, declaredMethod, args);

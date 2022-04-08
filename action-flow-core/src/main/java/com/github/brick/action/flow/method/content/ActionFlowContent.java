@@ -16,7 +16,6 @@
 
 package com.github.brick.action.flow.method.content;
 
-import com.github.brick.action.flow.execute.ActionFlowXMLExecute;
 import com.github.brick.action.flow.method.enums.StorageType;
 import com.github.brick.action.flow.method.factory.storage.StorageFactory;
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
@@ -36,21 +35,27 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class ActionFlowContent {
+public abstract class ActionFlowContent {
     private static final Logger logger = LoggerFactory.getLogger(ActionFlowContent.class);
     private final String[] actionFlowFileNames;
     private final Injector injector;
 
-    private final StorageType storageType;
-    private ActionExecuteEntityStorage actionExecuteEntityStorage;
-    private FlowExecuteEntityStorage flowExecuteEntityStorage;
-    private ResultExecuteEntityStorage resultExecuteEntityStorage;
+    protected StorageType storageType;
+    protected ActionExecuteEntityStorage actionExecuteEntityStorage;
+    protected FlowExecuteEntityStorage flowExecuteEntityStorage;
+    protected ResultExecuteEntityStorage resultExecuteEntityStorage;
 
     public ActionFlowContent(StorageType storageType, String[] actionFiles) {
 
         this.actionFlowFileNames = actionFiles;
         this.storageType = storageType;
         injector = Guice.createInjector(new ActionFlowGuiceModule());
+        actionExecuteEntityStorage = StorageFactory.factory(this.storageType, ActionExecuteEntityStorage.class);
+        flowExecuteEntityStorage = StorageFactory.factory(this.storageType, FlowExecuteEntityStorage.class);
+        resultExecuteEntityStorage = StorageFactory.factory(this.storageType, ResultExecuteEntityStorage.class);
+
+
+
         loads(this.actionFlowFileNames);
     }
 
@@ -64,6 +69,7 @@ public class ActionFlowContent {
         }
     }
 
+
     private void load(String actionFlowFineName) {
         if (actionFlowFineName.endsWith(".xml")) {
             try {
@@ -74,26 +80,7 @@ public class ActionFlowContent {
         }
     }
 
-    /**
-     * 执行
-     *
-     * @param fileName action flow xml 文件名称
-     * @param flowId   action flow xml 文件中flow标签的id
-     * @param jsonData 执行flow所需参数
-     * @return 执行结果
-     */
-    public String execute(String fileName, String flowId, String jsonData) {
-        ActionFlowXMLExecute actionFlowXMLExecute = new ActionFlowXMLExecute(fileName,
-                actionExecuteEntityStorage,
-                flowExecuteEntityStorage,
-                resultExecuteEntityStorage
-        );
 
-
-        return actionFlowXMLExecute.execute(
-                flowId,
-                jsonData);
-    }
 
     private void loadXml(String actionFlowXmlFineName) throws Exception {
         ActionFlowXMLParseApi instance = injector.getInstance(ActionFlowXMLParseApi.class);
@@ -111,11 +98,8 @@ public class ActionFlowContent {
         List<ActionExecuteEntity> actions = actionFlowXML.getActions();
         List<FlowExecuteEntity> flows = actionFlowXML.getFlows();
         List<ResultExecuteEntity> results = actionFlowXML.getResults();
-        actionExecuteEntityStorage = StorageFactory.factory(this.storageType, ActionExecuteEntityStorage.class);
         actionExecuteEntityStorage.save(fileName, actions);
-        flowExecuteEntityStorage = StorageFactory.factory(this.storageType, FlowExecuteEntityStorage.class);
         flowExecuteEntityStorage.save(fileName, flows);
-        resultExecuteEntityStorage = StorageFactory.factory(this.storageType, ResultExecuteEntityStorage.class);
         resultExecuteEntityStorage.save(fileName, results);
     }
 

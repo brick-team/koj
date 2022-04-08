@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+  ~    Copyright [2022] [brick-team]
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
 <action-flow>
     <actions>
         <action id="rest_api_1" type="rest_api" url="" method="">
@@ -17,12 +33,12 @@
     </actions>
 
     <results>
-        <result id="1">
+        <result flowId="1">
             <fields>
                 <field id="111">
                     <fieldName>O1</fieldName>
                     <type>object</type>
-                    <extract el="" step=""/>
+                    <extract el="$.name" step="1"/>
                     <properties>
                         <fields>
                             <field>
@@ -57,7 +73,6 @@
 
             </fields>
         </result>
-
     </results>
 
     <flows>

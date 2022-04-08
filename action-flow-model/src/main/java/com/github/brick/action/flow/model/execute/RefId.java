@@ -18,8 +18,8 @@ package com.github.brick.action.flow.model.execute;
 
 import java.io.Serializable;
 
-public interface RefId<Serializable> {
-    Serializable getRefId();
+public interface RefId<T extends   Serializable> {
+    T getRefId();
 
-    void setRefId(Serializable id);
+    void setRefId(T id);
 }

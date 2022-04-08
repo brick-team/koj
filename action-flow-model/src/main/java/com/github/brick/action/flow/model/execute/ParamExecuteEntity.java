@@ -19,6 +19,8 @@ package com.github.brick.action.flow.model.execute;
 import com.github.brick.action.flow.method.entity.api.ParamIn;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ParamExecuteEntity {
 
@@ -33,6 +35,8 @@ public class ParamExecuteEntity {
         private String value;
         private ExtractExecuteEntity extract;
 
+        private List<ForRestApi> restApis;
+
     }
 
     @Data
@@ -43,6 +47,9 @@ public class ParamExecuteEntity {
         private String name;
         private String value;
         private ExtractExecuteEntity extract;
+
+        private List<ForJavaMethod> restApis;
+
 
     }
 

@@ -47,7 +47,7 @@ public class JpaConfiguration {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/action-flow");
         dataSource.setUsername("root");
-        dataSource.setPassword("root123@");
+        dataSource.setPassword("root");
 
         return dataSource;
     }
