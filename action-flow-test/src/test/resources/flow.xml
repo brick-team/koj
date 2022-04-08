@@ -58,7 +58,7 @@
     <flows>
         <flow id="1">
             <work step="1" ref_id="rest_api_1">
-                <watcher condition="($.weight>10)">
+                <watcher condition="($.age >= 10)">
                     <then>
                         <work step="2" ref_id="java_method_1"/>
                         <work step="3" ref_id="java_method_1"/>

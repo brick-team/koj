@@ -102,7 +102,7 @@ public class ActionFlowExecute {
                     }
 
 
-                    Expression expression = parser.parseExpression(substring);
+                    Expression expression = parser.parseExpression(leftVal + op + rightVal);
                     EvaluationContext context = new StandardEvaluationContext();
                     Boolean value = expression.getValue(context, Boolean.class);
                     s2 = s2.replace(substring, value.toString());
