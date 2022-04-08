@@ -16,7 +16,6 @@
 
 package com.github.brick.action.flow.storage.mysql.impl;
 
-import com.github.brick.action.flow.method.entity.FlowEntity;
 import com.github.brick.action.flow.method.entity.api.ParamIn;
 import com.github.brick.action.flow.method.enums.ExtractModel;
 import com.github.brick.action.flow.method.req.WorkNode;
@@ -53,8 +52,8 @@ public class ApiDataStorage extends CommonTest {
     @Test
     public void step1() {
         Long loginId = apiStorage.save("http://localhost:8080/login", "post", "登陆");
-        apiParamStorage.save(loginId, null, ParamIn.formData.name(), "username", true);
-        apiParamStorage.save(loginId, null, ParamIn.formData.name(), "password", true);
+        apiParamStorage.save(loginId, null, ParamIn.formdata.name(), "username", true);
+        apiParamStorage.save(loginId, null, ParamIn.formdata.name(), "password", true);
         Long userInfoId = apiStorage.save("http://localhost:8080/user_info", "get", "获取用户信息");
         apiParamStorage.save(userInfoId, null, ParamIn.header.name(), "token", true);
         extractStorage.save(null, loginId, "$.token", ExtractModel.JSON_PATH.name());

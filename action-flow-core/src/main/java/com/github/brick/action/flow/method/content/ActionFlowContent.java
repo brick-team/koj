@@ -16,22 +16,35 @@
 
 package com.github.brick.action.flow.method.content;
 
+import com.github.brick.action.flow.execute.ActionFlowXMLExecute;
 import com.github.brick.action.flow.method.enums.StorageType;
+import com.github.brick.action.flow.method.factory.storage.StorageFactory;
+import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
+import com.github.brick.action.flow.model.execute.ResultExecuteEntity;
 import com.github.brick.action.flow.model.xml.ActionFlowXML;
 import com.github.brick.action.flow.parse.api.ActionFlowXMLParseApi;
 import com.github.brick.action.flow.parse.xml.ActionFlowXMLParseApiImpl;
+import com.github.brick.action.flow.storage.api.nv.ActionExecuteEntityStorage;
+import com.github.brick.action.flow.storage.api.nv.FlowExecuteEntityStorage;
+import com.github.brick.action.flow.storage.api.nv.ResultExecuteEntityStorage;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class ActionFlowContent {
     private static final Logger logger = LoggerFactory.getLogger(ActionFlowContent.class);
-    private String[] actionFlowFileNames;
-    private Injector injector;
+    private final String[] actionFlowFileNames;
+    private final Injector injector;
 
-    private StorageType storageType;
+    private final StorageType storageType;
+    private ActionExecuteEntityStorage actionExecuteEntityStorage;
+    private FlowExecuteEntityStorage flowExecuteEntityStorage;
+    private ResultExecuteEntityStorage resultExecuteEntityStorage;
 
     public ActionFlowContent(StorageType storageType, String[] actionFiles) {
 
@@ -41,15 +54,8 @@ public class ActionFlowContent {
         loads(this.actionFlowFileNames);
     }
 
-    public ActionFlowContent() {
-    }
-
     public ActionFlowContent(String... actionFlowFiles) {
         this(StorageType.MEMORY, actionFlowFiles);
-    }
-
-    public String[] getActionFlowFileNames() {
-        return actionFlowFileNames;
     }
 
     private void loads(String... actionFlowFileNames) {
@@ -68,11 +74,51 @@ public class ActionFlowContent {
         }
     }
 
+    /**
+     * 执行
+     *
+     * @param fileName action flow xml 文件名称
+     * @param flowId   action flow xml 文件中flow标签的id
+     * @param jsonData 执行flow所需参数
+     * @return 执行结果
+     */
+    public String execute(String fileName, String flowId, String jsonData) {
+        ActionFlowXMLExecute actionFlowXMLExecute = new ActionFlowXMLExecute(fileName,
+                actionExecuteEntityStorage,
+                flowExecuteEntityStorage,
+                resultExecuteEntityStorage
+        );
+
+
+        return actionFlowXMLExecute.execute(
+                flowId,
+                jsonData);
+    }
+
     private void loadXml(String actionFlowXmlFineName) throws Exception {
         ActionFlowXMLParseApi instance = injector.getInstance(ActionFlowXMLParseApi.class);
         ActionFlowXML parse = instance.parse(actionFlowXmlFineName);
-        StorageType storageType = this.storageType;
+        storage(actionFlowXmlFineName, parse);
     }
+
+    /**
+     * 进行存储操作
+     *
+     * @param fileName      文件名称
+     * @param actionFlowXML action flow xml
+     */
+    private void storage(String fileName, ActionFlowXML actionFlowXML) {
+        List<ActionExecuteEntity> actions = actionFlowXML.getActions();
+        List<FlowExecuteEntity> flows = actionFlowXML.getFlows();
+        List<ResultExecuteEntity> results = actionFlowXML.getResults();
+        actionExecuteEntityStorage = StorageFactory.factory(this.storageType, ActionExecuteEntityStorage.class);
+        actionExecuteEntityStorage.save(fileName, actions);
+        flowExecuteEntityStorage = StorageFactory.factory(this.storageType, FlowExecuteEntityStorage.class);
+        flowExecuteEntityStorage.save(fileName, flows);
+        resultExecuteEntityStorage = StorageFactory.factory(this.storageType, ResultExecuteEntityStorage.class);
+        resultExecuteEntityStorage.save(fileName, results);
+    }
+
 
     private static class ActionFlowGuiceModule extends AbstractModule {
         @Override

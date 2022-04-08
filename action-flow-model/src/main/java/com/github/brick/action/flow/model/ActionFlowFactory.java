@@ -14,15 +14,11 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.api.nv;
+package com.github.brick.action.flow.model;
 
-import com.github.brick.action.flow.model.execute.ResultExecuteEntity;
+public interface ActionFlowFactory<Type extends com.github.brick.action.flow.method.enums.Type, T> {
 
-import java.io.Serializable;
-import java.util.List;
 
-public interface ResultExecuteEntityStorage {
-    void save(String fileName, List<ResultExecuteEntity> results);
+    T factory(Type type);
 
-    ResultExecuteEntity getResult(String fileName, Serializable flowId);
 }

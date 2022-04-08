@@ -23,6 +23,8 @@ import java.lang.reflect.Method;
  *
  */
 public interface JDKExecuteService {
+    Object execute(String className, String method, String [] methodParamType, Object... args) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException;
+
     Object execute(String className, String method, Class<?>[] methodParamType, Object... args) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException;
 
     Object execute(Class<?> clazz, String method, Class<?>[] methodParamType, Object... args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;

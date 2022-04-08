@@ -18,9 +18,11 @@ package com.github.brick.action.flow.model.execute;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 @Data
-public class ResultExecuteEntity {
+public abstract class ResultExecuteEntity {
+    public abstract Serializable getFlowId();
 
     private List<FieldExecuteEntity> fields;
 

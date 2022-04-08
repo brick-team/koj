@@ -2,22 +2,25 @@
 
 <action-flow>
     <actions>
-        <action id="rest_api_1" type="rest_api" url="" method="">
-            <param in="body" name="" require="true" value="">
-                <extract fromAction="" el="" elType=""/>
+        <action id="rest_api_1" type="rest_api" url="http://localhost:8080/login" method="post">
+            <param in="formData" name="username" require="true">
+                <extract fromAction="java_method_1" el="$.username"/>
             </param>
 
-            <param in="header" name="" require="true" value="">
-                <extract fromAction="" el="" elType=""/>
+            <param in="formData" name="password" require="true" value="123">
             </param>
+
         </action>
-        <action id="java_method_1" type="java_method" className="" method="">
-            <param index="0" type="java.lang.String" name="" value=""/>
+        <action id="java_method_1" type="java_method" className="com.github.brick.action.flow.LoginAction"
+                method="login">
+            <param index="0" type="java.lang.String" value="testname"/>
+            <param index="1" type="java.lang.String" value="testPassword"/>
+
         </action>
     </actions>
 
     <results>
-        <result id="1">
+        <result flowId="1">
             <fields>
                 <field id="111">
                     <fieldName>O1</fieldName>

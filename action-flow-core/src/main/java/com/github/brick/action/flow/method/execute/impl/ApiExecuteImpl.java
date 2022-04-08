@@ -19,10 +19,10 @@ package com.github.brick.action.flow.method.execute.impl;
 import com.github.brick.action.flow.execute.http.HttpWorker;
 import com.github.brick.action.flow.method.enums.HttpClientType;
 import com.github.brick.action.flow.method.execute.ApiExecute;
-import com.github.brick.action.flow.method.extract.Extract;
-import com.github.brick.action.flow.method.extract.JsonPathExtract;
-import com.github.brick.action.flow.method.factory.ActionFlowFactory;
-import com.github.brick.action.flow.method.factory.HttpWorkerActionFlowFactory;
+import com.github.brick.action.flow.execute.extract.Extract;
+import com.github.brick.action.flow.execute.extract.JsonPathExtract;
+import com.github.brick.action.flow.model.ActionFlowFactory;
+import com.github.brick.action.flow.execute.http.HttpWorkerActionFlowFactory;
 
 import java.io.IOException;
 import java.util.Map;

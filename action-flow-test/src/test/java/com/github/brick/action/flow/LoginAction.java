@@ -36,7 +36,7 @@ public class LoginAction {
 //        }
 
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
-        stringStringHashMap.put("username", "zhangsan");
+        stringStringHashMap.put("username","zhangsan" + username);
         stringStringHashMap.put("age", "18");
         stringStringHashMap.put("login_time", LocalDate.now());
 

@@ -33,6 +33,7 @@ public interface HttpWorker {
      * @throws IOException 连接建立异常
      */
     String work(String url, String method,
+                Map<String, String> pathParam,
                 Map<String, String> queryParam,
                 Map<String, String> headers,
                 Map<String, String> formatData,

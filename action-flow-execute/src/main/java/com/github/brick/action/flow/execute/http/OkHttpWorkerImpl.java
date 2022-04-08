@@ -34,7 +34,14 @@ public class OkHttpWorkerImpl implements HttpWorker {
     Gson gson = new Gson();
 
     @Override
-    public String work(String url, String method, Map<String, String> queryParam, Map<String, String> headers, Map<String, String> formatData, Map<String, String> body) throws IOException {
+    public String work(String url, String method ,Map<String ,String> pathParam ,Map<String, String> queryParam, Map<String, String> headers, Map<String, String> formatData, Map<String, String> body) throws IOException {
+
+        for (Map.Entry<String, String> entry : pathParam.entrySet()) {
+            String k = entry.getKey();
+            String v = entry.getValue();
+            String replace = url.replace("{" + k + "}", v);
+            url = replace;
+        }
 
         url = handlerUrl(url, queryParam);
 

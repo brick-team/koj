@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class ActionExecuteEntity  {
+public abstract class ActionExecuteEntity {
 
     private ActionType type;
     private ForRestApi restApi;
@@ -35,6 +35,9 @@ public class ActionExecuteEntity  {
         private String method;
         private List<ParamExecuteEntity> param;
     }
+
+    public abstract Serializable getId();
+
 
     @Data
     public static class ForJavaMethod {

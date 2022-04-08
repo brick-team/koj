@@ -18,6 +18,7 @@ package com.github.brick.action.flow.method.factory;
 
 import com.github.brick.action.flow.method.enums.FLowModel;
 import com.github.brick.action.flow.method.parse.XMLActionFlowParseApi;
+import com.github.brick.action.flow.model.ActionFlowFactory;
 import com.github.brick.action.flow.parse.api.ActionFlowParseApi;
 
 public class ActionFlowParseApiActionFlowFactory implements ActionFlowFactory<FLowModel, ActionFlowParseApi> {

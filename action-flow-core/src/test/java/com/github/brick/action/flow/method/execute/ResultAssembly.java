@@ -16,8 +16,8 @@
 
 package com.github.brick.action.flow.method.execute;
 
-import com.github.brick.action.flow.method.extract.Extract;
-import com.github.brick.action.flow.method.extract.JsonPathExtract;
+import com.github.brick.action.flow.execute.extract.Extract;
+import com.github.brick.action.flow.execute.extract.JsonPathExtract;
 import com.google.gson.Gson;
 import org.junit.Test;
 

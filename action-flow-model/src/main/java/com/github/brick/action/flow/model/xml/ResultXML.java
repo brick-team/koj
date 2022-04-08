@@ -23,5 +23,5 @@ import java.util.List;
 
 @Data
 public class ResultXML extends ResultExecuteEntity {
-    private String id;
+    private String flowId;
 }

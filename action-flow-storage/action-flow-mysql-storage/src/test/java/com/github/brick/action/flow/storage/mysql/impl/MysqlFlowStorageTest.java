@@ -60,7 +60,7 @@ public class MysqlFlowStorageTest extends CommonTest {
 
         ApiParamEntity username = new ApiParamEntity();
         username.setId(17L);
-        username.setIn(ParamIn.formData);
+        username.setIn(ParamIn.formdata);
         username.setName("username");
         username.setRequire(true);
         username.setParamGroup("a");
@@ -69,7 +69,7 @@ public class MysqlFlowStorageTest extends CommonTest {
 
         ApiParamEntity password = new ApiParamEntity();
         password.setId(18L);
-        password.setIn(ParamIn.formData);
+        password.setIn(ParamIn.formdata);
         password.setName("password");
         password.setRequire(true);
         password.setParamGroup("a");

@@ -48,13 +48,13 @@ public class MysqlApiStorageTest extends CommonTest {
         api1.setMethod("post");
         ArrayList<ApiParamEntity> params1 = new ArrayList<>();
         ApiParamEntity username = new ApiParamEntity();
-        username.setIn(ParamIn.formData);
+        username.setIn(ParamIn.formdata);
         username.setName("username");
         username.setRequire(true);
 
         params1.add(username);
         ApiParamEntity password = new ApiParamEntity();
-        password.setIn(ParamIn.formData);
+        password.setIn(ParamIn.formdata);
         password.setName("password");
         password.setRequire(true);
         params1.add(password);

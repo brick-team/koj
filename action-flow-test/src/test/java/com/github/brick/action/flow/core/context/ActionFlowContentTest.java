@@ -27,6 +27,7 @@ public class ActionFlowContentTest {
     public void init() {
 
         ActionFlowContent content = new ActionFlowContent("flow.xml");
+        content.execute("flow.xml", "1", "");
     }
 
 }

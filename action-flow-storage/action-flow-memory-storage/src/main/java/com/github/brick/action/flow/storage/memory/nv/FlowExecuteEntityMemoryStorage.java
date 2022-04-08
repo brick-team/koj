@@ -16,7 +16,35 @@
 
 package com.github.brick.action.flow.storage.memory.nv;
 
+import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
 import com.github.brick.action.flow.storage.api.nv.FlowExecuteEntityStorage;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class FlowExecuteEntityMemoryStorage implements FlowExecuteEntityStorage {
+    Map<String, Map<Serializable, FlowExecuteEntity>> map = new HashMap<>(32);
+
+    @Override
+    public void save(String fileName, List<FlowExecuteEntity> flows) {
+        Map<Serializable, FlowExecuteEntity> collect = flows.stream().collect(Collectors.toMap(FlowExecuteEntity::getId, s -> s));
+        map.put(fileName, collect);
+    }
+
+    @Override
+    public FlowExecuteEntity getFlow(String fileName, Serializable flowId) {
+        Map<Serializable, FlowExecuteEntity> serializableFlowExecuteEntityMap = map.get(fileName);
+        if (serializableFlowExecuteEntityMap == null) {
+            throw new IllegalArgumentException("当前文件名称未解析,文件名称 = " + fileName);
+        }
+
+        FlowExecuteEntity flowExecuteEntity = serializableFlowExecuteEntityMap.get(flowId);
+        if (flowExecuteEntity == null) {
+            throw new IllegalArgumentException("当前文件名称 " + fileName + "中不存在 flowId 为" + flowId + "的数据");
+        }
+        return flowExecuteEntity;
+    }
 }

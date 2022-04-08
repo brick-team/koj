@@ -16,5 +16,13 @@
 
 package com.github.brick.action.flow.storage.api.nv;
 
+import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+
+import java.io.Serializable;
+import java.util.List;
+
 public interface ActionExecuteEntityStorage {
+    void save(String fileName, List<ActionExecuteEntity> actions);
+
+    ActionExecuteEntity getAction(String fileName, Serializable refId);
 }

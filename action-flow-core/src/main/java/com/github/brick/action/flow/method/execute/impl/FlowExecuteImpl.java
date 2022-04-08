@@ -25,11 +25,11 @@ import com.github.brick.action.flow.method.entity.api.ParamIn;
 import com.github.brick.action.flow.method.enums.FLowModel;
 import com.github.brick.action.flow.method.enums.HttpClientType;
 import com.github.brick.action.flow.method.execute.FlowExecute;
-import com.github.brick.action.flow.method.extract.Extract;
-import com.github.brick.action.flow.method.extract.JsonPathExtract;
-import com.github.brick.action.flow.method.factory.ActionFlowFactory;
+import com.github.brick.action.flow.execute.extract.Extract;
+import com.github.brick.action.flow.execute.extract.JsonPathExtract;
+import com.github.brick.action.flow.model.ActionFlowFactory;
 import com.github.brick.action.flow.method.factory.ActionFlowParseApiActionFlowFactory;
-import com.github.brick.action.flow.method.factory.HttpWorkerActionFlowFactory;
+import com.github.brick.action.flow.execute.http.HttpWorkerActionFlowFactory;
 import com.github.brick.action.flow.method.format.Format;
 import com.github.brick.action.flow.parse.api.ActionFlowParseApi;
 import com.google.gson.Gson;
@@ -468,7 +468,7 @@ public class FlowExecuteImpl implements FlowExecute {
                 handlerExId(exMap, apisEntity, actionResult, path, name, exId, paramsMap);
                 handlerEx(paramsMap, path, paramGroup, ex, name);
             }
-            else if (in == ParamIn.formData) {
+            else if (in == ParamIn.formdata) {
                 handlerExId(exMap, apisEntity, actionResult, formatData, name, exId, paramsMap);
                 handlerEx(paramsMap, formatData, paramGroup, ex, name);
             }
@@ -483,7 +483,7 @@ public class FlowExecuteImpl implements FlowExecute {
 
         }
 
-        String work = this.httpWorker.work(url, method, queryParam, headers, formatData, body);
+        String work = this.httpWorker.work(url, method, null,queryParam, headers, formatData, body);
         // 设置结果
         actionResult.put(refId, work);
         return work;

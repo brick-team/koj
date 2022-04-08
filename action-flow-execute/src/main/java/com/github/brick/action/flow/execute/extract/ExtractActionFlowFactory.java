@@ -14,12 +14,12 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.factory.execute;
+package com.github.brick.action.flow.execute.extract;
 
 import com.github.brick.action.flow.method.enums.ExtractModel;
-import com.github.brick.action.flow.method.extract.Extract;
-import com.github.brick.action.flow.method.extract.JsonPathExtract;
-import com.github.brick.action.flow.method.factory.ActionFlowFactory;
+import com.github.brick.action.flow.execute.extract.Extract;
+import com.github.brick.action.flow.execute.extract.JsonPathExtract;
+import com.github.brick.action.flow.model.ActionFlowFactory;
 
 public class ExtractActionFlowFactory
         implements ActionFlowFactory<ExtractModel, Extract> {

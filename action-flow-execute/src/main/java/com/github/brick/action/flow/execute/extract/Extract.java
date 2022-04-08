@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.extract;
+package com.github.brick.action.flow.execute.extract;
 
 public interface Extract {
     Object extract(Object o, String el);

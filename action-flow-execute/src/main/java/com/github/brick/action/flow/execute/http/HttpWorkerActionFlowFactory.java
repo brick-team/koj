@@ -14,13 +14,19 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.factory;
+package com.github.brick.action.flow.execute.http;
 
-import com.github.brick.action.flow.method.enums.StorageType;
+import com.github.brick.action.flow.execute.http.HttpWorker;
+import com.github.brick.action.flow.execute.http.OkHttpWorkerImpl;
+import com.github.brick.action.flow.method.enums.HttpClientType;
+import com.github.brick.action.flow.model.ActionFlowFactory;
 
-public interface ActionFlowFactory<Type extends com.github.brick.action.flow.method.enums.Type, T> {
-
-
-    T factory(Type type);
-
+public class HttpWorkerActionFlowFactory implements ActionFlowFactory<HttpClientType, HttpWorker> {
+    @Override
+    public HttpWorker factory(HttpClientType type) {
+        if (type == HttpClientType.OKHTTP) {
+            return new OkHttpWorkerImpl();
+        }
+        return null;
+    }
 }

@@ -28,7 +28,7 @@ import java.util.List;
 public class ResultXMLParse implements ParseXML<List<ResultExecuteEntity>> {
     private static final String RESULT_NODE = "result";
     private static final String RESULTS_NODE = "results";
-    private static final String ID_ATTR = "id";
+    private static final String FLOW_ID_ATTR = "flowId";
     private static final String FIELDS_NODE = "fields";
     private static final String FIELD_NODE = "field";
     private final FieldXMLParse fieldXMLParse = new FieldXMLParse();
@@ -39,9 +39,9 @@ public class ResultXMLParse implements ParseXML<List<ResultExecuteEntity>> {
         List<Element> result = results.elements(RESULT_NODE);
         List<ResultExecuteEntity> resultList = new ArrayList<>();
         for (Element element1 : result) {
-            String id = element1.attributeValue(ID_ATTR);
+            String id = element1.attributeValue(FLOW_ID_ATTR);
             ResultXML resultXML = new ResultXML();
-            resultXML.setId(id);
+            resultXML.setFlowId(id);
             ArrayList<FieldExecuteEntity> fields = new ArrayList<>();
             Element fields1 = element1.element(FIELDS_NODE);
             List<Element> field = fields1.elements(FIELD_NODE);

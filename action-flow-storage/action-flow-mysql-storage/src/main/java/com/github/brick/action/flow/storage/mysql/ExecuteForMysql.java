@@ -28,8 +28,8 @@ import com.github.brick.action.flow.method.execute.ApiExecute;
 import com.github.brick.action.flow.method.execute.MethodExecute;
 import com.github.brick.action.flow.method.execute.impl.ApiExecuteImpl;
 import com.github.brick.action.flow.method.execute.impl.MethodExecuteImpl;
-import com.github.brick.action.flow.method.extract.Extract;
-import com.github.brick.action.flow.method.extract.JsonPathExtract;
+import com.github.brick.action.flow.execute.extract.Extract;
+import com.github.brick.action.flow.execute.extract.JsonPathExtract;
 import com.github.brick.action.flow.method.format.Format;
 import com.github.brick.action.flow.method.req.WorkNode;
 import com.github.brick.action.flow.storage.api.*;
@@ -208,7 +208,7 @@ public class ExecuteForMysql {
                         if (in == ParamIn.header) {
                             headers.put(key, value);
                         }
-                        else if (in == ParamIn.formData) {
+                        else if (in == ParamIn.formdata) {
                             formData.put(key, value);
                         }
                         else if (in == ParamIn.body) {
@@ -247,7 +247,7 @@ public class ExecuteForMysql {
                 if (in == ParamIn.header) {
                     headers.put(param.getName(), (String) this.extract.extract(execute, el));
                 }
-                else if (in == ParamIn.formData) {
+                else if (in == ParamIn.formdata) {
                     formData.put(param.getName(), (String) this.extract.extract(execute, el));
                 }
                 else if (in == ParamIn.body) {

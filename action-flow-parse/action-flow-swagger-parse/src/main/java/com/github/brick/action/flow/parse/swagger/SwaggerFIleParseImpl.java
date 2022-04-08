@@ -80,7 +80,7 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
                     apiParamEntity.setType(pathParameter.getType());
                     res.add(apiParamEntity);
                 }
-                else if (paramIn == ParamIn.formData) {
+                else if (paramIn == ParamIn.formdata) {
                     ApiParamEntity apiParamEntity = new ApiParamEntity();
                     apiParamEntity.setIn(paramIn);
                     FormParameter formParameter = (FormParameter) parameter;

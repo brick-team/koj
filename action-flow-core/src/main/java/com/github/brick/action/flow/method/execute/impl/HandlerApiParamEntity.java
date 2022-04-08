@@ -18,8 +18,8 @@ package com.github.brick.action.flow.method.execute.impl;
 
 import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
 import com.github.brick.action.flow.method.entity.api.ParamIn;
-import com.github.brick.action.flow.method.extract.Extract;
-import com.github.brick.action.flow.method.extract.JsonPathExtract;
+import com.github.brick.action.flow.execute.extract.Extract;
+import com.github.brick.action.flow.execute.extract.JsonPathExtract;
 import com.google.gson.Gson;
 import net.minidev.json.JSONArray;
 

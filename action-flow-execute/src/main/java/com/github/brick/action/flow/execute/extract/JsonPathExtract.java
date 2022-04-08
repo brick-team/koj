@@ -14,16 +14,17 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.extract;
+package com.github.brick.action.flow.execute.extract;
 
-import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 
 public class JsonPathExtract implements Extract {
+    Gson gson = new Gson();
     @Override
     public Object extract(Object o, String el) {
-        String json = JSON.toJSONString(o);
+        String json = gson.toJson(o);
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
         try {
             return JsonPath.read(document, el);

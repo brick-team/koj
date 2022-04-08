@@ -17,7 +17,7 @@
 package com.github.brick.action.flow.method.factory.storage;
 
 import com.github.brick.action.flow.method.enums.StorageType;
-import com.github.brick.action.flow.method.factory.ActionFlowFactory;
+import com.github.brick.action.flow.model.ActionFlowFactory;
 import com.github.brick.action.flow.storage.api.nv.ActionExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.nv.FlowExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.nv.ResultExecuteEntityStorage;

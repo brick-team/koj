@@ -22,6 +22,20 @@ import java.lang.reflect.Method;
 
 public class JDKExecuteServiceImpl implements JDKExecuteService {
     @Override
+    public Object execute(String className, String method, String[] methodParamType, Object... args) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        Class<?>[] methodParamType1 = new Class<?>[methodParamType.length];
+
+        for (int i = 0; i < methodParamType.length; i++) {
+            String s = methodParamType[i];
+            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+            Class<?> aClass = contextClassLoader.loadClass(s);
+            methodParamType1[i] = aClass;
+        }
+        return execute(className, method, methodParamType1, args);
+
+    }
+
+    @Override
     public Object execute(String className, String method, Class<?>[] methodParamType, Object... args) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         Class<?> aClass = contextClassLoader.loadClass(className);
