@@ -14,12 +14,9 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.execute.action;
+package com.github.brick.action.flow.storage.memory.nv;
 
-import com.github.brick.action.flow.execute.ExecuteServer;
-import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.storage.api.nv.ActionExecuteEntityStorage;
 
-public interface ActionExecuteServer extends ExecuteServer {
-    String execute(ActionExecuteEntity execute);
-
+public class ActionExecuteEntityMemoryStorage implements ActionExecuteEntityStorage {
 }

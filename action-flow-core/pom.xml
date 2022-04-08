@@ -102,5 +102,9 @@
             <artifactId>action-flow-execute</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.brick</groupId>
+            <artifactId>action-flow-memory-storage</artifactId>
+        </dependency>
     </dependencies>
 </project>

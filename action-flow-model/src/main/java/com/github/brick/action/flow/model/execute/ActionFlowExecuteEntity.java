@@ -19,6 +19,7 @@ package com.github.brick.action.flow.model.execute;
 import lombok.Data;
 
 import java.util.List;
+
 @Data
 public class ActionFlowExecuteEntity {
     List<ActionExecuteEntity> actions;

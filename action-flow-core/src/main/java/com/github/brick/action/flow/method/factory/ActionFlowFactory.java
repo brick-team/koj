@@ -14,12 +14,13 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.execute.action;
+package com.github.brick.action.flow.method.factory;
 
-import com.github.brick.action.flow.execute.ExecuteServer;
-import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.method.enums.StorageType;
 
-public interface ActionExecuteServer extends ExecuteServer {
-    String execute(ActionExecuteEntity execute);
+public interface ActionFlowFactory<Type extends com.github.brick.action.flow.method.enums.Type, T> {
+
+
+    T factory(Type type);
 
 }

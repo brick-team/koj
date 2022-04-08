@@ -14,12 +14,19 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.execute.action;
+package com.github.brick.action.flow.core.context;
 
-import com.github.brick.action.flow.execute.ExecuteServer;
-import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.method.content.ActionFlowContent;
+import com.github.brick.action.flow.method.enums.StorageType;
+import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public interface ActionExecuteServer extends ExecuteServer {
-    String execute(ActionExecuteEntity execute);
+public class ActionFlowContentTest {
+
+    @Test
+    public void init() {
+
+        ActionFlowContent content = new ActionFlowContent("flow.xml");
+    }
 
 }

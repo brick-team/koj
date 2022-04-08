@@ -27,9 +27,9 @@ import com.github.brick.action.flow.method.enums.HttpClientType;
 import com.github.brick.action.flow.method.execute.FlowExecute;
 import com.github.brick.action.flow.method.extract.Extract;
 import com.github.brick.action.flow.method.extract.JsonPathExtract;
-import com.github.brick.action.flow.method.factory.ActionFlowParseApiFactory;
-import com.github.brick.action.flow.method.factory.Factory;
-import com.github.brick.action.flow.method.factory.HttpWorkerFactory;
+import com.github.brick.action.flow.method.factory.ActionFlowFactory;
+import com.github.brick.action.flow.method.factory.ActionFlowParseApiActionFlowFactory;
+import com.github.brick.action.flow.method.factory.HttpWorkerActionFlowFactory;
 import com.github.brick.action.flow.method.format.Format;
 import com.github.brick.action.flow.parse.api.ActionFlowParseApi;
 import com.google.gson.Gson;
@@ -62,12 +62,12 @@ public class FlowExecuteImpl implements FlowExecute {
     /**
      * ActionFlowParseApi factory
      */
-    Factory<FLowModel, ActionFlowParseApi> actionFlowParseApiFactory =
-            new ActionFlowParseApiFactory<>();
+    ActionFlowFactory<FLowModel, ActionFlowParseApi> actionFlowParseApiActionFlowFactory =
+            new ActionFlowParseApiActionFlowFactory();
 
 
-    Factory<HttpClientType, HttpWorker> httpWorkerFactory =
-            new HttpWorkerFactory();
+    ActionFlowFactory<HttpClientType, HttpWorker> httpWorkerActionFlowFactory =
+            new HttpWorkerActionFlowFactory();
     ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
     HttpWorker httpWorker = null;
     Gson gson = new Gson();
@@ -91,8 +91,8 @@ public class FlowExecuteImpl implements FlowExecute {
     }
 
     public void init(FLowModel module, HttpClientType type) {
-        this.actionFlowParseApi = actionFlowParseApiFactory.gen(module);
-        this.httpWorker = httpWorkerFactory.gen(type);
+        this.actionFlowParseApi = actionFlowParseApiActionFlowFactory.factory(module);
+        this.httpWorker = httpWorkerActionFlowFactory.factory(type);
     }
 
     /**

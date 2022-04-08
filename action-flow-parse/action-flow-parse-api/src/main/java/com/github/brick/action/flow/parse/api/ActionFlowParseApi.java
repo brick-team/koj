@@ -19,6 +19,7 @@ package com.github.brick.action.flow.parse.api;
 /**
  * 核心解析类
  */
+
 public interface ActionFlowParseApi<T> {
 
     T parse(String file) throws Exception;

@@ -14,12 +14,16 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.execute.action;
+package com.github.brick.action.flow.method.enums;
 
-import com.github.brick.action.flow.execute.ExecuteServer;
-import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+public enum StorageType implements Type {
 
-public interface ActionExecuteServer extends ExecuteServer {
-    String execute(ActionExecuteEntity execute);
+    MEMORY, MYSQL,
+    ;
+
+    @Override
+    public String type() {
+        return name();
+    }
 
 }

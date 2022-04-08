@@ -21,17 +21,17 @@ import com.github.brick.action.flow.method.enums.HttpClientType;
 import com.github.brick.action.flow.method.execute.ApiExecute;
 import com.github.brick.action.flow.method.extract.Extract;
 import com.github.brick.action.flow.method.extract.JsonPathExtract;
-import com.github.brick.action.flow.method.factory.Factory;
-import com.github.brick.action.flow.method.factory.HttpWorkerFactory;
+import com.github.brick.action.flow.method.factory.ActionFlowFactory;
+import com.github.brick.action.flow.method.factory.HttpWorkerActionFlowFactory;
 
 import java.io.IOException;
 import java.util.Map;
 
 public class ApiExecuteImpl implements ApiExecute {
-    Factory<HttpClientType, HttpWorker> httpWorkerFactory =
-            new HttpWorkerFactory();
+    ActionFlowFactory<HttpClientType, HttpWorker> httpWorkerActionFlowFactory =
+            new HttpWorkerActionFlowFactory();
     Extract extract = new JsonPathExtract();
-    HttpWorker gen = httpWorkerFactory.gen(HttpClientType.OKHTTP);
+    HttpWorker gen = httpWorkerActionFlowFactory.factory(HttpClientType.OKHTTP);
 
     @Override
     public String execute(String url, String method, Map<String, String> queryParam, Map<String, String> headers, Map<String, String> formatData, String body) throws IOException {
