@@ -22,39 +22,15 @@
     <results>
         <result flowId="1">
             <fields>
-                <field id="111">
-                    <fieldName>O1</fieldName>
-                    <type>object</type>
-                    <extract el="" step=""/>
-                    <properties>
-                        <fields>
-                            <field>
-                                <fieldName>f1</fieldName>
-                                <type>String</type>
-                                <extract el="" step="" elType=""/>
-                            </field>
-                            <field>
-                                <fieldName>f2</fieldName>
-                                <type>object</type>
-                                <extract el="" step="" elType=""/>
-                                <properties>
-                                    <fields>
-                                        <field>
-                                            <fieldName>f3</fieldName>
-                                            <type>String</type>
-                                            <extract el="" step="" elType=""/>
-                                        </field>
-                                        <field>
-                                            <fieldName>f4</fieldName>
-                                            <type>Integer</type>
-                                            <extract el="" step="" elType=""/>
-                                        </field>
-                                    </fields>
-                                </properties>
-
-                            </field>
-                        </fields>
-                    </properties>
+                <field>
+                    <fieldName>f1</fieldName>
+                    <type>String</type>
+                    <extract el="$.username" step="step2"/>
+                </field>
+                <field>
+                    <fieldName>f2</fieldName>
+                    <type>String</type>
+                    <extract el="$.username" step="step3"/>
                 </field>
 
 
@@ -66,7 +42,7 @@
     <flows>
         <flow id="1">
             <work step="1" ref_id="rest_api_1">
-                <watcher condition="($.age>10)" elType="">
+                <watcher condition="($.weight>10)">
                     <then>
                         <work step="2" ref_id="java_method_1"/>
                         <work step="3" ref_id="java_method_1"/>

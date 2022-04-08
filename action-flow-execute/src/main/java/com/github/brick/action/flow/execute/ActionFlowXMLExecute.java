@@ -34,6 +34,10 @@ import com.google.gson.Gson;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -41,7 +45,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ActionFlowXMLExecute {
+    public static final String DROOL = "$.";
     private static final Logger logger = LoggerFactory.getLogger(ActionFlowXMLExecute.class);
+    static SpelExpressionParser parser = new SpelExpressionParser();
     private final ActionExecuteEntityStorage actionExecuteEntityStorage;
     private final FlowExecuteEntityStorage flowExecuteEntityStorage;
     private final ResultExecuteEntityStorage resultExecuteEntityStorage;
@@ -59,6 +65,55 @@ public class ActionFlowXMLExecute {
         extractFactory = new ExtractActionFlowFactory();
     }
 
+    private void handlerLeftRight(String s2, ExtractModel elType, Object o) {
+        char[] chars = s2.toCharArray();
+        Extract extract = this.extractFactory.factory(elType);
+
+        StringBuilder sb = new StringBuilder();
+        int start = 0;
+        int end = 0;
+        for (int i = 0; i < chars.length; i++) {
+            char aChar = chars[i];
+            sb.append(aChar);
+            if (aChar == '(') {
+                start = i;
+            }
+            if (aChar == ')') {
+                end = i;
+            }
+            if (end != 0) {
+                String s = sb.toString();
+
+                String substring = s.substring(start + 1, end);
+                String[] s1 = substring.trim().split(" ");
+                if (s1.length == 3) {
+
+                    String left = s1[0];
+                    String op = s1[1];
+                    String right = s1[2];
+                    Object leftVal = null;
+                    Object rightVal = null;
+
+                    if (left.contains(DROOL)) {
+                        leftVal = extract.extract(o, left);
+                    }
+                    if (right.contains(DROOL)) {
+                        rightVal = extract.extract(o, right);
+                    }
+
+
+                    Expression expression = parser.parseExpression(substring);
+                    EvaluationContext context = new StandardEvaluationContext();
+                    Boolean value = expression.getValue(context, Boolean.class);
+                    s2 = s2.replace(substring, value.toString());
+                }
+                start = 0;
+                end = 0;
+            }
+        }
+        System.out.println(s2);
+    }
+
     public String execute(String flowId, String jsonData) {
 
         FlowExecuteEntity flowExecuteEntity = flowExecuteEntityStorage.getFlow(fileName, flowId);
@@ -70,8 +125,20 @@ public class ActionFlowXMLExecute {
         Map<String, Object> stepWorkResult = new HashMap<>(32);
         for (WorkExecuteEntity work : works) {
             String refId = work.getRefId();
+            // 执行action
             Object o = executeAction(fileName, jsonData, refId);
+            // 放入步骤结果容器
             stepWorkResult.put(work.getStep(), o);
+            // 处理watcher标签
+            List<WatcherExecuteEntity> watchers = work.getWatchers();
+            for (WatcherExecuteEntity watcher : watchers) {
+                ExtractModel elType = watcher.getElType();
+                String condition = watcher.getCondition();
+
+
+                handlerLeftRight(condition, elType, o);
+
+            }
         }
 
 

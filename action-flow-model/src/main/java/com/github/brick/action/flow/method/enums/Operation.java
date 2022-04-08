@@ -14,19 +14,14 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow;
+package com.github.brick.action.flow.method.enums;
 
-import com.github.brick.action.flow.method.search.ClazzSearch;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
-
-import java.util.List;
-
-public class ClassLoaderTest {
-
-    @Test
-    public void classLoaderFindAllClass() {
-        List<String> clazzName = ClazzSearch.getClazzName("com", true);
-        System.out.println();
-    }
+public enum Operation {
+    EQ,
+    NE,
+    GT,
+    LT,
+    GE,
+    LE,
+    ;
 }
