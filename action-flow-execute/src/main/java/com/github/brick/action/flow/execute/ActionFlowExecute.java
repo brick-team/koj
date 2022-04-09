@@ -47,6 +47,15 @@ import java.util.stream.Collectors;
 public class ActionFlowExecute {
     public static final String DROOL = "$.";
     private static final Logger logger = LoggerFactory.getLogger(ActionFlowExecute.class);
+    private static final String[] ops = new String[]{
+            ">",
+            ">=",
+            "==",
+            "<",
+            "<=",
+            "&&",
+            "||",
+    };
     static SpelExpressionParser parser = new SpelExpressionParser();
     private final ActionExecuteEntityStorage actionExecuteEntityStorage;
     private final FlowExecuteEntityStorage flowExecuteEntityStorage;
@@ -65,53 +74,104 @@ public class ActionFlowExecute {
         extractFactory = new ExtractActionFlowFactory();
     }
 
-    private void handlerLeftRight(String s2, ExtractModel elType, Object o) {
+    private static boolean inOps(String aChar) {
+        for (String op : ops) {
+            if (op.contains(aChar)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean inOps(char aChar) {
+        for (String op : ops) {
+            if (op.contains(Character.toString(aChar))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Boolean handlerLeftRight(String s2, ExtractModel elType, Object o) {
         char[] chars = s2.toCharArray();
         Extract extract = this.extractFactory.factory(elType);
 
-        StringBuilder sb = new StringBuilder();
-        int start = 0;
-        int end = 0;
-        for (int i = 0; i < chars.length; i++) {
-            char aChar = chars[i];
-            sb.append(aChar);
-            if (aChar == '(') {
-                start = i;
-            }
-            if (aChar == ')') {
-                end = i;
-            }
-            if (end != 0) {
-                String s = sb.toString();
-
-                String substring = s.substring(start + 1, end);
-                String[] s1 = substring.trim().split(" ");
-                if (s1.length == 3) {
-
-                    String left = s1[0];
-                    String op = s1[1];
-                    String right = s1[2];
-                    Object leftVal = null;
-                    Object rightVal = null;
-
-                    if (left.contains(DROOL)) {
-                        leftVal = extract.extract(o, left);
-                    }
-                    if (right.contains(DROOL)) {
-                        rightVal = extract.extract(o, right);
-                    }
+        if (s2.contains("(") && s2.contains(")")) {
 
 
-                    Expression expression = parser.parseExpression(leftVal + op + rightVal);
-                    EvaluationContext context = new StandardEvaluationContext();
-                    Boolean value = expression.getValue(context, Boolean.class);
-                    s2 = s2.replace(substring, value.toString());
+            StringBuilder sb = new StringBuilder();
+            int start = 0;
+            int end = 0;
+            for (int i = 0; i < chars.length; i++) {
+                char aChar = chars[i];
+                sb.append(aChar);
+                if (aChar == '(') {
+                    start = i;
                 }
-                start = 0;
-                end = 0;
+                if (aChar == ')') {
+                    end = i;
+                }
+                if (end != 0) {
+                    String s = sb.toString();
+
+                    String substring = s.substring(start + 1, end);
+                    String[] s1 = substring.trim().split(" ");
+                    if (s1.length == 3) {
+
+                        Boolean value = handlerLeftAndRightCondition(s1[0], s1[1], s1[2], extract, o);
+                        s2 = s2.replace(substring, value.toString());
+                    }
+                    start = 0;
+                    end = 0;
+                }
             }
+            Expression expression = parser.parseExpression(s2);
+            EvaluationContext context = new StandardEvaluationContext();
+            Boolean value = expression.getValue(context, Boolean.class);
+            return value;
         }
-        System.out.println(s2);
+        else {
+            int start = 0;
+            int end = 0;
+            for (int i = 0; i < chars.length; i++) {
+                char aChar = chars[i];
+                if (inOps(aChar)) {
+                    start = i;
+                    if (inOps(Character.toString(aChar) + chars[i + 1])) {
+                        end = i + 1;
+                        break;
+
+                    }
+                    else {
+                        end = i;
+                    }
+                }
+            }
+
+            Boolean value = handlerLeftAndRightCondition(s2.substring(0, start), s2.substring(start, end + 1), s2.substring(end + 1), extract, o);
+            return value;
+        }
+
+    }
+
+    private Boolean handlerLeftAndRightCondition(String s2, String s21, String s22, Extract extract, Object o) {
+        String left = s2;
+        String op = s21;
+        String right = s22;
+        Object leftVal = null;
+        Object rightVal = null;
+        if (left.contains(DROOL)) {
+            leftVal = extract.extract(o, left);
+        }
+        if (right.contains(DROOL)) {
+            rightVal = extract.extract(o, right);
+        }
+
+
+        Expression expression = parser.parseExpression(leftVal + op + rightVal);
+        EvaluationContext context = new StandardEvaluationContext();
+        Boolean value = expression.getValue(context, Boolean.class);
+        return value;
     }
 
     public String execute(String flowId, String jsonData) {
@@ -124,22 +184,38 @@ public class ActionFlowExecute {
 
         Map<String, Object> stepWorkResult = new HashMap<>(32);
         for (WorkExecuteEntity work : works) {
-            String refId = work.getRefId();
-            // 执行action
-            Object o = executeAction(fileName, jsonData, refId);
-            // 放入步骤结果容器
-            stepWorkResult.put(work.getStep(), o);
-            // 处理watcher标签
-            List<WatcherExecuteEntity> watchers = work.getWatchers();
-            for (WatcherExecuteEntity watcher : watchers) {
-                ExtractModel elType = watcher.getElType();
-                String condition = watcher.getCondition();
-                handlerLeftRight(condition, elType, o);
-            }
+            executeWork(jsonData, stepWorkResult, work);
         }
 
 
         return null;
+    }
+
+    private void executeWork(String jsonData, Map<String, Object> stepWorkResult, WorkExecuteEntity work) {
+        String refId = work.getRefId();
+        // 执行action
+        Object o = executeAction(fileName, jsonData, refId);
+        // 放入步骤结果容器
+        stepWorkResult.put(work.getStep(), o);
+        // 处理watcher标签
+        List<WatcherExecuteEntity> watchers = work.getWatchers();
+        for (WatcherExecuteEntity watcher : watchers) {
+            ExtractModel elType = watcher.getElType();
+            String condition = watcher.getCondition();
+            Boolean aBoolean = handlerLeftRight(condition, elType, o);
+            if (aBoolean) {
+                List<WorkExecuteEntity> then = watcher.getThen();
+                for (WorkExecuteEntity workExecuteEntity : then) {
+                    executeWork(jsonData, stepWorkResult, workExecuteEntity);
+                }
+            }
+            else {
+                List<WorkExecuteEntity> cat = watcher.getCat();
+                for (WorkExecuteEntity workExecuteEntity : cat) {
+                    executeWork(jsonData, stepWorkResult, workExecuteEntity);
+                }
+            }
+        }
     }
 
     private Object executeAction(String fileName, String jsonData, Serializable refId) {
@@ -184,38 +260,46 @@ public class ActionFlowExecute {
 
         for (ParamExecuteEntity paramExecuteEntity : param) {
             ParamExecuteEntity.ForRestApi restApi1 = paramExecuteEntity.getRestApi();
-            ParamIn in = restApi1.getIn();
-            ExtractExecuteEntity extract = restApi1.getExtract();
-            String name = restApi1.getName();
-            String value = restApi1.getValue();
-
-
-            if (in == ParamIn.header) {
-                handlerDataMap(value, extract, jsonData, headers, name);
-            }
-            else if (in == ParamIn.formdata) {
-                handlerDataMap(value, extract, jsonData, formatData, name);
-            }
-            else if (in == ParamIn.body) {
-                handlerDataMap(value, extract, jsonData, body, name);
-            }
-            else if (in == ParamIn.path) {
-                handlerDataMap(value, extract, jsonData, pathParam, name);
-            }
-            else if (in == ParamIn.query) {
-                handlerDataMap(value, extract, jsonData, queryParam, name);
-            }
-
-            // todo: 子集参数处理
-            List<ParamExecuteEntity.ForRestApi> restApis = restApi1.getRestApis();
-
-
+            handlerRestApiParam(jsonData, queryParam, pathParam, headers, formatData, body, restApi1);
 
         }
 
 
         String work = httpWorker.work(url, method, pathParam, queryParam, headers, formatData, body);
         return work;
+    }
+
+    private void handlerRestApiParam(String jsonData, Map<String, String> queryParam, Map<String, String> pathParam, Map<String, String> headers, Map<String, String> formatData, Map<String, String> body, ParamExecuteEntity.ForRestApi restApi1) {
+        ParamIn in = restApi1.getIn();
+        ExtractExecuteEntity extract = restApi1.getExtract();
+        String name = restApi1.getName();
+        String value = restApi1.getValue();
+
+
+        if (in == ParamIn.header) {
+            handlerDataMap(value, extract, jsonData, headers, name);
+        }
+        else if (in == ParamIn.formdata) {
+            handlerDataMap(value, extract, jsonData, formatData, name);
+        }
+        else if (in == ParamIn.body) {
+            handlerDataMap(value, extract, jsonData, body, name);
+        }
+        else if (in == ParamIn.path) {
+            handlerDataMap(value, extract, jsonData, pathParam, name);
+        }
+        else if (in == ParamIn.query) {
+            handlerDataMap(value, extract, jsonData, queryParam, name);
+        }
+
+        // todo: 子集参数处理
+        List<ParamExecuteEntity.ForRestApi> restApis = restApi1.getRestApis();
+        for (ParamExecuteEntity.ForRestApi api : restApis) {
+            List<ParamExecuteEntity.ForRestApi> restApis1 = api.getRestApis();
+            for (ParamExecuteEntity.ForRestApi forRestApi : restApis1) {
+                handlerRestApiParam(jsonData, queryParam, pathParam, headers, formatData, body, forRestApi);
+            }
+        }
     }
 
     private void handlerDataMap(String value, ExtractExecuteEntity extract, String jsonData, Map<String, String> dataMap, String name) {

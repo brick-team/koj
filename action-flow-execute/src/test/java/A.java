@@ -23,7 +23,8 @@ public class A {
     private static final String[] ops = new String[]{
             ">",
             ">=",
-            "=",
+            "==",
+            "<",
             "<=",
             "&&",
             "||",
