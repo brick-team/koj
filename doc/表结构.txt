@@ -1,0 +1,82 @@
+flow表:
+		id (流程id)
+		name (流程名称)
+
+action表：
+		id
+		flow_id (流程id)
+		type (类型：RestApi、JavaApi)
+		url (type为RestApi时 需存入url地址)
+		method (type为JavaApi时 需存入java方法名)
+		clazz (type为JavaApi时需存入java对象类型)
+
+param表：
+		id
+		flow_id (流程id)
+		action_id (action表id)
+		type (类型：RestApi、JavaApi)
+		in (type为RestApi时 需存入参数所在位置：body，url，formData)
+		index (type为JavaApi时 参数位置索引值)
+		clazz (type为JavaApi时需存入java对象类型)
+		name  (参数名称)
+		require (是否必填)
+		value (参数值)
+
+extract 表:
+		id
+		flow_id (流程id)
+		action_id (action表id)
+		param_id (参数表id)
+		action_name (action名 是否有必要？)
+		el_type (JSON_PATH方式...)
+		el (取值表达式)
+
+work 表：
+		id
+		flow_id (流程id)
+		action_id (action表id)
+		step (流程执行步骤)
+		then_id (所属then节点id 可为空)
+		cat_id (所属cat节点id 可为空)
+
+watcher表：
+		id
+		flow_id (流程id)
+		work_id (action表id)
+		el_type (JSON_PATH方式...)
+		el
+		condition (判断条件)
+
+then表：
+		id
+		flow_id (流程id)
+		watcher_id
+
+cat表：
+		id
+		flow_id (流程id)
+		watcher_id
+
+result表：
+		id
+		flow_id (流程id)
+		parent_id (上级id 可为空)
+		file_name (字段名)
+		type (值类型)
+		value (字段值)
+		
+		
+===
+问题：
+1. 未解决文件模式的数据存储信息，文件名称字段缺失
+2. 流程id不应该在每个表中出现，需要通过外部进行获取，从而提高复用率
+3. 参数表分开制作成 REST_API 和 JAVA_METHOD 两张表，添加参数层级关系
+4. extract 只关注了 action 相关的参数提取，没有关注 result中字段的提取
+5. work 不具备操作 then cat 节点的能力，此能力由 watcher 进行提供，work 表需要与 watcher 建立关系。
+    现在这个work节点设计携带flow_id，按我的理解在xml中work -> watcher -> then\cat 标签下的 work 标签也会携带 flow_id ，在实际操作中 then、cat标签下的work标签不应该具备flow_id。
+    建议: flow 标签下的直属work节点一个表，后续为数据监控相关的work节点在做一个表。或者提供相关设计说明
+
+8. then cat 表的处理逻辑不明确只看到了 flow 标签 watcher 标签，无法与work标签结合
+
+6. watcher 新版本已经不存在 el 属性，该数据已经全部存储在 condition 中， work \ watcher \ then \ cat 结构不明确
+7. result 缺少取值相关设计，建议通过绑定取值器，file_name 应该替换为 field_name
