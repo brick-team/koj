@@ -22,5 +22,7 @@ package com.github.brick.action.flow.parse.api;
 
 public interface ActionFlowParseApi<T> {
 
-    T parse(String file) throws Exception;
+    default T parseFile(String file) throws Exception {
+        throw new RuntimeException("默认返回异常");
+    }
 }

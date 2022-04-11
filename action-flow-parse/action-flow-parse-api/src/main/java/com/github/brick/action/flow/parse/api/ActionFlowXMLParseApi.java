@@ -18,8 +18,9 @@ package com.github.brick.action.flow.parse.api;
 
 import com.github.brick.action.flow.model.xml.ActionFlowXML;
 
-import java.awt.image.ImageConsumer;
-
 public interface ActionFlowXMLParseApi extends ActionFlowParseApi<ActionFlowXML> {
+
+    ActionFlowXML parseFile(String file) throws Exception;
+
 
 }

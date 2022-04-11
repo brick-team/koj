@@ -14,11 +14,19 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.web.common;
+package com.github.brick.action.flow.web.common.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-@Configuration
-public class ActionFlowConfig {
+public final class SecurityUtils {
+
+    private SecurityUtils() {
+
+    }
+
+
+
+
 }

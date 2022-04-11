@@ -84,7 +84,7 @@ public abstract class ActionFlowContent {
 
     private void loadXml(String actionFlowXmlFineName) throws Exception {
         ActionFlowXMLParseApi instance = injector.getInstance(ActionFlowXMLParseApi.class);
-        ActionFlowXML parse = instance.parse(actionFlowXmlFineName);
+        ActionFlowXML parse = instance.parseFile(actionFlowXmlFineName);
         storage(actionFlowXmlFineName, parse);
     }
 

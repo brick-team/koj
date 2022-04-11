@@ -26,7 +26,7 @@ public class ActionFlowXMLParseApiImpl implements ActionFlowXMLParseApi {
     ActionFlowXMLParse actionFlowXMLParse = new ActionFlowXMLParse();
 
     @Override
-    public ActionFlowXML parse(String file) throws Exception {
+    public ActionFlowXML parseFile(String file) throws Exception {
         String fileName = this.getClass().getClassLoader().getResource(file).getPath();//获取文件路径
         SAXReader reader = new SAXReader();
         Document document = reader.read(fileName);

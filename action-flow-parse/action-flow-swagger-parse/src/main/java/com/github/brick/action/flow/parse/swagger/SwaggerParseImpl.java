@@ -35,7 +35,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class SwaggerFIleParseImpl implements SwaggerFIleParse {
+public class SwaggerParseImpl implements SwaggerParse {
+    public static void main(String[] args) {
+        SwaggerParser sw = new SwaggerParser();
+        Swagger read = sw.read("https://petstore.swagger.io/v2/swagger.json");
+        System.out.println();
+    }
+
+
     private List<ApiParamEntity> handlerParamEntity(Operation operation, Map<String, Model> modelMap) {
         List<ApiParamEntity> res = new ArrayList<>();
         if (operation != null) {
@@ -162,13 +169,22 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
     }
 
     @Override
-    public List<ApiEntity> parse(String file) {
+    public List<ApiEntity> parseFile(String filePath) {
         SwaggerParser sw = new SwaggerParser();
-        Swagger read = sw.read("swagge_example.json");
-        Map<String, Path> paths = read.getPaths();
+        Swagger read = sw.read(filePath);
+        return handlerResult(read);
+    }
 
-        Map<String, Model> definitions = read.getDefinitions();
+    @Override
+    public List<ApiEntity> parseData(String swaggerData) {
+        SwaggerParser sw = new SwaggerParser();
+        Swagger parse = sw.parse(swaggerData);
+        return handlerResult(parse);
+    }
 
+    private List<ApiEntity> handlerResult(Swagger parse) {
+        Map<String, Path> paths = parse.getPaths();
+        Map<String, Model> definitions = parse.getDefinitions();
         List<ApiEntity> res = new ArrayList<>();
 
         paths.forEach(
@@ -177,8 +193,14 @@ public class SwaggerFIleParseImpl implements SwaggerFIleParse {
                 }
         );
 
-
         return res;
+    }
+
+    @Override
+    public List<ApiEntity> parseUrl(String url) {
+        SwaggerParser sw = new SwaggerParser();
+        Swagger read = sw.read(url);
+        return handlerResult(read);
     }
 
     private List<ApiEntity> genSwaggerApiEntity(String k, Path v, Map<String, Model> modelMap) {

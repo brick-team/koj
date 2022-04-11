@@ -16,7 +16,10 @@
 
 package com.github.brick.action.flow.web.common.ctr;
 
+import com.github.brick.action.flow.method.entity.api.ApiEntity;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * swagger 文件导入
@@ -28,7 +31,7 @@ public interface SwaggerCtr {
      * @param swaggerData swagger文件内容
      * @return true 成功 ，false 失败
      */
-    boolean handlerWithData(String swaggerData);
+    List<ApiEntity> handlerWithData(String swaggerData);
 
     /**
      * 处理上传的swagger文件
@@ -36,7 +39,7 @@ public interface SwaggerCtr {
      * @param file swagger文件
      * @return true 成功 ，false 失败
      */
-    boolean handlerWithFile(MultipartFile file);
+    List<ApiEntity> handlerWithFile(MultipartFile file);
 
     /**
      * 处理swagger地址
@@ -44,6 +47,33 @@ public interface SwaggerCtr {
      * @param url swagger访问地址
      * @return true 成功 ，false 失败
      */
-    boolean handlerWithUrl(String url);
+    List<ApiEntity> handlerWithUrl(String url);
+
+
+    /**
+     * 处理swagger数据,携带存储
+     *
+     * @param swaggerData swagger文件内容
+     * @return true 成功 ，false 失败
+     */
+    boolean handlerWithDataWithStorage(String swaggerData);
+
+    /**
+     * 处理上传的swagger文件,携带存储
+     *
+     * @param file swagger文件
+     * @return true 成功 ，false 失败
+     */
+    boolean handlerWithFileWithStorage(MultipartFile file);
+
+    /**
+     * 处理swagger地址,携带存储
+     *
+     * @param url swagger访问地址
+     * @return true 成功 ，false 失败
+     */
+    boolean handlerWithUrlWithStorage(String url);
+
+
 
 }

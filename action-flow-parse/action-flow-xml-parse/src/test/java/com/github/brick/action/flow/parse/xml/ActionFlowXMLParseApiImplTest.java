@@ -20,14 +20,12 @@ import com.github.brick.action.flow.model.xml.ActionFlowXML;
 import com.github.brick.action.flow.parse.api.ActionFlowXMLParseApi;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class ActionFlowXMLParseApiImplTest extends XMLParseCommonTest{
     ActionFlowXMLParseApi parseApi = new ActionFlowXMLParseApiImpl();
 
     @Test
     public void parse() throws Exception {
-        ActionFlowXML parse = parseApi.parse(FILE_PATH);
+        ActionFlowXML parse = parseApi.parseFile(FILE_PATH);
         System.out.println();
     }
 }

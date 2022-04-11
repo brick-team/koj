@@ -14,26 +14,33 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.parse.swagger;
+package com.github.brick.action.flow.parse.api;
 
 import com.github.brick.action.flow.method.entity.api.ApiEntity;
-import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
-import com.google.gson.Gson;
 
 import java.util.List;
 
-public class SwaggerFIleParseImplTest {
-    SwaggerFIleParse swaggerFIleParse = new SwaggerFIleParseImpl();
-    Gson gson = new Gson();
+public interface ActionFlowSwaggerParseApi extends ActionFlowParseApi<List<ApiEntity>> {
 
-    @org.junit.Test
-    public void parse() {
-        List<ApiEntity> parse = swaggerFIleParse.parse("swagge_example.json");
-        for (ApiEntity apiEntity : parse) {
-            List<ApiParamEntity> params = apiEntity.getParams();
-            System.out.println(gson.toJson(apiEntity));
-        }
+    /**
+     * 解析 swagger 文件符串
+     * @param swaggerData swagger 字符串
+     * @return 解析结果
+     */
+    List<ApiEntity> parseData(String swaggerData);
 
+    /**
+     * 解析本地 swagger 文件
+     * @param filePath swagger 文件地址
+     * @return 解析结果
+     */
+    List<ApiEntity> parseFile(String filePath);
 
-    }
+    /**
+     * 解析 swagger url
+     * @param url swagger url
+     * @return 解析结果
+     */
+    List<ApiEntity> parseUrl(String url);
+
 }

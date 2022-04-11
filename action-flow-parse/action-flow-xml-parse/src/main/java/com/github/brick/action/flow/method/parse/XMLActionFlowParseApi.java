@@ -35,7 +35,7 @@ public class XMLActionFlowParseApi implements ActionFlowMethodParseApi {
     private final ApisParse apisParse = new ApisParse();
 
     @Override
-    public AllEntity parse(String file) throws Exception {
+    public AllEntity parseFile(String file) throws Exception {
         AllEntity allEntity = new AllEntity();
 
         String fileName = this.getClass().getClassLoader().getResource(file).getPath();//获取文件路径

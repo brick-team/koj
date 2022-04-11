@@ -1,2 +1,10 @@
 server:
   port: 9011
+logging:
+  level:
+    root: debug
+
+
+#action-flow:
+#  security:
+#    enable: true

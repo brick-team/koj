@@ -14,12 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.config;
+package com.github.brick.action.flow.web.common.ctr;
 
-import com.github.brick.action.flow.method.enums.HttpClientType;
-import lombok.Data;
-
-@Data
-public class ActionFlowConfig {
-    private HttpClientType httpClientType;
+public class ActionFLowControllerAutoConfiguration {
 }

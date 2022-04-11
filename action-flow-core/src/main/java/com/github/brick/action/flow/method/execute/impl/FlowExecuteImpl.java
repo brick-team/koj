@@ -80,7 +80,7 @@ public class FlowExecuteImpl implements FlowExecute {
 
         AllEntity parse = null;
         try {
-            parse = actionFlowParseApi.parse(file);
+            parse = actionFlowParseApi.parseFile(file);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
