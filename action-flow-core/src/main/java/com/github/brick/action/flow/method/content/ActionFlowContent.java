@@ -50,13 +50,23 @@ public abstract class ActionFlowContent {
         this.actionFlowFileNames = actionFiles;
         this.storageType = storageType;
         injector = Guice.createInjector(new ActionFlowGuiceModule());
+
+        if (storageType == StorageType.MYSQL) {
+            configJpa();
+        }
+
+
         actionExecuteEntityStorage = StorageFactory.factory(this.storageType, ActionExecuteEntityStorage.class);
         flowExecuteEntityStorage = StorageFactory.factory(this.storageType, FlowExecuteEntityStorage.class);
         resultExecuteEntityStorage = StorageFactory.factory(this.storageType, ResultExecuteEntityStorage.class);
-
-
-
         loads(this.actionFlowFileNames);
+    }
+
+    /**
+     * 配置 JPA 相关
+     */
+    protected void configJpa() {
+
     }
 
     public ActionFlowContent(String... actionFlowFiles) {

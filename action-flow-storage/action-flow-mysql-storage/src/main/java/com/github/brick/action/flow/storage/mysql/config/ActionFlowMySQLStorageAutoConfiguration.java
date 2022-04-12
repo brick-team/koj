@@ -16,19 +16,10 @@
 
 package com.github.brick.action.flow.storage.mysql.config;
 
-import com.github.brick.action.flow.storage.api.FormatStorage;
-import com.github.brick.action.flow.storage.mysql.impl.MysqlFormatStorage;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@Configurable
 @EnableJpaRepositories("com.github.brick.action.flow.storage.mysql.repository")
 @ComponentScan(basePackages = {"com.github.brick.action.flow.storage"})
-public class ActionFLowMySQLStorageConfig {
-//    @Bean
-//    public FormatStorage mysqlFormatStorage() {
-//        return new MysqlFormatStorage();
-//    }
+public class ActionFlowMySQLStorageAutoConfiguration {
 }

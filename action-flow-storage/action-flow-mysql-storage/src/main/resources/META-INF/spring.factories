@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageAutoConfiguration

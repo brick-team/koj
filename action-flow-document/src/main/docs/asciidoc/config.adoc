@@ -1,0 +1,33 @@
+[#action-flow-config]
+= Action Flow 配置
+
+:reproducible:
+:listing-caption: Listing
+:source-highlighter: rouge
+:toc:
+:toc-title: Action Flow 数据库设计说明目录
+
+作者:  https://github.com/brick-team[brick-team]
+
+
+
+[#java-config]
+== 原生配置
+
+[#spring-boot-config]
+== Spring Boot 配置
+
+|===
+|配置键 |配置含义 |配置类| 默认值
+
+| `action-flow.security.enable`
+| 是否启用安全配置
+| `com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.SecurityConfiguration`
+| false
+
+| `action-flow.storage.type`
+| 存储类型
+| `com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.StorageConfiguration`
+| `mysql`
+
+|===

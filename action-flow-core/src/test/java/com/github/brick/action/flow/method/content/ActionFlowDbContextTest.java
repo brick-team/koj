@@ -14,22 +14,16 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.mysql.impl;
+package com.github.brick.action.flow.method.content;
 
-import com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageConfig;
-import org.junit.Before;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.junit.Test;
 
-public class CommonTest {
-    protected ApplicationContext context;
+import static org.junit.Assert.*;
 
-    @Before
-    public void initCtx() {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(JpaConfiguration.class,
-                ActionFlowMySQLStorageConfig.class);
-        this.context = context;
+public class ActionFlowDbContextTest {
+    @Test
+    public void init() {
+        ActionFlowDbContext context = new ActionFlowDbContext();
     }
-
 
 }

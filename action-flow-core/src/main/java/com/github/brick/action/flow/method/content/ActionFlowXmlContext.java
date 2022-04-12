@@ -20,7 +20,7 @@ import com.github.brick.action.flow.execute.ActionFlowExecute;
 import com.github.brick.action.flow.method.enums.StorageType;
 
 public class ActionFlowXmlContext extends ActionFlowContent {
-    public ActionFlowXmlContext(StorageType storageType, String[] actionFiles) {
+    public ActionFlowXmlContext(StorageType storageType, String... actionFiles) {
         super(storageType, actionFiles);
     }
 

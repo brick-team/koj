@@ -14,24 +14,26 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.core.context;
+package com.github.brick.action.flow.storage.mysql.nv;
 
-import com.github.brick.action.flow.method.content.ActionFlowContent;
-import com.github.brick.action.flow.method.content.ActionFlowDbContext;
-import com.github.brick.action.flow.method.content.ActionFlowXmlContext;
-import com.github.brick.action.flow.method.enums.StorageType;
-import org.junit.Test;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import com.github.brick.action.flow.model.execute.ResultExecuteEntity;
+import com.github.brick.action.flow.storage.api.nv.ResultExecuteEntityStorage;
 
-public class ActionFlowContentTest {
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-    @Test
-    public void init() {
+public class ResultExecuteEntityMySqlStorage implements ResultExecuteEntityStorage {
 
-        ActionFlowXmlContext content = new ActionFlowXmlContext(StorageType.MYSQL,"flow.xml");
-        content.execute("flow.xml", "1", "");
-
+    @Override
+    public ResultExecuteEntity getResult(String fileName, Serializable flowId) {
+        return null;
 
     }
 
+    @Override
+    public void save(String fileName, List<ResultExecuteEntity> results) {
+    }
 }

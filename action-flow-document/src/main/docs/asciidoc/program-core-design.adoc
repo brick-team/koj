@@ -119,8 +119,29 @@ public class FlowExecuteEntityMemoryStorage implements FlowExecuteEntityStorage 
 
 === 存储模块使用
 存储模块的使用首先需要明确存储产生的时机。
-1. Action Flow 支持 XML 形式配置，为提升性能不会每次进行 Action Flow XML 文件的解析工作，在解析完成后会将数据进行存储，此时允许选择内存或数据库进行存储，默认采用内存存储。
-2. Action Flow 支持通过WEB可视化的方式进行,此时允许选择内存或数据库进行存储，默认采用数据库存储
+
+. Action Flow 支持 XML 形式配置，为提升性能不会每次都进行 Action Flow XML 文件的解析工作，因此在解析完成后会将数据进行存储，此时允许选择内存或数据库进行存储，默认采用内存存储。
+. Action Flow 支持通过WEB可视化的方式进行,此时允许选择内存或数据库进行存储，默认采用数据库存储。允许通过 `action-flow.storage.type` 配置进行修改.
+
+[TIP]
+====
+更多配置信息查看 * xref:config.adoc#action-flow-config[Action Flow 配置说明]
+====
+
+下面对 XML 模式下的存储模式进行介绍，使用 XML 模式开发默认采用内存存储，基本构造函数如下。
+
+[source,java]
+----
+    ActionFlowXmlContext content = new ActionFlowXmlContext("flow.xml");
+----
+
+如果采用上述方式进行 Action Flow XML Context 的初始化默认选择内存存储，如果需要改变存储模式需要使用如下代码。
+
+[source,java]
+----
+    ActionFlowXmlContext content = new ActionFlowXmlContext(StorageType.MYSQL,"flow.xml");
+----
+
 
 
 

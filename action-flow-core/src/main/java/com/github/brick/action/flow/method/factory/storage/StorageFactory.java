@@ -24,6 +24,9 @@ import com.github.brick.action.flow.storage.api.nv.ResultExecuteEntityStorage;
 import com.github.brick.action.flow.storage.memory.nv.ActionExecuteEntityMemoryStorage;
 import com.github.brick.action.flow.storage.memory.nv.FlowExecuteEntityMemoryStorage;
 import com.github.brick.action.flow.storage.memory.nv.ResultExecuteEntityMemoryStorage;
+import com.github.brick.action.flow.storage.mysql.nv.ActionExecuteEntityMySqlStorage;
+import com.github.brick.action.flow.storage.mysql.nv.FlowExecuteEntityMySqlStorage;
+import com.github.brick.action.flow.storage.mysql.nv.ResultExecuteEntityMySqlStorage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +72,7 @@ public final class StorageFactory {
         public ActionExecuteEntityStorage factory(StorageType type) {
             switch (type) {
                 case MYSQL:
-                    break;
+                    return new ActionExecuteEntityMySqlStorage();
                 case MEMORY:
                     ActionExecuteEntityStorage actionExecuteEntityStorage = map.get(type);
                     if (actionExecuteEntityStorage != null) {
@@ -95,7 +98,7 @@ public final class StorageFactory {
         public FlowExecuteEntityStorage factory(StorageType type) {
             switch (type) {
                 case MYSQL:
-                    break;
+                    return new FlowExecuteEntityMySqlStorage();
                 case MEMORY:
                     FlowExecuteEntityStorage flowExecuteEntityStorage = map.get(type);
                     if (flowExecuteEntityStorage != null) {
@@ -121,7 +124,7 @@ public final class StorageFactory {
         public ResultExecuteEntityStorage factory(StorageType type) {
             switch (type) {
                 case MYSQL:
-                    break;
+                    return new ResultExecuteEntityMySqlStorage();
                 case MEMORY:
                     ResultExecuteEntityStorage resultExecuteEntityStorage = map.get(type);
                     if (resultExecuteEntityStorage != null) {

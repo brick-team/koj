@@ -14,12 +14,14 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.mysql.impl;
+package com.github.brick.action.flow.storage.mysql.nv.context;
 
+import com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageAutoConfiguration;
+import com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -29,12 +31,23 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
+public class ActionFlowMySQLStorageContext {
+    public static final String FILE_NAME = "action_flow_jdbc.properties";
+    static AnnotationConfigApplicationContext applicationContext;
+    @Autowired(required = false)
+    private ActionFlowMySQLStorageConfig mySQLStorageConfig;
 
-@Configuration
-@EnableJpaRepositories(basePackages = "com.github.brick.action.flow.storage.mysql.*")
-public class JpaConfiguration {
+    public static <T> T getBean(Class<T> clazz) {
+        return applicationContext.getBean(clazz);
+    }
+
+    public void configJpa() {
+        applicationContext = new AnnotationConfigApplicationContext(ActionFlowMySQLStorageAutoConfiguration.class, ActionFlowMySQLStorageContext.class);
+    }
 
     @Bean
     PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
@@ -42,19 +55,44 @@ public class JpaConfiguration {
     }
 
     @Bean
-    public DataSource dataSource() {
+    public DataSource dataSource() throws IOException {
+        String driver = null;
+        String url = null;
+        String username = null;
+        String password = null;
+        if (mySQLStorageConfig == null) {
+            InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(FILE_NAME);
+            Properties properties = new Properties();
+            properties.load(resourceAsStream);
+
+            driver = properties.getProperty("driver");
+            url = properties.getProperty("url");
+            username = properties.getProperty("username");
+            password = properties.getProperty("password");
+        }
+        else {
+            driver = mySQLStorageConfig.getDriver();
+            url = mySQLStorageConfig.getUrl();
+            username = mySQLStorageConfig.getUsername();
+            password = mySQLStorageConfig.getPassword();
+        }
+
+
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/action-flow");
-        dataSource.setUsername("root");
-        dataSource.setPassword("root");
+        dataSource.setDriverClassName(driver);
+        dataSource.setUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
         return dataSource;
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+            @Autowired DataSource dataSource
+    ) {
+
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactoryBean.setDataSource(dataSource());
+        entityManagerFactoryBean.setDataSource(dataSource);
         entityManagerFactoryBean.setPackagesToScan("com.github.brick.action.flow.storage.mysql.entity");
         entityManagerFactoryBean.setJpaProperties(buildHibernateProperties());
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter() {{
@@ -86,7 +124,10 @@ public class JpaConfiguration {
     }
 
     @Bean
-    public TransactionTemplate transactionTemplate() {
-        return new TransactionTemplate(transactionManager());
+    public TransactionTemplate transactionTemplate(
+            @Autowired PlatformTransactionManager transactionManager
+    ) {
+        return new TransactionTemplate(transactionManager);
     }
+
 }

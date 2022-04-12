@@ -14,22 +14,25 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.mysql.impl;
+package com.github.brick.action.flow.storage.mysql.nv;
 
-import com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageConfig;
-import org.junit.Before;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
+import com.github.brick.action.flow.storage.api.nv.FlowExecuteEntityStorage;
 
-public class CommonTest {
-    protected ApplicationContext context;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-    @Before
-    public void initCtx() {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(JpaConfiguration.class,
-                ActionFlowMySQLStorageConfig.class);
-        this.context = context;
+public class FlowExecuteEntityMySqlStorage implements FlowExecuteEntityStorage {
+
+    @Override
+    public void save(String fileName, List<FlowExecuteEntity> flows) {
     }
 
-
+    @Override
+    public FlowExecuteEntity getFlow(String fileName, Serializable flowId) {
+        return null;
+    }
 }

@@ -106,5 +106,9 @@
             <groupId>com.github.brick</groupId>
             <artifactId>action-flow-memory-storage</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.brick</groupId>
+            <artifactId>action-flow-mysql-storage</artifactId>
+        </dependency>
     </dependencies>
 </project>
