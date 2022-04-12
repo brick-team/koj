@@ -1,5 +1,0 @@
-action-flow:
-  profile: dev
-server:
-  servlet:
-    context-path:

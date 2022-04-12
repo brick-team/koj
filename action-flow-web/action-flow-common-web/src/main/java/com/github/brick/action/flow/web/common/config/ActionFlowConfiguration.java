@@ -16,11 +16,31 @@
 
 package com.github.brick.action.flow.web.common.config;
 
+import com.github.brick.action.flow.method.enums.StorageType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * action flow configuration
+ */
 @ConfigurationProperties(prefix = "action-flow")
 public class ActionFlowConfiguration {
+    /**
+     * 安全配置
+     */
     private SecurityConfiguration security;
+
+    /**
+     * 存储配置
+     */
+    private StorageConfiguration storage;
+
+    public StorageConfiguration getStorage() {
+        return storage;
+    }
+
+    public void setStorage(StorageConfiguration storage) {
+        this.storage = storage;
+    }
 
     public SecurityConfiguration getSecurity() {
         return security;
@@ -30,7 +50,20 @@ public class ActionFlowConfiguration {
         this.security = security;
     }
 
-    public class SecurityConfiguration {
+
+    public static class StorageConfiguration {
+        private StorageType type;
+
+        public StorageType getType() {
+            return type;
+        }
+
+        public void setType(StorageType type) {
+            this.type = type;
+        }
+    }
+
+    public static class SecurityConfiguration {
         private boolean enable;
 
         public boolean isEnable() {

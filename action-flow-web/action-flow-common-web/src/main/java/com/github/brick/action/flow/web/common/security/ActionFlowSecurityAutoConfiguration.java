@@ -16,18 +16,16 @@
 
 package com.github.brick.action.flow.web.common.security;
 
-import com.github.brick.action.flow.web.common.config.ActionFlowConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
-@EnableConfigurationProperties(value = {
-        ActionFlowConfiguration.class
-})
+/**
+ * action flow 安全相关配置
+ */
 @ConditionalOnProperty(value = "action-flow.security.enable", matchIfMissing = false)
 public class ActionFlowSecurityAutoConfiguration {
     public static final String ACTION_FLOW_URL_PRE = "/brick/action_flow/";
@@ -37,7 +35,6 @@ public class ActionFlowSecurityAutoConfiguration {
     private String servletContextPath;
 
     public ActionFlowSecurityAutoConfiguration() {
-        System.out.println();
     }
 
     @Bean

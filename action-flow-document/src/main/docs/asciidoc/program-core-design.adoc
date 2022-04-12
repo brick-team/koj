@@ -47,3 +47,85 @@ Action Flow 项目使用 Maven 和 JDK8+ 进行开发，Maven 模块结构如下
 ----
 <1> Action Flow 执行器用于执行 REST-API 、Java-Method 等，用于完成 action 执行。
 
+== 存储模块
+存储模块在当前版本只支持**内存储存**和**数据库存储**两种。存储模块主要负责管理三大核心对象
+
+
+
+|===
+|核心类型 |作用  |Java 类| 存储接口
+
+| action
+| 行为动作
+| `com.github.brick.action.flow.model.execute.ActionExecuteEntity`
+| `com.github.brick.action.flow.storage.api.nv.ActionExecuteEntityStorage`
+
+| result
+| 结果定义
+| `com.github.brick.action.flow.model.execute.ResultExecuteEntity`
+| `com.github.brick.action.flow.storage.api.nv.ResultExecuteEntityStorage`
+
+| flow
+| 执行流程
+| `com.github.brick.action.flow.model.execute.FlowExecuteEntity`
+| `com.github.brick.action.flow.storage.api.nv.FlowExecuteEntityStorage`
+
+|===
+
+在实际使用中 action、result和flow三大核心对象的执行还需要配合其他对象，这些依赖的对象原则上交给不同的存储模式自行处理，在 action-flow-storage-api 工程中允许只进行接口定义，不做相关方法的定义。
+
+
+
+=== 内存存储
+内存存储当前版本仅服务于文件模式，核心作用是存储各个 Action Flow 文件的数据信息。以内存的形式进行数据存储实现方式相对简单，仅需要以文件为最大分组，将不同的 Action Flow 文件信息存储在内存中即可，选择的存储结构是 Map 。下面以核心对象 flow 的存储设计进行说明，其他两者同理，基于内存存储的实现类是 `com.github.brick.action.flow.storage.memory.nv.ResultExecuteEntityMemoryStorage` ，具体实现代码如下:
+
+[source,java]
+----
+public class FlowExecuteEntityMemoryStorage implements FlowExecuteEntityStorage {
+    Map<String, Map<Serializable, FlowExecuteEntity>> map = new HashMap<>(32);
+
+    @Override
+    public void save(String fileName, List<FlowExecuteEntity> flows) {
+        Map<Serializable, FlowExecuteEntity> collect = flows.stream().collect(Collectors.toMap(FlowExecuteEntity::getId, s -> s));
+        map.put(fileName, collect);
+    }
+
+    @Override
+    public FlowExecuteEntity getFlow(String fileName, Serializable flowId) {
+        Map<Serializable, FlowExecuteEntity> serializableFlowExecuteEntityMap = map.get(fileName);
+        if (serializableFlowExecuteEntityMap == null) {
+            throw new IllegalArgumentException("当前文件名称未解析,文件名称 = " + fileName);
+        }
+
+        FlowExecuteEntity flowExecuteEntity = serializableFlowExecuteEntityMap.get(flowId);
+        if (flowExecuteEntity == null) {
+            throw new IllegalArgumentException("当前文件名称 " + fileName + "中不存在 flowId 为" + flowId + "的数据");
+        }
+        return flowExecuteEntity;
+    }
+}
+----
+
+在上述代码中用于存储数据的结构是 `Map<String, Map<Serializable, FlowExecuteEntity>>` 它的层级含义如下:
+
+. key: Action Flow 文件名称
+. value: 当前 Action Flow 文件中 flow 核心对象信息，使用 Map 存储。
+.. key: flow 唯一标识
+.. value: flow 对象信息
+
+
+=== 数据库存储
+
+
+=== 存储模块使用
+存储模块的使用首先需要明确存储产生的时机。
+1. Action Flow 支持 XML 形式配置，为提升性能不会每次进行 Action Flow XML 文件的解析工作，在解析完成后会将数据进行存储，此时允许选择内存或数据库进行存储，默认采用内存存储。
+2. Action Flow 支持通过WEB可视化的方式进行,此时允许选择内存或数据库进行存储，默认采用数据库存储
+
+
+
+== 解析器模块
+
+== 执行器模块
+
+== Web模块

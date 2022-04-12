@@ -14,17 +14,15 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.web.independent;
+package com.github.brick.action.flow.web.common.config;
 
-import com.github.brick.action.flow.web.common.config.EnableActionFlowServer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Import;
 
-@SpringBootApplication(scanBasePackages = {"com.github.brick.action.flow.web"})
-@EnableActionFlowServer
-public class App {
-    public static void main(String[] args) {
-        ConfigurableApplicationContext run = SpringApplication.run(App.class, args);
-    }
+import java.lang.annotation.*;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Import(ActionFlowServerAutoConfiguration.class)
+public @interface EnableActionFlowServer {
 }

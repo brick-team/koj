@@ -16,13 +16,25 @@
 
 package com.github.brick.action.flow.web.common.ctr;
 
+import com.github.brick.action.flow.method.config.ActionFlowVersion;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-@RestController
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.github.brick.action.flow.web.common.security.ActionFlowSecurityAutoConfiguration.ACTION_FLOW_URL_PRE;
+
+@ResponseBody
+@RequestMapping(ACTION_FLOW_URL_PRE)
 public class ConsoleController {
     @GetMapping("/console")
-    public String console() {
-        return "console";
+    public ResponseEntity<Map<String, String>> console() {
+        Map<String, String> map = new HashMap<>(8);
+        map.put("version", ActionFlowVersion.VERSION);
+        map.put("author", ActionFlowVersion.AUTHOR);
+        return ResponseEntity.ok(map);
     }
 }

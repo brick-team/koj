@@ -16,5 +16,15 @@
 
 package com.github.brick.action.flow.web.common.ctr;
 
+import org.springframework.context.annotation.Bean;
+
+/**
+ * action flow 控制器配置
+ */
 public class ActionFLowControllerAutoConfiguration {
+    @Bean
+    public ConsoleController consoleController() {
+        return new ConsoleController();
+    }
+
 }

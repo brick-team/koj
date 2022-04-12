@@ -2,9 +2,11 @@ server:
   port: 9011
 logging:
   level:
-    root: debug
+    com.github.brick.action.flow: debug
 
 
-#action-flow:
-#  security:
-#    enable: true
+action-flow:
+  security:
+    enable: true
+  storage:
+    type: memory
