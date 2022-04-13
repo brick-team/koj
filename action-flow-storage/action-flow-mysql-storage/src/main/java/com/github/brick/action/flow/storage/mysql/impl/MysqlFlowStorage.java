@@ -32,11 +32,11 @@ import java.util.Optional;
 
 @Service
 public class MysqlFlowStorage implements FlowStorage {
-    @Autowired
+    @Autowired(required = false)
     private AfFlowEntityRepository afFlowEntityRepository;
-    @Autowired
+    @Autowired(required = false)
     private AfApiParamExEntityRepository afApiParamExEntityRepository;
-    @Autowired
+    @Autowired(required = false)
     private MysqlWorkStorage workStorage;
 
     @Override

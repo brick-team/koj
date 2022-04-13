@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class MysqlWorkStorage implements WorkStorage {
-    @Autowired
+    @Autowired(required = false)
     private AfWorkCzRepository workCzRepository;
 
     @Override

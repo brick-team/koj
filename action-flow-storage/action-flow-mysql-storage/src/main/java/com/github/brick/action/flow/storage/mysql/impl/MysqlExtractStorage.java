@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @Service
 public class MysqlExtractStorage implements ExtractStorage {
-    @Autowired
+    @Autowired(required = false)
     private AfExtractEntityRepository extractEntityRepository;
 
     @Override

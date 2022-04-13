@@ -31,7 +31,7 @@ import java.util.Optional;
 
 @Service
 public class MysqlActionStorage implements ActionStorage {
-    @Autowired
+    @Autowired(required = false)
     private AfActionEntityRepository actionEntityRepository;
 
     @Override
@@ -45,7 +45,7 @@ public class MysqlActionStorage implements ActionStorage {
         return save.getId();
     }
 
-    @Autowired
+    @Autowired(required = false)
     private AfActionParamEntityRepository actionParamEntityRepository;
 
     @Override

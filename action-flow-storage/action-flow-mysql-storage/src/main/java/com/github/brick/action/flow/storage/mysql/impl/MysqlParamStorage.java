@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MysqlParamStorage implements ParamStorage {
-    @Autowired
+    @Autowired(required = false)
     private AfParamEntityRepository afParamEntityRepository;
 
 

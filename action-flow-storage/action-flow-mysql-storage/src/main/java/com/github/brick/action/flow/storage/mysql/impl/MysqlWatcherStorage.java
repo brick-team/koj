@@ -32,10 +32,10 @@ import java.util.Optional;
 
 @Service
 public class MysqlWatcherStorage implements WatcherStorage {
-    @Autowired
+    @Autowired(required = false)
     private AfWatcherEntityRepository afWatcherEntityRepository;
 
-    @Autowired
+    @Autowired(required = false)
     private AfWatcherRsEntityRepository afWatcherRsEntityRepository;
 
     @Transactional

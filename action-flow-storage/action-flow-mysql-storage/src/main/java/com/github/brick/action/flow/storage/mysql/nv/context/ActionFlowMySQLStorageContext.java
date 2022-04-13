@@ -17,7 +17,6 @@
 package com.github.brick.action.flow.storage.mysql.nv.context;
 
 import com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageAutoConfiguration;
-import com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -38,8 +37,6 @@ import java.util.Properties;
 public class ActionFlowMySQLStorageContext {
     public static final String FILE_NAME = "action_flow_jdbc.properties";
     static AnnotationConfigApplicationContext applicationContext;
-    @Autowired(required = false)
-    private ActionFlowMySQLStorageConfig mySQLStorageConfig;
 
     public static <T> T getBean(Class<T> clazz) {
         return applicationContext.getBean(clazz);
@@ -60,22 +57,14 @@ public class ActionFlowMySQLStorageContext {
         String url = null;
         String username = null;
         String password = null;
-        if (mySQLStorageConfig == null) {
-            InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(FILE_NAME);
-            Properties properties = new Properties();
-            properties.load(resourceAsStream);
+        InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(FILE_NAME);
+        Properties properties = new Properties();
+        properties.load(resourceAsStream);
 
-            driver = properties.getProperty("driver");
-            url = properties.getProperty("url");
-            username = properties.getProperty("username");
-            password = properties.getProperty("password");
-        }
-        else {
-            driver = mySQLStorageConfig.getDriver();
-            url = mySQLStorageConfig.getUrl();
-            username = mySQLStorageConfig.getUsername();
-            password = mySQLStorageConfig.getPassword();
-        }
+        driver = properties.getProperty("driver");
+        url = properties.getProperty("url");
+        username = properties.getProperty("username");
+        password = properties.getProperty("password");
 
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();

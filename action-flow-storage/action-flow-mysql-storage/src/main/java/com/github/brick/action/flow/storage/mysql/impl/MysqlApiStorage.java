@@ -33,11 +33,11 @@ import java.util.Optional;
 
 @Service
 public class MysqlApiStorage implements ApiStorage {
-    @Autowired
+    @Autowired(required = false)
     private AfApiEntityRepository afApiEntityRepository;
-    @Autowired
+    @Autowired(required = false)
     private MysqlApiParamStorage apiParamStorage;
-    @Autowired
+    @Autowired(required = false)
     private AfApiParamExEntityRepository afApiParamExEntityRepository;
 
     @Override

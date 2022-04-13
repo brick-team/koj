@@ -25,7 +25,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class MysqlResultStorage implements ResultStorage {
 
-    @Autowired
+    @Autowired(required = false)
+
     private AfResultEntityRepository afResultEntityRepository;
 
     @Override

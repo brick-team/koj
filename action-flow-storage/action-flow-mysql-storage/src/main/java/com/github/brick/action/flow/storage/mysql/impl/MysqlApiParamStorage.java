@@ -29,7 +29,7 @@ import java.util.List;
 
 @Service
 public class MysqlApiParamStorage implements ApiParamStorage {
-    @Autowired
+    @Autowired(required = false)
     private AfApiParamEntityRepository afApiParamEntityRepository;
 
     @Override

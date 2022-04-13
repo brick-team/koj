@@ -17,6 +17,7 @@
 package com.github.brick.action.flow.web.common.config;
 
 import com.github.brick.action.flow.method.enums.StorageType;
+import com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -33,6 +34,19 @@ public class ActionFlowConfiguration {
      * 存储配置
      */
     private StorageConfiguration storage;
+
+    /**
+     * 数据源配置
+     */
+    private DataSourceConfiguration dataSource;
+
+    public DataSourceConfiguration getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(DataSourceConfiguration dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public StorageConfiguration getStorage() {
         return storage;
@@ -73,5 +87,9 @@ public class ActionFlowConfiguration {
         public void setEnable(boolean enable) {
             this.enable = enable;
         }
+    }
+
+    public static class DataSourceConfiguration extends ActionFlowMySQLStorageConfig {
+
     }
 }

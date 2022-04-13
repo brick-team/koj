@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @Service
 public class MysqlFormatStorage implements FormatStorage {
-    @Autowired
+    @Autowired(required = false)
     private AfFormatEntityRepository formatEntityRepository;
 
     @Override

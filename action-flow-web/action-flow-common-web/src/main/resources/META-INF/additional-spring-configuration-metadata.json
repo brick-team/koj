@@ -2,9 +2,10 @@
   "groups": [
     {
       "name": "action-flow",
-      "type": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration",
+      "type" : "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration",
       "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration",
       "description": "action flow 顶层配置"
+
     },
     {
       "name": "action-flow.security",
@@ -17,6 +18,12 @@
       "type": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.StorageConfiguration",
       "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.StorageConfiguration",
       "description": "action flow 存储配置"
+    },
+    {
+      "name": "action-flow.datasource",
+      "type": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.DataSourceConfiguration",
+      "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.DataSourceConfiguration",
+      "description": "action flow 数据源配置"
     }
   ],
   "properties": [
@@ -31,7 +38,28 @@
       "name": "action-flow.storage.type",
       "type": "com.github.brick.action.flow.method.enums.StorageType",
       "description": "存储类型",
-      "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.StorageConfiguration"
+      "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.StorageConfiguration",
+      "defaultValue": "mysql"
+    },
+    {
+      "name": "action-flow.datasource.url",
+      "type": "java.lang.String",
+      "description": "数据库地址"
+    },
+    {
+      "name": "action-flow.datasource.driver",
+      "type": "java.lang.String",
+      "description": "数据库启动"
+    },
+    {
+      "name": "action-flow.datasource.username",
+      "type": "java.lang.String",
+      "description": "数据库账号"
+    },
+    {
+      "name": "action-flow.datasource.password",
+      "type": "java.lang.String",
+      "description": "数据库密码"
     }
   ]
 }
