@@ -28,10 +28,18 @@ public class ActionFlowContentTest {
     @Test
     public void init() {
 
-        ActionFlowXmlContext content = new ActionFlowXmlContext(StorageType.MYSQL,"flow.xml");
+        ActionFlowXmlContext content = new ActionFlowXmlContext(StorageType.MEMORY,"flow.xml");
         content.execute("flow.xml", "1", "");
 
 
+    }
+
+    private void hh(String name, int age) {
+
+    }
+
+    private void hh(String name) {
+        hh(name, 10);
     }
 
 }

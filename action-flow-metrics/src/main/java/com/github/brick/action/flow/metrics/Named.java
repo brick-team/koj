@@ -14,8 +14,16 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.entity.api;
+package com.github.brick.action.flow.metrics;
 
-public enum ParamIn {
-    body, path, formdata, header, query,formData
+/**
+ * action flow metrics named
+ * @author huifer
+ */
+public interface Named {
+     /**
+      * metrics named
+      * @return metrics named
+      */
+     String name();
 }

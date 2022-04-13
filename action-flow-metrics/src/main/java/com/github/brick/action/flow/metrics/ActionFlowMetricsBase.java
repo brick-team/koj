@@ -14,8 +14,14 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.entity.api;
+package com.github.brick.action.flow.metrics;
 
-public enum ParamIn {
-    body, path, formdata, header, query,formData
+/**
+ * 用于在指标监测阶段执行的接口，
+ */
+public interface ActionFlowMetricsBase {
+    /**
+     * 执行需要监控的方法
+     */
+    Object ex();
 }

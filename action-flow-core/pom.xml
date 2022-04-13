@@ -110,5 +110,9 @@
             <groupId>com.github.brick</groupId>
             <artifactId>action-flow-mysql-storage</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.brick</groupId>
+            <artifactId>action-flow-metrics</artifactId>
+        </dependency>
     </dependencies>
 </project>

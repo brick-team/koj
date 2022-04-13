@@ -14,8 +14,11 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.entity.api;
+package com.github.brick.action.flow.metrics;
 
-public enum ParamIn {
-    body, path, formdata, header, query,formData
+public class FlowMetricsImpl extends CommonMetrics implements ActionMetrics {
+    @Override
+    public String name() {
+        return "flow";
+    }
 }

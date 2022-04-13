@@ -14,8 +14,31 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.entity.api;
+package com.github.brick.action.flow.metrics;
 
-public enum ParamIn {
-    body, path, formdata, header, query,formData
+import org.junit.Test;
+
+import java.util.concurrent.TimeUnit;
+
+public class ActionMetricsImplTest {
+    ActionMetrics actionMetrics = new ActionMetricsImpl();
+
+    @Test
+    public void metrics() throws InterruptedException {
+        ActionFlowMetricRegistry.consoleReporter.start(1, TimeUnit.SECONDS);
+
+        actionMetrics.metrics(new ActionFlowMetricsBase() {
+            @Override
+            public Object ex() {
+                return data();
+            }
+
+        });
+
+        Thread.sleep(3000);
+    }
+
+    private String data() {
+        return "";
+    }
 }

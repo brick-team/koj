@@ -18,6 +18,8 @@ package com.github.brick.action.flow.storage.mysql.nv;
 
 import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
 import com.github.brick.action.flow.storage.api.nv.FlowExecuteEntityStorage;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.defaults.DefaultSqlSession;
 
 import java.io.Serializable;
 import java.util.HashMap;

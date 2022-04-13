@@ -25,6 +25,7 @@ import com.github.brick.action.flow.execute.jdk.JDKExecuteServiceImpl;
 import com.github.brick.action.flow.method.entity.api.ParamIn;
 import com.github.brick.action.flow.method.enums.ActionType;
 import com.github.brick.action.flow.method.enums.ExtractModel;
+import com.github.brick.action.flow.metrics.ActionMetricsImpl;
 import com.github.brick.action.flow.model.ActionFlowFactory;
 import com.github.brick.action.flow.model.execute.*;
 import com.github.brick.action.flow.storage.api.nv.ActionExecuteEntityStorage;
@@ -47,15 +48,7 @@ import java.util.stream.Collectors;
 public class ActionFlowExecute {
     public static final String DROOL = "$.";
     private static final Logger logger = LoggerFactory.getLogger(ActionFlowExecute.class);
-    private static final String[] ops = new String[]{
-            ">",
-            ">=",
-            "==",
-            "<",
-            "<=",
-            "&&",
-            "||",
-    };
+    private static final String[] ops = new String[]{">", ">=", "==", "<", "<=", "&&", "||",};
     static SpelExpressionParser parser = new SpelExpressionParser();
     private final ActionExecuteEntityStorage actionExecuteEntityStorage;
     private final FlowExecuteEntityStorage flowExecuteEntityStorage;
@@ -65,8 +58,7 @@ public class ActionFlowExecute {
     Gson gson = new Gson();
     JDKExecuteService jdkExecuteService = new JDKExecuteServiceImpl();
 
-    public ActionFlowExecute(String fileName,
-                             ActionExecuteEntityStorage actionExecuteEntityStorage, FlowExecuteEntityStorage flowExecuteEntityStorage, ResultExecuteEntityStorage resultExecuteEntityStorage) {
+    public ActionFlowExecute(String fileName, ActionExecuteEntityStorage actionExecuteEntityStorage, FlowExecuteEntityStorage flowExecuteEntityStorage, ResultExecuteEntityStorage resultExecuteEntityStorage) {
         this.fileName = fileName;
         this.actionExecuteEntityStorage = actionExecuteEntityStorage;
         this.flowExecuteEntityStorage = flowExecuteEntityStorage;
@@ -129,8 +121,7 @@ public class ActionFlowExecute {
             EvaluationContext context = new StandardEvaluationContext();
             Boolean value = expression.getValue(context, Boolean.class);
             return value;
-        }
-        else {
+        } else {
             int start = 0;
             int end = 0;
             for (int i = 0; i < chars.length; i++) {
@@ -141,8 +132,7 @@ public class ActionFlowExecute {
                         end = i + 1;
                         break;
 
-                    }
-                    else {
+                    } else {
                         end = i;
                     }
                 }
@@ -174,6 +164,8 @@ public class ActionFlowExecute {
         return value;
     }
 
+    ActionMetricsImpl actionMetrics = new ActionMetricsImpl();
+
     public String execute(String flowId, String jsonData) {
 
         FlowExecuteEntity flowExecuteEntity = flowExecuteEntityStorage.getFlow(fileName, flowId);
@@ -191,7 +183,7 @@ public class ActionFlowExecute {
         return null;
     }
 
-    private void executeWork(String jsonData, Map<String, Object> stepWorkResult, WorkExecuteEntity work) {
+    private Object executeWork(String jsonData, Map<String, Object> stepWorkResult, WorkExecuteEntity work) {
         String refId = work.getRefId();
         // 执行action
         Object o = executeAction(fileName, jsonData, refId);
@@ -208,14 +200,14 @@ public class ActionFlowExecute {
                 for (WorkExecuteEntity workExecuteEntity : then) {
                     executeWork(jsonData, stepWorkResult, workExecuteEntity);
                 }
-            }
-            else {
+            } else {
                 List<WorkExecuteEntity> cat = watcher.getCat();
                 for (WorkExecuteEntity workExecuteEntity : cat) {
                     executeWork(jsonData, stepWorkResult, workExecuteEntity);
                 }
             }
         }
+        return o;
     }
 
     private Object executeAction(String fileName, String jsonData, Serializable refId) {
@@ -228,8 +220,7 @@ public class ActionFlowExecute {
             } catch (Exception e) {
                 logger.error("执行action异常", e);
             }
-        }
-        else if (type == ActionType.REST_API) {
+        } else if (type == ActionType.REST_API) {
             try {
 
                 o = handlerRestApi(actionExecuteEntity, jsonData);
@@ -278,26 +269,26 @@ public class ActionFlowExecute {
 
         if (in == ParamIn.header) {
             handlerDataMap(value, extract, jsonData, headers, name);
-        }
-        else if (in == ParamIn.formdata) {
+        } else if (in == ParamIn.formdata) {
             handlerDataMap(value, extract, jsonData, formatData, name);
-        }
-        else if (in == ParamIn.body) {
+        } else if (in == ParamIn.body) {
             handlerDataMap(value, extract, jsonData, body, name);
-        }
-        else if (in == ParamIn.path) {
+        } else if (in == ParamIn.path) {
             handlerDataMap(value, extract, jsonData, pathParam, name);
-        }
-        else if (in == ParamIn.query) {
+        } else if (in == ParamIn.query) {
             handlerDataMap(value, extract, jsonData, queryParam, name);
         }
 
         // todo: 子集参数处理
         List<ParamExecuteEntity.ForRestApi> restApis = restApi1.getRestApis();
-        for (ParamExecuteEntity.ForRestApi api : restApis) {
-            List<ParamExecuteEntity.ForRestApi> restApis1 = api.getRestApis();
-            for (ParamExecuteEntity.ForRestApi forRestApi : restApis1) {
-                handlerRestApiParam(jsonData, queryParam, pathParam, headers, formatData, body, forRestApi);
+
+        if (restApis != null) {
+
+            for (ParamExecuteEntity.ForRestApi api : restApis) {
+                List<ParamExecuteEntity.ForRestApi> restApis1 = api.getRestApis();
+                for (ParamExecuteEntity.ForRestApi forRestApi : restApis1) {
+                    handlerRestApiParam(jsonData, queryParam, pathParam, headers, formatData, body, forRestApi);
+                }
             }
         }
     }
@@ -310,8 +301,7 @@ public class ActionFlowExecute {
             Object o = executeAction(fileName, jsonData, fromAction);
             Object exData = factory.extract(o, el);
             dataMap.put(name, gson.toJson(exData));
-        }
-        else {
+        } else {
             dataMap.put(name, value);
         }
     }
@@ -348,8 +338,7 @@ public class ActionFlowExecute {
                 Object o = executeAction(fileName, jsonData, fromAction);
                 Object exData = factory.extract(o, el);
                 args[i] = exData;
-            }
-            else {
+            } else {
                 args[i] = value;
             }
 

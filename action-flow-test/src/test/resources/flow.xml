@@ -41,12 +41,12 @@
                 <field>
                     <fieldName>f1</fieldName>
                     <type>String</type>
-                    <extract el="$.username" step="step2"/>
+                    <extract el="$.username" step="1"/>
                 </field>
                 <field>
                     <fieldName>f2</fieldName>
                     <type>String</type>
-                    <extract el="$.username" step="step3"/>
+                    <extract el="$.username" step="2"/>
                 </field>
 
 
@@ -56,8 +56,32 @@
     </results>
 
     <flows>
+
         <flow id="1">
             <work step="1" ref_id="rest_api_1">
+                <watcher condition="($.age >= 10)">
+                    <then>
+                        <work step="2" ref_id="java_method_1">
+                            <watcher condition="($.age >= 10)">
+                                <then>
+                                    <work step="2" ref_id="java_method_1">
+                                    </work>
+                                    <work step="3" ref_id="java_method_1"/>
+                                </then>
+                                <cat>
+                                    <work step="4" ref_id="java_method_1"/>
+                                    <work step="5" ref_id="java_method_1"/>
+                                </cat>
+                            </watcher>
+
+                        </work>
+                        <work step="3" ref_id="java_method_1"/>
+                    </then>
+                    <cat>
+                        <work step="4" ref_id="java_method_1"/>
+                        <work step="5" ref_id="java_method_1"/>
+                    </cat>
+                </watcher>
                 <watcher condition="($.age >= 10)">
                     <then>
                         <work step="2" ref_id="java_method_1"/>
@@ -68,6 +92,7 @@
                         <work step="5" ref_id="java_method_1"/>
                     </cat>
                 </watcher>
+
             </work>
         </flow>
     </flows>

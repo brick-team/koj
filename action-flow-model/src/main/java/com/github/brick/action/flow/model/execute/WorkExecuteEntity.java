@@ -24,5 +24,6 @@ import java.util.List;
 public class WorkExecuteEntity {
     private String step;
     private String refId;
+    private boolean async = false;
     private List<WatcherExecuteEntity> watchers;
 }

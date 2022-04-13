@@ -18,6 +18,7 @@ package com.github.brick.action.flow.method.content;
 
 import com.github.brick.action.flow.method.enums.StorageType;
 import com.github.brick.action.flow.method.factory.storage.StorageFactory;
+import com.github.brick.action.flow.metrics.ActionFlowMetricRegistry;
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
 import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
 import com.github.brick.action.flow.model.execute.ResultExecuteEntity;
@@ -34,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public abstract class ActionFlowContent {
     private static final Logger logger = LoggerFactory.getLogger(ActionFlowContent.class);
@@ -52,20 +54,31 @@ public abstract class ActionFlowContent {
         injector = Guice.createInjector(new ActionFlowGuiceModule());
 
         if (storageType == StorageType.MYSQL) {
-            configJpa(false);
+            configJpa();
         }
-
-
         actionExecuteEntityStorage = StorageFactory.factory(this.storageType, ActionExecuteEntityStorage.class);
         flowExecuteEntityStorage = StorageFactory.factory(this.storageType, FlowExecuteEntityStorage.class);
         resultExecuteEntityStorage = StorageFactory.factory(this.storageType, ResultExecuteEntityStorage.class);
         loads(this.actionFlowFileNames);
+
+        startMetrics(false);
+    }
+
+    /**
+     * 启动监控相关
+     * @param b 是否启用,默认采用false
+     */
+    private void startMetrics(boolean b) {
+        if (b) {
+            ActionFlowMetricRegistry.getConsoleReporter().start(1, TimeUnit.SECONDS);
+            ActionFlowMetricRegistry.getSlf4jReporter().start(1, TimeUnit.SECONDS);
+        }
     }
 
     /**
      * 配置 JPA 相关
      */
-    protected void configJpa(boolean isSpring) {
+    protected void configJpa() {
 
     }
 

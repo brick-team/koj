@@ -18,7 +18,12 @@ package com.github.brick.action.flow.metrics;
 
 /**
  * flow metrics
- * todo: flow metrics
  */
-public class FlowMetrics {
+public interface FlowMetrics {
+    /**
+     * metrics
+     * @param base flow work
+     * @return flow work result
+     */
+    Object metrics(ActionFlowMetricsBase base);
 }

@@ -125,7 +125,7 @@ public class FlowExecuteEntityMemoryStorage implements FlowExecuteEntityStorage 
 
 [TIP]
 ====
-更多配置信息查看 * xref:config.adoc#action-flow-config[Action Flow 配置说明]
+更多配置信息查看 xref:config.adoc#action-flow-config[Action Flow 配置说明]
 ====
 
 下面对 XML 模式下的存储模式进行介绍，使用 XML 模式开发默认采用内存存储，基本构造函数如下。
@@ -150,3 +150,7 @@ public class FlowExecuteEntityMemoryStorage implements FlowExecuteEntityStorage 
 == 执行器模块
 
 == Web模块
+
+== 指标监控模块
+
+指标监控模块使用 `metrics-core` 技术进行开发，主要对以下指标进行监控
