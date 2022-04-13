@@ -52,7 +52,7 @@ public abstract class ActionFlowContent {
         injector = Guice.createInjector(new ActionFlowGuiceModule());
 
         if (storageType == StorageType.MYSQL) {
-            configJpa();
+            configJpa(false);
         }
 
 
@@ -65,7 +65,7 @@ public abstract class ActionFlowContent {
     /**
      * 配置 JPA 相关
      */
-    protected void configJpa() {
+    protected void configJpa(boolean isSpring) {
 
     }
 

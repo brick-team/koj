@@ -16,10 +16,15 @@
 
 package com.github.brick.action.flow.storage.mysql.config;
 
+import com.github.brick.action.flow.storage.mysql.nv.context.ActionFlowMySQLStorageContext;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaRepositories("com.github.brick.action.flow.storage.mysql.repository")
 @ComponentScan(basePackages = {"com.github.brick.action.flow.storage"})
+@EnableConfigurationProperties({ActionFlowMySQLStorageConfig.class})
+@Import(ActionFlowMySQLStorageContext.class)
 public class ActionFlowMySQLStorageAutoConfiguration {
 }

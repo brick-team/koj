@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
 public class MysqlExtractStorage implements ExtractStorage {
     @Autowired(required = false)
     private AfExtractEntityRepository extractEntityRepository;

@@ -16,6 +16,9 @@
 
 package com.github.brick.action.flow.storage.mysql.config;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties(prefix = "action-flow.datasource")
 public class ActionFlowMySQLStorageConfig {
     private String url;
     private String driver;

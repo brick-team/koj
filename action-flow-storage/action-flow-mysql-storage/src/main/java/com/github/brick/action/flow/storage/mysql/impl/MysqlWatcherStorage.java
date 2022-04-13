@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public class MysqlWatcherStorage implements WatcherStorage {
     @Autowired(required = false)
     private AfWatcherEntityRepository afWatcherEntityRepository;

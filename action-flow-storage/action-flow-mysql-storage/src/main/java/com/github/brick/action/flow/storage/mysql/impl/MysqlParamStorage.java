@@ -23,7 +23,6 @@ import com.github.brick.action.flow.storage.mysql.repository.AfWatcherRsEntityRe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
 public class MysqlParamStorage implements ParamStorage {
     @Autowired(required = false)
     private AfParamEntityRepository afParamEntityRepository;

@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public class MysqlFlowStorage implements FlowStorage {
     @Autowired(required = false)
     private AfFlowEntityRepository afFlowEntityRepository;

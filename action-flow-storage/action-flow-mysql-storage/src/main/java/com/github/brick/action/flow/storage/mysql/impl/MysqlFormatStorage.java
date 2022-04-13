@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
 public class MysqlFormatStorage implements FormatStorage {
     @Autowired(required = false)
     private AfFormatEntityRepository formatEntityRepository;

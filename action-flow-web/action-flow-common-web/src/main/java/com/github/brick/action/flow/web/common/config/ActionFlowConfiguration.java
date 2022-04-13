@@ -35,18 +35,6 @@ public class ActionFlowConfiguration {
      */
     private StorageConfiguration storage;
 
-    /**
-     * 数据源配置
-     */
-    private DataSourceConfiguration dataSource;
-
-    public DataSourceConfiguration getDataSource() {
-        return dataSource;
-    }
-
-    public void setDataSource(DataSourceConfiguration dataSource) {
-        this.dataSource = dataSource;
-    }
 
     public StorageConfiguration getStorage() {
         return storage;
@@ -89,7 +77,4 @@ public class ActionFlowConfiguration {
         }
     }
 
-    public static class DataSourceConfiguration extends ActionFlowMySQLStorageConfig {
-
-    }
 }

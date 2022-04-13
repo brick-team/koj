@@ -17,7 +17,9 @@
 package com.github.brick.action.flow.storage.mysql.nv.context;
 
 import com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageAutoConfiguration;
+import com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
@@ -26,6 +28,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -34,7 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class ActionFlowMySQLStorageContext {
+public class ActionFlowMySQLStorageContext  {
     public static final String FILE_NAME = "action_flow_jdbc.properties";
     static AnnotationConfigApplicationContext applicationContext;
 
@@ -42,8 +45,12 @@ public class ActionFlowMySQLStorageContext {
         return applicationContext.getBean(clazz);
     }
 
+
     public void configJpa() {
-        applicationContext = new AnnotationConfigApplicationContext(ActionFlowMySQLStorageAutoConfiguration.class, ActionFlowMySQLStorageContext.class);
+        applicationContext = new AnnotationConfigApplicationContext(ActionFlowMySQLStorageAutoConfiguration.class,
+                ActionFlowMySQLStorageContext.class);
+
+
     }
 
     @Bean
@@ -51,12 +58,16 @@ public class ActionFlowMySQLStorageContext {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
+
     @Bean
     public DataSource dataSource() throws IOException {
+        // TODO: 2022/4/13 从application.yaml文件中读取配置
         String driver = null;
         String url = null;
         String username = null;
         String password = null;
+
+
         InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(FILE_NAME);
         Properties properties = new Properties();
         properties.load(resourceAsStream);

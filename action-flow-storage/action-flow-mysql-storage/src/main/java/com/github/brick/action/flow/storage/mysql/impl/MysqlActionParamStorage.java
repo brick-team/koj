@@ -22,7 +22,6 @@ import com.github.brick.action.flow.storage.mysql.repository.AfActionParamEntity
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
 public class MysqlActionParamStorage implements ActionParamStorage {
     @Autowired(required = false)
     private AfActionParamEntityRepository actionParamEntityRepository;

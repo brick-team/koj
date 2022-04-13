@@ -22,7 +22,6 @@ import com.github.brick.action.flow.storage.mysql.repository.AfResultEntityRepos
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
 public class MysqlResultStorage implements ResultStorage {
 
     @Autowired(required = false)

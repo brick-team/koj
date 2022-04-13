@@ -23,7 +23,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface AfParamEntityRepository extends JpaRepository<AfParamEntity, Long>, JpaSpecificationExecutor<AfParamEntity> {
     List<AfParamEntity> findAllByFlowId(long flowId);
 }

@@ -26,21 +26,30 @@ import com.github.brick.action.flow.storage.mysql.nv.context.ActionFlowMySQLStor
 import java.io.Serializable;
 
 public class ActionFlowDbContext extends ActionFlowContent {
-
-
     public ActionFlowDbContext() {
         this.storageType = StorageType.MYSQL;
-        configJpa();
+        configJpa(false);
+        actionExecuteEntityStorage = StorageFactory.factory(this.storageType, ActionExecuteEntityStorage.class);
+        flowExecuteEntityStorage = StorageFactory.factory(this.storageType, FlowExecuteEntityStorage.class);
+       resultExecuteEntityStorage = StorageFactory.factory(this.storageType, ResultExecuteEntityStorage.class);
+    }
+
+    public ActionFlowDbContext(boolean isSpring) {
+        this.storageType = StorageType.MYSQL;
+        configJpa(isSpring);
         actionExecuteEntityStorage = StorageFactory.factory(this.storageType, ActionExecuteEntityStorage.class);
         flowExecuteEntityStorage = StorageFactory.factory(this.storageType, FlowExecuteEntityStorage.class);
         resultExecuteEntityStorage = StorageFactory.factory(this.storageType, ResultExecuteEntityStorage.class);
     }
 
     @Override
-    protected void configJpa() {
-        // TODO: 2022/4/12 通过上下文初始化需要构造 JPA相关对象
-        ActionFlowMySQLStorageContext context = new ActionFlowMySQLStorageContext();
-        context.configJpa();
+    protected void configJpa(boolean spring) {
+        if (!spring) {
+
+            // TODO: 2022/4/12 通过上下文初始化需要构造 JPA相关对象
+            ActionFlowMySQLStorageContext context = new ActionFlowMySQLStorageContext();
+            context.configJpa();
+        }
 
     }
 

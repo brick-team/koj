@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public class MysqlActionStorage implements ActionStorage {
     @Autowired(required = false)
     private AfActionEntityRepository actionEntityRepository;
