@@ -20,7 +20,7 @@ import com.github.brick.action.flow.model.enums.ExtractModel;
 import com.github.brick.action.flow.model.xml.ExtractXML;
 import org.dom4j.Element;
 
-public class ExtractXMLParse implements ParseXML<ExtractXML> {
+public class ExtractXMLParse extends CommonParseAndValidateImpl<ExtractXML> implements ValidateXMLParseData<ExtractXML> {
     private static final String EL_ATTR = "el";
     private static final String EL_TYPE_ATTR = "elType";
     private static final String STEP_ATTR = "step";
@@ -37,8 +37,7 @@ public class ExtractXMLParse implements ParseXML<ExtractXML> {
         String elType = element.attributeValue(EL_TYPE_ATTR);
         if ("".equals(elType) || elType == null) {
             extractXML.setElType(ExtractModel.JSON_PATH);
-        }
-        else {
+        } else {
             extractXML.setElType(ExtractModel.valueOf(elType.toUpperCase()));
         }
         String step = element.attributeValue(STEP_ATTR);
@@ -47,5 +46,13 @@ public class ExtractXMLParse implements ParseXML<ExtractXML> {
         extractXML.setFromAction(fromAction);
 
         return extractXML;
+    }
+
+    @Override
+    public void validate(ExtractXML extractXML) throws IllegalArgumentException {
+        String el = extractXML.getEl();
+        if (el == null || "".equals(el)) {
+            throw new IllegalArgumentException();
+        }
     }
 }

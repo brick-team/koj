@@ -23,10 +23,13 @@ import com.github.brick.action.flow.model.xml.ActionXML;
 import com.github.brick.action.flow.model.xml.ParamXML;
 import org.dom4j.Element;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActionXMLParse implements ParseXML<List<ActionExecuteEntity>> {
+public class ActionXMLParse extends CommonParseAndValidateImpl<List<ActionExecuteEntity>>
+        implements ParseXML<List<ActionExecuteEntity>>, ValidateXMLParseData<List<ActionExecuteEntity>> {
+
     private static final String ACTIONS_NODE = "actions";
     private static final String ACTION_NODE = "action";
     private static final String ID_ATTR = "id";
@@ -51,6 +54,20 @@ public class ActionXMLParse implements ParseXML<List<ActionExecuteEntity>> {
         return result;
     }
 
+    @Override
+    public void validate(List<ActionExecuteEntity> actionExecuteEntities) throws IllegalArgumentException {
+        List<Serializable> actionIds = new ArrayList<>(actionExecuteEntities.size());
+
+        for (ActionExecuteEntity actionExecuteEntity : actionExecuteEntities) {
+            Serializable id = actionExecuteEntity.getId();
+            if (actionIds.contains(id)) {
+                throw new IllegalArgumentException("当前 action id = " + id + " 已存在，请保证唯一!");
+            } else {
+                actionIds.add(id);
+            }
+        }
+    }
+
     private void handlerAction(List<ActionExecuteEntity> result, Element elm) throws Exception {
         ActionXML actionXML = new ActionXML();
         String id = elm.attributeValue(ID_ATTR);
@@ -61,8 +78,7 @@ public class ActionXMLParse implements ParseXML<List<ActionExecuteEntity>> {
 
         if (actionType == ActionType.REST_API) {
             handlerRestApi(elm, actionXML);
-        }
-        else if (actionType == ActionType.JAVA_METHOD) {
+        } else if (actionType == ActionType.JAVA_METHOD) {
             handlerJavaMethod(elm, actionXML);
         }
         result.add(actionXML);

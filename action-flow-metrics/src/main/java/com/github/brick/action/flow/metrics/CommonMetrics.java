@@ -37,11 +37,11 @@ public abstract class CommonMetrics implements Named {
         ActionFlowMetricRegistry.register(name() + "-counter", counter);
     }
 
-    public Object metrics(ActionFlowMetricsBase ActionFlowMetricsBase) {
+    public Object metrics(ActionFlowMetricsBase actionFlowMetricsBase) {
 
         Timer.Context time = timer.time();
         try {
-            return ActionFlowMetricsBase.ex();
+            return actionFlowMetricsBase.ex();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

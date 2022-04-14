@@ -40,6 +40,7 @@ public class ParamXMLForRestApiParse implements ParseXML<ParamXML> {
         ParamXML paramXML = new ParamXML();
 
         ParamExecuteEntity.ForRestApi restApi = new ParamExecuteEntity.ForRestApi();
+        // todo: 参数所在位置枚举转换修正
         restApi.setIn(ParamIn.valueOf(in.toLowerCase()));
         restApi.setName(name);
         restApi.setRequire(Boolean.parseBoolean(require));
