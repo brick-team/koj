@@ -16,6 +16,11 @@
 
 package com.github.brick.action.flow.method.config;
 
+
+/**
+ * action flow version info.
+ * @author Zen Huifer
+ */
 public interface ActionFlowVersion {
     String VERSION = "1.0-SNAPSHOT";
     String AUTHOR = "brick-team";

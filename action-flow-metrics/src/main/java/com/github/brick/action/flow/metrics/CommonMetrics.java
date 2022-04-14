@@ -21,6 +21,7 @@ import com.codahale.metrics.Timer;
 
 /**
  * common metrics
+ * @author Zen Huifer
  */
 public abstract class CommonMetrics implements Named {
 

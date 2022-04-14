@@ -16,6 +16,10 @@
 
 package com.github.brick.action.flow.metrics;
 
+/**
+ * flow metrics.
+ * @author Zen Huifer
+ */
 public class FlowMetricsImpl extends CommonMetrics implements ActionMetrics {
     @Override
     public String name() {

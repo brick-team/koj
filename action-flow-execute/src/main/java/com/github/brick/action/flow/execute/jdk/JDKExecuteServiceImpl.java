@@ -20,6 +20,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ * jdk execute.
+ * @author Zen Huifer
+ */
 public class JDKExecuteServiceImpl implements JDKExecuteService {
     @Override
     public Object execute(String className, String method, String[] methodParamType, Object... args) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {

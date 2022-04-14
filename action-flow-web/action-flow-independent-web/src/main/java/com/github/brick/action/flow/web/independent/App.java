@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.web.independent;
 
-import com.github.brick.action.flow.method.content.ActionFlowDbContext;
+import com.github.brick.action.flow.method.content.ActionFlowDbContent;
 import com.github.brick.action.flow.web.common.config.EnableActionFlowServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,7 +30,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class App {
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(App.class, args);
-        ActionFlowDbContext dbContext = new ActionFlowDbContext();
+        ActionFlowDbContent dbContext = new ActionFlowDbContent();
         System.out.println();
     }
 }

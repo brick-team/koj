@@ -18,6 +18,10 @@ package com.github.brick.action.flow.method.format.num;
 
 import com.github.brick.action.flow.method.format.Format;
 
+/**
+ * string to long .
+ * @author Zen Huifer
+ */
 public class StringToLongFormat implements Format<String> {
     @Override
     public Long format(String s, Class<?> clazz) {

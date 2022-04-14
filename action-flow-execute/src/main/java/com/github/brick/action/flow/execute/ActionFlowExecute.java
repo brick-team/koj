@@ -45,6 +45,10 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * action flow execute.
+ * @author Zen Huifer 
+ */
 public class ActionFlowExecute {
     public static final String DROOL = "$.";
     private static final Logger logger = LoggerFactory.getLogger(ActionFlowExecute.class);

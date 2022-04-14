@@ -19,6 +19,10 @@ package com.github.brick.action.flow.execute.extract;
 import com.github.brick.action.flow.model.enums.ExtractModel;
 import com.github.brick.action.flow.model.ActionFlowFactory;
 
+/**
+ * Extract factory.
+ * @author Zen Huifer
+ */
 public class ExtractActionFlowFactory
         implements ActionFlowFactory<ExtractModel, Extract> {
     @Override

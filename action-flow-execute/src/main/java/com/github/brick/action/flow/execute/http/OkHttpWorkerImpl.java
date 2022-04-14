@@ -23,6 +23,10 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * OKHTTP {@link  HttpWorker}
+ * @author Zen Huifer
+ */
 public class OkHttpWorkerImpl implements HttpWorker {
 
     private static final OkHttpClient okHttpClient = new OkHttpClient().newBuilder()

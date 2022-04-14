@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.core.context;
 
-import com.github.brick.action.flow.method.content.ActionFlowXmlContext;
+import com.github.brick.action.flow.method.content.ActionFlowXmlContent;
 import com.github.brick.action.flow.model.enums.StorageType;
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class ActionFlowContentTest {
     @Test
     public void init() {
 
-        ActionFlowXmlContext content = new ActionFlowXmlContext(StorageType.MEMORY,"flow.xml");
+        ActionFlowXmlContent content = new ActionFlowXmlContent(StorageType.MEMORY,"flow.xml");
         content.execute("flow.xml", "1", "");
 
 

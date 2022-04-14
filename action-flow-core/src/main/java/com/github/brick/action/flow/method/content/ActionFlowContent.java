@@ -37,6 +37,10 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * action flow content.
+ * @author Zen Huifer
+ */
 public abstract class ActionFlowContent {
     private static final Logger logger = LoggerFactory.getLogger(ActionFlowContent.class);
     private final String[] actionFlowFileNames;

@@ -20,6 +20,10 @@ import com.google.gson.Gson;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 
+/**
+ * json path extract.
+ * @author Zen Huifer
+ */
 public class JsonPathExtract implements Extract {
     Gson gson = new Gson();
     @Override

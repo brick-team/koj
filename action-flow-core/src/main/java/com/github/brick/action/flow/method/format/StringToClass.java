@@ -18,6 +18,10 @@ package com.github.brick.action.flow.method.format;
 
 import com.google.gson.Gson;
 
+/**
+ * json string to class.
+ * @author Zen Huifer
+ */
 public class StringToClass implements Format<String> {
     Gson gson = new Gson();
 

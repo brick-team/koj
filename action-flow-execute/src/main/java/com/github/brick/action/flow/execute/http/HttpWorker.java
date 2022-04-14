@@ -19,6 +19,10 @@ package com.github.brick.action.flow.execute.http;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * http worker.
+ * @author Zen Huifer
+ */
 public interface HttpWorker {
 
     /**

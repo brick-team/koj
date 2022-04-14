@@ -31,6 +31,10 @@ import com.github.brick.action.flow.storage.mysql.ResultExecuteEntityMySqlStorag
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * storage factory.
+ * @author Zen Huifer
+ */
 public final class StorageFactory {
     private static final Map<Class<?>, ActionFlowStorageFactory<?>> map = new HashMap<>(8);
 

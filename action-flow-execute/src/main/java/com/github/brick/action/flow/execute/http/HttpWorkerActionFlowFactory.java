@@ -19,6 +19,10 @@ package com.github.brick.action.flow.execute.http;
 import com.github.brick.action.flow.model.enums.HttpClientType;
 import com.github.brick.action.flow.model.ActionFlowFactory;
 
+/**
+ * {@link  HttpWorker} factory.
+ * @author Zen Huifer
+ */
 public class HttpWorkerActionFlowFactory implements ActionFlowFactory<HttpClientType, HttpWorker> {
     @Override
     public HttpWorker factory(HttpClientType type) {

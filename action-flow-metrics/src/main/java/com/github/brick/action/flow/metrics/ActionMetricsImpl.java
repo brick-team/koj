@@ -16,6 +16,10 @@
 
 package com.github.brick.action.flow.metrics;
 
+/**
+ * action metrics.
+ * @author Zen Huifer
+ */
 public class ActionMetricsImpl
         extends CommonMetrics
         implements ActionMetrics {

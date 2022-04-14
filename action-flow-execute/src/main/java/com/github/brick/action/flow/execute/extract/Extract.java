@@ -16,6 +16,10 @@
 
 package com.github.brick.action.flow.execute.extract;
 
+/**
+ * Extract.
+ * @author Zen Huifer
+ */
 public interface Extract {
     Object extract(Object o, String el);
 

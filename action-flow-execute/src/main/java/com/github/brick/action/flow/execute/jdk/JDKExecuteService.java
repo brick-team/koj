@@ -20,7 +20,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- *
+ * jdk execute.
+ * @author Zen Huifer
  */
 public interface JDKExecuteService {
     Object execute(String className, String method, String [] methodParamType, Object... args) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException;

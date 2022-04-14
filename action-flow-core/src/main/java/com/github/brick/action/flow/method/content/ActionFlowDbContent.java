@@ -25,8 +25,12 @@ import com.github.brick.action.flow.storage.mysql.context.ActionFlowMySQLStorage
 
 import java.io.Serializable;
 
-public class ActionFlowDbContext extends ActionFlowContent {
-    public ActionFlowDbContext() {
+/**
+ * action flo db content
+ * @author Zen Huifer
+ */
+public class ActionFlowDbContent extends ActionFlowContent {
+    public ActionFlowDbContent() {
         this.storageType = StorageType.MYSQL;
         configJpa();
         actionExecuteEntityStorage = StorageFactory.factory(this.storageType, ActionExecuteEntityStorage.class);

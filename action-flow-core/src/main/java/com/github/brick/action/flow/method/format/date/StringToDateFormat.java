@@ -20,6 +20,10 @@ import com.github.brick.action.flow.method.format.Format;
 
 import java.util.Date;
 
+/**
+ * string to date.
+ * @author Zen Huifer
+ */
 public class StringToDateFormat implements Format<String> {
     @Override
     public Date format(String s, Class<?> clazz) {

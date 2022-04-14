@@ -27,7 +27,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * 类搜索器
+ * class search.
+ * @author Zen Huifer
  */
 public class ClazzSearch {
     private static final String CLASS_SUFFIX = ".class";

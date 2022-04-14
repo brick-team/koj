@@ -16,6 +16,11 @@
 
 package com.github.brick.action.flow.method.format;
 
+/**
+ * format interface
+ * @param <S> source type
+ * @author Zen Huifer
+ */
 public interface Format<S> {
     Object format(S s, Class<?> clazz);
 }
