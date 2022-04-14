@@ -17,9 +17,10 @@
 package com.github.brick.action.flow.web.common.security;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-
+@WebFilter
 public class ActionFlowSecurityFilter implements Filter {
 
 

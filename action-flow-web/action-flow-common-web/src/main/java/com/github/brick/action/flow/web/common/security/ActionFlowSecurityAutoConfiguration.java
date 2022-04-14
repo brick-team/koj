@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Component;
  * action flow 安全相关配置
  */
 @Configuration(proxyBeanMethods = false)
+@ServletComponentScan
 @ConditionalOnProperty(value = "action-flow.security.enable", matchIfMissing = false)
 public class ActionFlowSecurityAutoConfiguration {
     public static final String ACTION_FLOW_URL_PRE = "/brick/action_flow/";
@@ -45,7 +47,7 @@ public class ActionFlowSecurityAutoConfiguration {
     public FilterRegistrationBean<ActionFlowSecurityFilter> getFilterRegistrationBean() {
         logger.debug("注册 Action Flow 安全过滤器");
         FilterRegistrationBean<ActionFlowSecurityFilter> bean = new FilterRegistrationBean(new ActionFlowSecurityFilter());
-        bean.addUrlPatterns(servletContextPath + ACTION_FLOW_URL_PRE);
+        bean.addUrlPatterns(servletContextPath + ACTION_FLOW_URL_PRE + "/**");
         return bean;
     }
 
