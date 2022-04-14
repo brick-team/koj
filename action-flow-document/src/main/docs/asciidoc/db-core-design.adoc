@@ -8,3 +8,201 @@
 :toc-title: Action Flow 数据库设计说明目录
 
 作者:  https://github.com/brick-team[brick-team]
+
+== MySQL 设计
+
+MySQL 设计基于 xref:xml-core-design.adoc#xml-design-notes[Action Flow XML 设计说明] 进行。MySQL 设计将 Action Flow 分为两部分： . 候选配置: 候选配置用于存储 REST_API ， Java_Method ， 取值表达式相关内容，为运行时配置提供基础数据。 . 运行时配置: 运行时配置用于存储 flow 执行期间所需信息。例如工作流程，结果信息，工作期间取值信息。
+
+=== 候选配置
+
+本节将对候选配置进行设计说明，根据前文所述候选配置应当有 REST_API 相关信息、Java_Method、取值表达式相关信息。下面先进行 Action 相关设计。
+
+[source,sql]
+----
+CREATE TABLE `action` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `type` int DEFAULT NULL COMMENT '1:rest_api,2:java_method',
+  `url` varchar(255) DEFAULT NULL COMMENT 'type=1时表示HTTP请求地址',
+  `method` varchar(255) DEFAULT NULL COMMENT 'type=1时表示HTTP请求方式(POST\\GET\\DELETE\\PUT)\r\ntype=2时表示java函数名称',
+  `class_name` varchar(255) DEFAULT NULL COMMENT 'type=2时表示需要执行的类全路径',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+----
+
+表 action 和 XML 模式下的 action 标签直接映射，含义相同，接下来是 action 下的两种参数信息，REST_API 对应的参数表设计如下:
+
+[source,sql]
+----
+CREATE TABLE `rest_api_param` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `action_id` int DEFAULT NULL,
+  `in` varchar(255) DEFAULT NULL COMMENT '参数所在位置',
+  `name` varchar(255) DEFAULT NULL COMMENT '参数名称',
+  `require` tinyint DEFAULT NULL COMMENT '是否必填',
+  `value` varchar(255) DEFAULT NULL COMMENT '默认值',
+  `pid` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+----
+
+JAVA_METHOD 对应的参数表设计如下:
+
+[source,sql]
+----
+CREATE TABLE `java_method_param` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `action_id` int DEFAULT NULL,
+  `index` varchar(255) DEFAULT NULL COMMENT '参数索引，从0开始计数',
+  `type` varchar(255) DEFAULT NULL COMMENT '参数类型，类全路径',
+  `name` varchar(255) DEFAULT NULL COMMENT '参数名称',
+  `value` varchar(255) DEFAULT NULL COMMENT '默认值',
+  `pid` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+----
+
+在这个设计中并未将 XML 模式中 param 的下级标签 extract 与参数表直接绑定，这类 extract 标签认为是运行时配置会交给执行器相关配置进行设置。
+
+=== 运行时配置
+
+运行时配置主要围绕 flow 标签进行设计，flow 标签对应的数据表结构如下：
+
+[source,sql]
+----
+CREATE TABLE `flow` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL COMMENT '工作流名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+----
+
+flow 标签下还存在 work 标签和 watcher 标签以及watcher从属的 cat标签和 then标签，结构设计如下
+
+[source,sql]
+----
+CREATE TABLE `flow_work` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `flow_id` int DEFAULT NULL,
+    `step` varchar(255) DEFAULT NULL,
+    `ref_id` int default  null,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `flow_watcher` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `flow_work_id` int DEFAULT NULL,
+    `condition` varchar(255) DEFAULT NULL,
+    `el_type` varchar(255) DEFAULT NULL,
+    `then_or_cat` varchar(255) DEFAULT NULL,
+    `next_flow_work_id` int  DEFAULT NULL COMMENT '指向flow_work表的id',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+----
+
+测试数据
+[source,xml]
+----
+    <flows>
+        <flow id="1">
+            <work step="1" ref_id="rest_api_1">
+                <watcher condition="($.age>10)" elType="">
+                    <then>
+                        <work step="2" ref_id="java_method_1">
+                            <watcher condition="true">
+                                <then>
+                                    <work step="6" ref_id="java_method_1"/>
+
+                                </then>
+                            </watcher>
+                        </work>
+                        <work step="3" ref_id="java_method_1"/>
+                    </then>
+                    <cat>
+                        <work step="4" ref_id="java_method_1"/>
+                        <work step="5" ref_id="java_method_1"/>
+                    </cat>
+                </watcher>
+            </work>
+        </flow>
+    </flows>
+
+----
+
+|===
+|id |flow_id |step |ref_id
+
+|1
+|1
+|step1
+|rest_api_1
+
+|2
+|1
+|step2
+|java_method_1
+
+|3
+|1
+|step3
+|java_method_1
+
+
+|4
+|1
+|step4
+|java_method_1
+
+|5
+|1
+|step5
+|java_method_1
+
+|6
+|1
+|step6
+|java_method_1
+|===
+
+
+|===
+|id |flow_work_id |condition |el_type |then_or_cat |next_flow_work_id
+
+|1
+|1
+|($.age>10)
+|JSON_PATH
+|then
+|2
+
+|2
+|1
+|($.age>10)
+|JSON_PATH
+|then
+|3
+
+|4
+|1
+|($.age>10)
+|JSON_PATH
+|cat
+|4
+
+|5
+|1
+|($.age>10)
+|JSON_PATH
+|cat
+|5
+
+
+|6
+|2
+|true
+|JSON_PATH
+|then
+|6
+
+|===

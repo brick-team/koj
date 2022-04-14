@@ -77,7 +77,6 @@ CREATE TABLE `flow_works_param`  (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `flow_works_watcher`  ();
 
 CREATE TABLE `java_method_param`  (
   `id` int NOT NULL AUTO_INCREMENT,

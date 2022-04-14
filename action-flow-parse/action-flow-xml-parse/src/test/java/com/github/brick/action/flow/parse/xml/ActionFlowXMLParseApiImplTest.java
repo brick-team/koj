@@ -18,14 +18,15 @@ package com.github.brick.action.flow.parse.xml;
 
 import com.github.brick.action.flow.model.xml.ActionFlowXML;
 import com.github.brick.action.flow.parse.api.ActionFlowXMLParseApi;
+import com.google.gson.Gson;
 import org.junit.Test;
 
 public class ActionFlowXMLParseApiImplTest extends XMLParseCommonTest{
     ActionFlowXMLParseApi parseApi = new ActionFlowXMLParseApiImpl();
-
+    Gson gson = new Gson();
     @Test
     public void parse() throws Exception {
         ActionFlowXML parse = parseApi.parseFile(FILE_PATH);
-        System.out.println();
+        System.out.println(gson.toJson(parse));
     }
 }
