@@ -16,7 +16,7 @@
   ~    limitations under the License.
   -->
 
-<action-flow>
+<action-flow xmlns="http://www.github.com/brick-team/action-flow">
     <actions>
         <action id="rest_api_1" type="rest_api" url="" method="">
             <param in="body" name="" require="true" value="">
@@ -80,7 +80,19 @@
             <work step="1" ref_id="rest_api_1">
                 <watcher condition="($.age>10)" elType="">
                     <then>
-                        <work step="2" ref_id="java_method_1"/>
+                        <work step="2" ref_id="java_method_1">
+                            <watcher condition="($.age>10)" elType="">
+                                <then>
+                                    <work step="2" ref_id="java_method_1"/>
+                                    <work step="3" ref_id="java_method_1"/>
+                                </then>
+                                <cat>
+                                    <work step="4" ref_id="java_method_1"/>
+                                    <work step="5" ref_id="java_method_1"/>
+                                </cat>
+                            </watcher>
+
+                        </work>
                         <work step="3" ref_id="java_method_1"/>
                     </then>
                     <cat>

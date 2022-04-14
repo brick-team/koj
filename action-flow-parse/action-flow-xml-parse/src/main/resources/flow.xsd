@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           targetNamespace="http://www.github.com/brick-team/action-flow" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="extract">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="fromAction" use="optional"/>
+          <xs:attribute type="xs:string" name="el" use="required"/>
+          <xs:attribute type="xs:string" name="elType" use="optional" default="json_path"/>
+          <xs:attribute type="xs:string" name="step" use="optional"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="param">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element ref="act:extract" minOccurs="0" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="in" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="body"/>
+            <xs:enumeration value="path"/>
+            <xs:enumeration value="form_data"/>
+            <xs:enumeration value="header"/>
+            <xs:enumeration value="query"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute type="xs:string" name="name" use="optional"/>
+      <xs:attribute type="xs:string" name="require" use="optional"/>
+      <xs:attribute type="xs:string" name="value" use="optional"/>
+      <xs:attribute type="xs:string" name="index" use="optional"/>
+      <xs:attribute type="xs:string" name="type" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="action">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:param" maxOccurs="unbounded" minOccurs="0"
+                    xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="id" use="required"/>
+      <xs:attribute type="xs:string" name="type" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="rest_api"/>
+            <xs:enumeration value="java_method"/>
+          </xs:restriction>
+        </xs:simpleType>
+
+      </xs:attribute>
+      <xs:attribute type="xs:string" name="url" use="optional"/>
+      <xs:attribute type="xs:string" name="method" use="optional"/>
+      <xs:attribute type="xs:string" name="className" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="fieldName">
+  </xs:element>
+  <xs:element name="type">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="String"/>
+        <xs:enumeration value="Integer"/>
+        <xs:enumeration value="Number"/>
+        <xs:enumeration value="object"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="field">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:fieldName" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+        <xs:element ref="act:type" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+        <xs:element ref="act:extract" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+        <xs:element ref="act:properties" minOccurs="0"
+                    xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="id" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="fields">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:field" maxOccurs="unbounded" minOccurs="0"
+                    xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="properties">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:fields" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="result">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:fields" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="flowId" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="work">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element ref="act:watcher" minOccurs="0" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="step" use="required"/>
+      <xs:attribute type="xs:string" name="ref_id" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="then">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:work" maxOccurs="unbounded" minOccurs="0"
+                    xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cat">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:work" maxOccurs="unbounded" minOccurs="0"
+                    xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="watcher">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:then" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+        <xs:element ref="act:cat" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="condition" use="required"/>
+      <xs:attribute type="xs:string" name="elType" use="optional" default="json_path"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="flow">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:work" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="id" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="actions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:action" maxOccurs="unbounded" minOccurs="0"
+                    xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="results">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:result" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="flows">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:flow" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="action-flow">
+    <xs:annotation>
+      <xs:documentation>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="act:actions" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+        <xs:element ref="act:results" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+        <xs:element ref="act:flows" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
