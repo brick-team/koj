@@ -17,6 +17,7 @@
 package com.github.brick.action.flow.web.common.ctr;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 /**
  * action flow 控制器配置

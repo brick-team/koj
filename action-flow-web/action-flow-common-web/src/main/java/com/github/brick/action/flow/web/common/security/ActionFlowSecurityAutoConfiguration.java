@@ -18,14 +18,18 @@ package com.github.brick.action.flow.web.common.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * action flow 安全相关配置
  */
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(value = "action-flow.security.enable", matchIfMissing = false)
 public class ActionFlowSecurityAutoConfiguration {
     public static final String ACTION_FLOW_URL_PRE = "/brick/action_flow/";
