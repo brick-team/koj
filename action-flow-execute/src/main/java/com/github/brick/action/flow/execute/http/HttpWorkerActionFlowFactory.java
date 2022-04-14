@@ -16,9 +16,7 @@
 
 package com.github.brick.action.flow.execute.http;
 
-import com.github.brick.action.flow.execute.http.HttpWorker;
-import com.github.brick.action.flow.execute.http.OkHttpWorkerImpl;
-import com.github.brick.action.flow.method.enums.HttpClientType;
+import com.github.brick.action.flow.model.enums.HttpClientType;
 import com.github.brick.action.flow.model.ActionFlowFactory;
 
 public class HttpWorkerActionFlowFactory implements ActionFlowFactory<HttpClientType, HttpWorker> {

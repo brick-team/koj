@@ -14,36 +14,22 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.execute;
+package com.github.brick.action.flow.storage.mysql;
 
-import com.github.brick.action.flow.model.enums.ActionType;
-import lombok.Data;
+import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
+import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
 
 import java.io.Serializable;
 import java.util.List;
 
-@Data
-public abstract class ActionExecuteEntity {
+public class FlowExecuteEntityMySqlStorage implements FlowExecuteEntityStorage {
 
-    private ActionType type;
-    private ForRestApi restApi;
-    private ForJavaMethod javaMethod;
-
-    @Data
-    public static class ForRestApi {
-        private String url;
-        private String method;
-        private List<ParamExecuteEntity> param;
+    @Override
+    public void save(String fileName, List<FlowExecuteEntity> flows) {
     }
 
-    public abstract Serializable getId();
-
-
-    @Data
-    public static class ForJavaMethod {
-        private String className;
-        private String method;
-        private List<ParamExecuteEntity> param;
-
+    @Override
+    public FlowExecuteEntity getFlow(String fileName, Serializable flowId) {
+        return null;
     }
 }

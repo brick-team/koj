@@ -16,8 +16,7 @@
 
 package com.github.brick.action.flow.web.common.config;
 
-import com.github.brick.action.flow.method.enums.StorageType;
-import com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageConfig;
+import com.github.brick.action.flow.model.enums.StorageType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**

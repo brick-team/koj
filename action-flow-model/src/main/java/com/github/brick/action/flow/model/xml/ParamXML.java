@@ -16,9 +16,7 @@
 
 package com.github.brick.action.flow.model.xml;
 
-import com.github.brick.action.flow.method.entity.api.ParamIn;
 import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
-import lombok.Data;
 
 public class ParamXML extends ParamExecuteEntity {
 }

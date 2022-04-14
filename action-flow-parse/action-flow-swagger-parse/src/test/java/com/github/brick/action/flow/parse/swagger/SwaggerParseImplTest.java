@@ -16,8 +16,8 @@
 
 package com.github.brick.action.flow.parse.swagger;
 
-import com.github.brick.action.flow.method.entity.api.ApiEntity;
-import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
+import com.github.brick.action.flow.model.swagger.ApiEntity;
+import com.github.brick.action.flow.model.swagger.ApiParamEntity;
 import com.google.gson.Gson;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;

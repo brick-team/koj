@@ -16,12 +16,12 @@
 
 package com.github.brick.action.flow.method.content;
 
-import com.github.brick.action.flow.method.enums.StorageType;
+import com.github.brick.action.flow.model.enums.StorageType;
 import com.github.brick.action.flow.method.factory.storage.StorageFactory;
-import com.github.brick.action.flow.storage.api.nv.ActionExecuteEntityStorage;
-import com.github.brick.action.flow.storage.api.nv.FlowExecuteEntityStorage;
-import com.github.brick.action.flow.storage.api.nv.ResultExecuteEntityStorage;
-import com.github.brick.action.flow.storage.mysql.nv.context.ActionFlowMySQLStorageContext;
+import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
+import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
+import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
+import com.github.brick.action.flow.storage.mysql.context.ActionFlowMySQLStorageContext;
 
 import java.io.Serializable;
 

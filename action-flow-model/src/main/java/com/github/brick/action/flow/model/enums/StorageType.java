@@ -14,11 +14,16 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model;
+package com.github.brick.action.flow.model.enums;
 
-public interface ActionFlowFactory<Type extends com.github.brick.action.flow.model.enums.Type, T> {
+public enum StorageType implements Type {
 
+    MEMORY, MYSQL,
+    ;
 
-    T factory(Type type);
+    @Override
+    public String type() {
+        return name();
+    }
 
 }

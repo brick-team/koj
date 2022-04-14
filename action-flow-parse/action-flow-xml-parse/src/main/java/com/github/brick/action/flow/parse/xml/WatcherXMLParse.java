@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.parse.xml;
 
-import com.github.brick.action.flow.method.enums.ExtractModel;
+import com.github.brick.action.flow.model.enums.ExtractModel;
 import com.github.brick.action.flow.model.xml.WatcherXML;
 import org.dom4j.Element;
 

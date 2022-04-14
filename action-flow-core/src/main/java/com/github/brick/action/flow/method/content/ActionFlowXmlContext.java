@@ -17,7 +17,7 @@
 package com.github.brick.action.flow.method.content;
 
 import com.github.brick.action.flow.execute.ActionFlowExecute;
-import com.github.brick.action.flow.method.enums.StorageType;
+import com.github.brick.action.flow.model.enums.StorageType;
 
 public class ActionFlowXmlContext extends ActionFlowContent {
     public ActionFlowXmlContext(StorageType storageType, String... actionFiles) {

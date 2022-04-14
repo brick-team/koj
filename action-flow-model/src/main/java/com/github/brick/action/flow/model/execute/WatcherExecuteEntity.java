@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.model.execute;
 
-import com.github.brick.action.flow.method.enums.ExtractModel;
+import com.github.brick.action.flow.model.enums.ExtractModel;
 import lombok.Data;
 
 import java.util.List;

@@ -16,8 +16,8 @@
 
 package com.github.brick.action.flow.parse.swagger;
 
-import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
-import com.github.brick.action.flow.method.entity.api.ParamIn;
+import com.github.brick.action.flow.model.enums.ParamIn;
+import com.github.brick.action.flow.model.swagger.ApiParamEntity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.junit.Before;

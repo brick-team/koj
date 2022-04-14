@@ -14,11 +14,18 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model;
+package com.github.brick.action.flow.model.enums;
 
-public interface ActionFlowFactory<Type extends com.github.brick.action.flow.model.enums.Type, T> {
+import lombok.Getter;
 
+@Getter
+public enum ActionType implements Type {
+    REST_API,
+    JAVA_METHOD,
+    ;
 
-    T factory(Type type);
-
+    @Override
+    public String type() {
+        return name();
+    }
 }

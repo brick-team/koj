@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.web.common.ctr;
 
-import com.github.brick.action.flow.method.entity.api.ApiEntity;
+import com.github.brick.action.flow.model.swagger.ApiEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

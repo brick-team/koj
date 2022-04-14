@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.execute;
+package com.github.brick.action.flow.model.swagger;
 
 import com.github.brick.action.flow.model.enums.ParamIn;
 import lombok.Data;
@@ -22,35 +22,24 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ParamExecuteEntity {
-
-    private ForRestApi restApi;
-    private ForJavaMethod javaMethod;
-
-    @Data
-    public static class ForRestApi {
-        private ParamIn in;
-        private String name;
-        private boolean require;
-        private String value;
-        private ExtractExecuteEntity extract;
-
-        private List<ForRestApi> restApis;
-
-    }
-
-    @Data
-    public static class ForJavaMethod {
-
-        private Integer index;
-        private String type;
-        private String name;
-        private String value;
-        private ExtractExecuteEntity extract;
-
-        private List<ForJavaMethod> restApis;
+public class ApiParamEntity {
+    private String flag;
+    private ParamIn in;
+    private String name;
+    private boolean require;
+    private String type;
+    private Long id;
 
 
-    }
+    private List<ApiParamEntity> paramEntities;
+    private String el;
+
+
+    /**
+     * 取值用
+     **/
+    private String paramGroup;
+    private String ex;
+    private String exId;
 
 }

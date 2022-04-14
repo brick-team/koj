@@ -14,36 +14,15 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.execute;
+package com.github.brick.action.flow.storage.api;
 
-import com.github.brick.action.flow.model.enums.ActionType;
-import lombok.Data;
+import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
 
 import java.io.Serializable;
 import java.util.List;
 
-@Data
-public abstract class ActionExecuteEntity {
+public interface FlowExecuteEntityStorage {
+    void save(String fileName, List<FlowExecuteEntity> flows);
 
-    private ActionType type;
-    private ForRestApi restApi;
-    private ForJavaMethod javaMethod;
-
-    @Data
-    public static class ForRestApi {
-        private String url;
-        private String method;
-        private List<ParamExecuteEntity> param;
-    }
-
-    public abstract Serializable getId();
-
-
-    @Data
-    public static class ForJavaMethod {
-        private String className;
-        private String method;
-        private List<ParamExecuteEntity> param;
-
-    }
+    FlowExecuteEntity getFlow(String fileName, Serializable flowId);
 }

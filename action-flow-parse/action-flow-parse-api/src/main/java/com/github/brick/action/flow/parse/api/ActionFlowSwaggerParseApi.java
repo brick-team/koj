@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.parse.api;
 
-import com.github.brick.action.flow.method.entity.api.ApiEntity;
+import com.github.brick.action.flow.model.swagger.ApiEntity;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ public interface ActionFlowSwaggerParseApi extends ActionFlowParseApi<List<ApiEn
 
     /**
      * 解析 swagger 文件符串
+     *
      * @param swaggerData swagger 字符串
      * @return 解析结果
      */
@@ -31,6 +32,7 @@ public interface ActionFlowSwaggerParseApi extends ActionFlowParseApi<List<ApiEn
 
     /**
      * 解析本地 swagger 文件
+     *
      * @param filePath swagger 文件地址
      * @return 解析结果
      */
@@ -38,6 +40,7 @@ public interface ActionFlowSwaggerParseApi extends ActionFlowParseApi<List<ApiEn
 
     /**
      * 解析 swagger url
+     *
      * @param url swagger url
      * @return 解析结果
      */

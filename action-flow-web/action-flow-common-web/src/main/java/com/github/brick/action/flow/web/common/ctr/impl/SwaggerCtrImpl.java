@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.web.common.ctr.impl;
 
-import com.github.brick.action.flow.method.entity.api.ApiEntity;
+import com.github.brick.action.flow.model.swagger.ApiEntity;
 import com.github.brick.action.flow.parse.api.ActionFlowSwaggerParseApi;
 import com.github.brick.action.flow.parse.swagger.SwaggerParseImpl;
 import com.github.brick.action.flow.web.common.ctr.SwaggerCtr;

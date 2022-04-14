@@ -17,7 +17,7 @@
 package com.github.brick.action.flow.storage.memory.nv;
 
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
-import com.github.brick.action.flow.storage.api.nv.ActionExecuteEntityStorage;
+import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 
 import java.io.Serializable;
 import java.util.HashMap;

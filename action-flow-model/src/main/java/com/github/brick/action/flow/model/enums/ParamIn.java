@@ -14,11 +14,8 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model;
+package com.github.brick.action.flow.model.enums;
 
-public interface ActionFlowFactory<Type extends com.github.brick.action.flow.model.enums.Type, T> {
-
-
-    T factory(Type type);
-
+public enum ParamIn {
+    body, path, formdata, header, query,formData
 }

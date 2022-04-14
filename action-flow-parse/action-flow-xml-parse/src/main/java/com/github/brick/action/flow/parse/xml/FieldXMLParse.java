@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.parse.xml;
 
-import com.github.brick.action.flow.method.enums.FieldType;
+import com.github.brick.action.flow.model.enums.FieldType;
 import com.github.brick.action.flow.model.execute.FieldExecuteEntity;
 import com.github.brick.action.flow.model.xml.ExtractXML;
 import com.github.brick.action.flow.model.xml.FieldXML;

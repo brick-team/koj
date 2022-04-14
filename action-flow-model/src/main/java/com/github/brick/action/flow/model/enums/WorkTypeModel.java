@@ -14,11 +14,26 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model;
+package com.github.brick.action.flow.model.enums;
 
-public interface ActionFlowFactory<Type extends com.github.brick.action.flow.model.enums.Type, T> {
+/**
+ * work节点类型
+ */
+public enum WorkTypeModel implements Type {
 
+    /**
+     * 动作
+     */
+    ACTION(),
+    /**
+     * 监控
+     */
+    WATCHER(),
+    API(),
+    ;
 
-    T factory(Type type);
-
+    @Override
+    public String type() {
+        return name();
+    }
 }

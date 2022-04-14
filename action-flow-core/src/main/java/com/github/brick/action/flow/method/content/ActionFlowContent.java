@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.method.content;
 
-import com.github.brick.action.flow.method.enums.StorageType;
+import com.github.brick.action.flow.model.enums.StorageType;
 import com.github.brick.action.flow.method.factory.storage.StorageFactory;
 import com.github.brick.action.flow.metrics.ActionFlowMetricRegistry;
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
@@ -25,9 +25,9 @@ import com.github.brick.action.flow.model.execute.ResultExecuteEntity;
 import com.github.brick.action.flow.model.xml.ActionFlowXML;
 import com.github.brick.action.flow.parse.api.ActionFlowXMLParseApi;
 import com.github.brick.action.flow.parse.xml.ActionFlowXMLParseApiImpl;
-import com.github.brick.action.flow.storage.api.nv.ActionExecuteEntityStorage;
-import com.github.brick.action.flow.storage.api.nv.FlowExecuteEntityStorage;
-import com.github.brick.action.flow.storage.api.nv.ResultExecuteEntityStorage;
+import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
+import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
+import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;

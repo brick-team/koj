@@ -18,7 +18,7 @@ package com.github.brick.action.flow.metrics;
 
 /**
  * action flow metrics named
- * @author huifer
+ * @author Zen Zen Huifer
  */
 public interface Named {
      /**

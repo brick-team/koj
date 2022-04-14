@@ -16,9 +16,9 @@
 
 package com.github.brick.action.flow.parse.swagger;
 
-import com.github.brick.action.flow.method.entity.api.ApiEntity;
-import com.github.brick.action.flow.method.entity.api.ApiParamEntity;
-import com.github.brick.action.flow.method.entity.api.ParamIn;
+import com.github.brick.action.flow.model.enums.ParamIn;
+import com.github.brick.action.flow.model.swagger.ApiEntity;
+import com.github.brick.action.flow.model.swagger.ApiParamEntity;
 import io.swagger.models.*;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.FormParameter;
@@ -36,11 +36,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SwaggerParseImpl implements SwaggerParse {
-    public static void main(String[] args) {
-        SwaggerParser sw = new SwaggerParser();
-        Swagger read = sw.read("https://petstore.swagger.io/v2/swagger.json");
-        System.out.println();
-    }
 
 
     private List<ApiParamEntity> handlerParamEntity(Operation operation, Map<String, Model> modelMap) {

@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.parse.xml;
 
-import com.github.brick.action.flow.method.enums.ActionType;
+import com.github.brick.action.flow.model.enums.ActionType;
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
 import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
 import com.github.brick.action.flow.model.xml.ActionXML;

@@ -36,7 +36,7 @@
     },
     {
       "name": "action-flow.storage.type",
-      "type": "com.github.brick.action.flow.method.enums.StorageType",
+      "type": "com.github.brick.action.flow.model.enums.StorageType",
       "description": "存储类型",
       "sourceType": "com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageConfig",
       "defaultValue": "mysql"

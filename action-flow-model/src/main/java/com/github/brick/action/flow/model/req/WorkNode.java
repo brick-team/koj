@@ -14,36 +14,29 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.execute;
+package com.github.brick.action.flow.model.req;
 
-import com.github.brick.action.flow.model.enums.ActionType;
 import lombok.Data;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 工作节点
+ */
 @Data
-public abstract class ActionExecuteEntity {
+public class WorkNode {
 
-    private ActionType type;
-    private ForRestApi restApi;
-    private ForJavaMethod javaMethod;
+    private Long id;
+    private String type;
+    private Long refId;
+    /**
+     * 执行成功后
+     */
+    private List<WorkNode> then = new ArrayList<>();
+    /**
+     * 执行失败后
+     */
+    private List<WorkNode> cat = new ArrayList<>();
 
-    @Data
-    public static class ForRestApi {
-        private String url;
-        private String method;
-        private List<ParamExecuteEntity> param;
-    }
-
-    public abstract Serializable getId();
-
-
-    @Data
-    public static class ForJavaMethod {
-        private String className;
-        private String method;
-        private List<ParamExecuteEntity> param;
-
-    }
 }

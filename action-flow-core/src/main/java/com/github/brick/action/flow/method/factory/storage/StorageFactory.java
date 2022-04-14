@@ -16,17 +16,17 @@
 
 package com.github.brick.action.flow.method.factory.storage;
 
-import com.github.brick.action.flow.method.enums.StorageType;
+import com.github.brick.action.flow.model.enums.StorageType;
 import com.github.brick.action.flow.model.ActionFlowFactory;
-import com.github.brick.action.flow.storage.api.nv.ActionExecuteEntityStorage;
-import com.github.brick.action.flow.storage.api.nv.FlowExecuteEntityStorage;
-import com.github.brick.action.flow.storage.api.nv.ResultExecuteEntityStorage;
+import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
+import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
+import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
 import com.github.brick.action.flow.storage.memory.nv.ActionExecuteEntityMemoryStorage;
 import com.github.brick.action.flow.storage.memory.nv.FlowExecuteEntityMemoryStorage;
 import com.github.brick.action.flow.storage.memory.nv.ResultExecuteEntityMemoryStorage;
-import com.github.brick.action.flow.storage.mysql.nv.ActionExecuteEntityMySqlStorage;
-import com.github.brick.action.flow.storage.mysql.nv.FlowExecuteEntityMySqlStorage;
-import com.github.brick.action.flow.storage.mysql.nv.ResultExecuteEntityMySqlStorage;
+import com.github.brick.action.flow.storage.mysql.ActionExecuteEntityMySqlStorage;
+import com.github.brick.action.flow.storage.mysql.FlowExecuteEntityMySqlStorage;
+import com.github.brick.action.flow.storage.mysql.ResultExecuteEntityMySqlStorage;
 
 import java.util.HashMap;
 import java.util.Map;

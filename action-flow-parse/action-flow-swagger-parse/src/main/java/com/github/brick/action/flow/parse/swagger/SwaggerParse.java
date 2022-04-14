@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.parse.swagger;
 
-import com.github.brick.action.flow.method.entity.api.ApiEntity;
+import com.github.brick.action.flow.model.swagger.ApiEntity;
 import com.github.brick.action.flow.parse.api.ActionFlowSwaggerParseApi;
 
 import java.util.List;

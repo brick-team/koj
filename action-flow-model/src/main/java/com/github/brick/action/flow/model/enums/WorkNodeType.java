@@ -14,11 +14,31 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model;
+package com.github.brick.action.flow.model.enums;
 
-public interface ActionFlowFactory<Type extends com.github.brick.action.flow.model.enums.Type, T> {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+/**
+ * 工作节点类型
+ */
+@AllArgsConstructor
+@Getter
+public enum WorkNodeType {
+    /**
+     * 开始节点
+     */
+    START(1L),
+    /**
+     * 成功节点
+     */
+    THEN(2L),
 
-    T factory(Type type);
+    /**
+     * 失败节点
+     */
+    CAT(3L),
+    ;
+    private Long id;
 
 }

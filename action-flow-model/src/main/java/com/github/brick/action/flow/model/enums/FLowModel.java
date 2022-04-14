@@ -14,11 +14,14 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model;
+package com.github.brick.action.flow.model.enums;
 
-public interface ActionFlowFactory<Type extends com.github.brick.action.flow.model.enums.Type, T> {
+public enum FLowModel implements Type {
+    XML,
+    ;
 
-
-    T factory(Type type);
-
+    @Override
+    public String type() {
+        return name();
+    }
 }

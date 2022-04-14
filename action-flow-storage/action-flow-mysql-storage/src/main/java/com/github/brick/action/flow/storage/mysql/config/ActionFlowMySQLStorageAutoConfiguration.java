@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.storage.mysql.config;
 
-import com.github.brick.action.flow.storage.mysql.nv.context.ActionFlowMySQLStorageContext;
+import com.github.brick.action.flow.storage.mysql.context.ActionFlowMySQLStorageContext;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;

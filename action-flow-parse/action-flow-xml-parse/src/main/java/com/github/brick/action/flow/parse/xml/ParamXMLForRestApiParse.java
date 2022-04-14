@@ -16,7 +16,7 @@
 
 package com.github.brick.action.flow.parse.xml;
 
-import com.github.brick.action.flow.method.entity.api.ParamIn;
+import com.github.brick.action.flow.model.enums.ParamIn;
 import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
 import com.github.brick.action.flow.model.xml.ExtractXML;
 import com.github.brick.action.flow.model.xml.ParamXML;
