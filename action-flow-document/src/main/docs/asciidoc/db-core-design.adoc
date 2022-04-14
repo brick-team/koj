@@ -85,6 +85,7 @@ CREATE TABLE `flow_work` (
     `flow_id` int DEFAULT NULL,
     `step` varchar(255) DEFAULT NULL,
     `ref_id` int default  null,
+    `type` varchar(255) default  null comment '是否是顶层',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -130,41 +131,51 @@ CREATE TABLE `flow_watcher` (
 
 ----
 
+flow_work 测试数据如下
+
 |===
-|id |flow_id |step |ref_id
+|id |flow_id |step |ref_id|type
 
 |1
 |1
 |step1
 |rest_api_1
+|顶层
 
 |2
 |1
 |step2
 |java_method_1
+|非顶层
 
 |3
 |1
 |step3
 |java_method_1
+|非顶层
 
 
 |4
 |1
 |step4
 |java_method_1
+|非顶层
 
 |5
 |1
 |step5
 |java_method_1
+|非顶层
 
 |6
 |1
 |step6
 |java_method_1
+|非顶层
 |===
 
+
+flow_watcher 测试数据如下
 
 |===
 |id |flow_work_id |condition |el_type |then_or_cat |next_flow_work_id
@@ -204,5 +215,39 @@ CREATE TABLE `flow_watcher` (
 |JSON_PATH
 |then
 |6
+
+|===
+
+使用步骤
+
+. 在 flow_work 表中找到 type 类型为顶层的数据
+. 循环第一步中的数据对其做如下操作
+    .. 将 flow_work 表的 id 在 flow_watcher 表中搜索
+    .. 执行 condition 判断是否符合，如果符合则将 next_flow_work_id 数据在回到 flow_work 表中搜索 ，递归操作 1，2
+
+
+完成 flow 执行流程设计后还需要对执行期间的执行参数进行配置，执行参数是应当绑定在 flow_work 表上，表结构如下
+
+
+|===
+|字段名称 | 字段含义
+
+| id
+| 主键
+
+|flow_work_id
+|flow_work表id
+
+| action_type
+| 动作类型、rest_api、java_method
+
+| action_param_id
+| 参数表id
+
+| el
+| 取值表达式
+
+
+
 
 |===
