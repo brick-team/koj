@@ -31,6 +31,7 @@ import javax.sql.DataSource;
  */
 public class MybatisUtil {
 
+    static ThreadLocal<SqlSession> sqlSessionThreadLocal = new InheritableThreadLocal<>();
     private static MybatisUtil mybatisUtil;
     private final String user;
     private final String password;
@@ -52,6 +53,9 @@ public class MybatisUtil {
         return mybatisUtil;
     }
 
+    public static SqlSession getThreadLocalSqlSession() {
+        return sqlSessionThreadLocal.get();
+    }
 
     private void initSqlSessionFactory(Class<?>... clazz) {
         TransactionFactory transactionFactory = new JdbcTransactionFactory();
@@ -65,21 +69,22 @@ public class MybatisUtil {
         this.sqlSessionFactory = sqlSessionFactory;
     }
 
-
     private DataSource dataSource() {
         return new org.apache.ibatis.datasource.pooled.PooledDataSource(dbDriver, url, user, password);
     }
 
     private void close(SqlSession session) {
+        sqlSessionThreadLocal.remove();
         session.close();
     }
 
-
     private SqlSession open() {
-        return this.sqlSessionFactory.openSession();
+        SqlSession sqlSession = this.sqlSessionFactory.openSession();
+        sqlSessionThreadLocal.set(sqlSession);
+        return sqlSession;
     }
 
-    public void work(ExecuteMapper executeMapper) {
+    public void work(ExecuteMapper executeMapper) throws Exception {
 
         SqlSession open = open();
         try {
@@ -87,7 +92,7 @@ public class MybatisUtil {
             open.commit();
         } catch (Exception e) {
             open.rollback();
-            e.printStackTrace();
+            throw e;
         } finally {
             close(open);
         }
