@@ -14,13 +14,23 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.enums;
+package com.github.brick.action.flow.web.common.config;
 
-public enum FieldType {
-    OBJECT,
-    ARRAY,
-    INTEGER,
-    LONG,
-    STRING,
-    ARRAY_OBJECT
+import com.github.brick.action.flow.method.config.ActionFlowVersion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+/**
+ * @author Zen Huifer
+ */
+@Component
+public class ActionFlowLogRunner implements CommandLineRunner {
+    private static final Logger logger = LoggerFactory.getLogger(ActionFlowLogRunner.class);
+
+    @Override
+    public void run(String... args) throws Exception {
+        logger.info("Action Flow Version: {}", ActionFlowVersion.VERSION);
+    }
 }

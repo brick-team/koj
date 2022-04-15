@@ -22,10 +22,11 @@ import com.github.brick.action.flow.execute.http.HttpWorker;
 import com.github.brick.action.flow.execute.http.OkHttpWorkerImpl;
 import com.github.brick.action.flow.execute.jdk.JDKExecuteService;
 import com.github.brick.action.flow.execute.jdk.JDKExecuteServiceImpl;
-import com.github.brick.action.flow.model.enums.ActionType;
-import com.github.brick.action.flow.model.enums.ExtractModel;
 import com.github.brick.action.flow.metrics.ActionMetricsImpl;
 import com.github.brick.action.flow.model.ActionFlowFactory;
+import com.github.brick.action.flow.model.enums.ActionType;
+import com.github.brick.action.flow.model.enums.ExtractModel;
+import com.github.brick.action.flow.model.enums.FieldType;
 import com.github.brick.action.flow.model.enums.ParamIn;
 import com.github.brick.action.flow.model.execute.*;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
@@ -33,6 +34,7 @@ import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
 import com.google.gson.Gson;
 import lombok.Data;
+import net.minidev.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.expression.EvaluationContext;
@@ -47,7 +49,8 @@ import java.util.stream.Collectors;
 
 /**
  * action flow execute.
- * @author Zen Huifer 
+ *
+ * @author Zen Huifer
  */
 public class ActionFlowExecute {
     public static final String DROOL = "$.";
@@ -61,6 +64,7 @@ public class ActionFlowExecute {
     private final ActionFlowFactory<ExtractModel, Extract> extractFactory;
     Gson gson = new Gson();
     JDKExecuteService jdkExecuteService = new JDKExecuteServiceImpl();
+    ActionMetricsImpl actionMetrics = new ActionMetricsImpl();
 
     public ActionFlowExecute(String fileName, ActionExecuteEntityStorage actionExecuteEntityStorage, FlowExecuteEntityStorage flowExecuteEntityStorage, ResultExecuteEntityStorage resultExecuteEntityStorage) {
         this.fileName = fileName;
@@ -125,7 +129,8 @@ public class ActionFlowExecute {
             EvaluationContext context = new StandardEvaluationContext();
             Boolean value = expression.getValue(context, Boolean.class);
             return value;
-        } else {
+        }
+        else {
             int start = 0;
             int end = 0;
             for (int i = 0; i < chars.length; i++) {
@@ -136,7 +141,8 @@ public class ActionFlowExecute {
                         end = i + 1;
                         break;
 
-                    } else {
+                    }
+                    else {
                         end = i;
                     }
                 }
@@ -168,8 +174,6 @@ public class ActionFlowExecute {
         return value;
     }
 
-    ActionMetricsImpl actionMetrics = new ActionMetricsImpl();
-
     public String execute(String flowId, String jsonData) {
 
         FlowExecuteEntity flowExecuteEntity = flowExecuteEntityStorage.getFlow(fileName, flowId);
@@ -183,8 +187,104 @@ public class ActionFlowExecute {
             executeWork(jsonData, stepWorkResult, work);
         }
 
+        Map<String, Object> res = handlerResult(resultExecuteEntity, stepWorkResult);
+        return gson.toJson(res);
+    }
 
-        return null;
+    protected Map<String, Object> handlerResult(ResultExecuteEntity resultExecuteEntity, Map<String, Object> stepWorkResult) {
+        List<FieldExecuteEntity> fields = resultExecuteEntity.getFields();
+
+        Map<String, Object> res = new HashMap<>(32);
+
+        for (FieldExecuteEntity field : fields) {
+            res.putAll(handlerFieldExecuteEntity(stepWorkResult, field));
+
+        }
+        return res;
+    }
+
+    private Map<String, Object> handlerFieldExecuteEntity(Map<String, Object> stepWorkResult, FieldExecuteEntity field) {
+        Map<String, Object> res = new HashMap<>();
+        FieldType type = field.getType();
+
+        String fieldName = field.getFieldName();
+        ExtractExecuteEntity extract = field.getExtract();
+        ExtractModel elType = extract.getElType();
+        Extract factory = this.extractFactory.factory(elType);
+
+        List<FieldExecuteEntity> properties = field.getProperties();
+        Object objDataFrom = factory.extract(stepWorkResult.get(extract.getStep()), extract.getEl());
+        if (type == FieldType.OBJECT) {
+            res.put(fieldName, handlerResultObject(properties, objDataFrom));
+        }
+        else if (type == FieldType.ARRAY) {
+            res.put(fieldName, handlerResultArray(properties, objDataFrom));
+        }
+        else if (type == FieldType.ARRAY_OBJECT) {
+            res.put(fieldName, handlerResultArrayObject(properties, objDataFrom,stepWorkResult));
+
+        }
+        else {
+            res.put(fieldName, objDataFrom);
+        }
+        return res;
+    }
+
+    private Object handlerResultArrayObject(List<FieldExecuteEntity> properties, Object objDataFrom, Map<String, Object> stepWorkResult) {
+        List<Map> res = new ArrayList<>();
+        // objDataFrom 不同数据类型
+        if (objDataFrom instanceof LinkedHashMap) {
+
+            Map<String, Object> data = new HashMap<>();
+
+            for (FieldExecuteEntity field : properties) {
+                String fieldName = field.getFieldName();
+                ExtractExecuteEntity extract = field.getExtract();
+                ExtractModel elType = extract.getElType();
+                Extract factory = this.extractFactory.factory(elType);
+                Object elValue = factory.extract(objDataFrom, extract.getEl());
+                data.put(fieldName, elValue);
+            }
+            res.add(data);
+        }
+        return res;
+    }
+
+    private Object handlerResultArray(List<FieldExecuteEntity> properties, Object objDataFrom) {
+        List<Object> res = new ArrayList<>();
+        if (null == properties || properties.isEmpty()) {
+            return objDataFrom;
+        }
+
+        for (FieldExecuteEntity property : properties) {
+            ExtractExecuteEntity extract = property.getExtract();
+            ExtractModel elType = extract.getElType();
+            Extract factory = this.extractFactory.factory(elType);
+
+            if (objDataFrom instanceof JSONArray) {
+                for (Object o : ((JSONArray) objDataFrom)) {
+                    Object extract1 = factory.extract(o, extract.getEl());
+                    res.add(extract1);
+                }
+            }
+
+        }
+        return res;
+    }
+
+    private Object handlerResultObject(List<FieldExecuteEntity> properties, Object objDataFrom) {
+        Map<String, Object> map = new HashMap<>(32);
+        if (null == properties || properties.isEmpty()) {
+            return objDataFrom;
+        }
+        for (FieldExecuteEntity property : properties) {
+            ExtractExecuteEntity extract = property.getExtract();
+            ExtractModel elType = extract.getElType();
+            Extract factory = this.extractFactory.factory(elType);
+            Object extract1 = factory.extract(objDataFrom, extract.getEl());
+            map.put(property.getFieldName(), extract1);
+        }
+        return map;
     }
 
     private Object executeWork(String jsonData, Map<String, Object> stepWorkResult, WorkExecuteEntity work) {
@@ -204,7 +304,8 @@ public class ActionFlowExecute {
                 for (WorkExecuteEntity workExecuteEntity : then) {
                     executeWork(jsonData, stepWorkResult, workExecuteEntity);
                 }
-            } else {
+            }
+            else {
                 List<WorkExecuteEntity> cat = watcher.getCat();
                 for (WorkExecuteEntity workExecuteEntity : cat) {
                     executeWork(jsonData, stepWorkResult, workExecuteEntity);
@@ -224,7 +325,8 @@ public class ActionFlowExecute {
             } catch (Exception e) {
                 logger.error("执行action异常", e);
             }
-        } else if (type == ActionType.REST_API) {
+        }
+        else if (type == ActionType.REST_API) {
             try {
 
                 o = handlerRestApi(actionExecuteEntity, jsonData);
@@ -273,13 +375,17 @@ public class ActionFlowExecute {
 
         if (in == ParamIn.header) {
             handlerDataMap(value, extract, jsonData, headers, name);
-        } else if (in == ParamIn.formdata) {
+        }
+        else if (in == ParamIn.formdata) {
             handlerDataMap(value, extract, jsonData, formatData, name);
-        } else if (in == ParamIn.body) {
+        }
+        else if (in == ParamIn.body) {
             handlerDataMap(value, extract, jsonData, body, name);
-        } else if (in == ParamIn.path) {
+        }
+        else if (in == ParamIn.path) {
             handlerDataMap(value, extract, jsonData, pathParam, name);
-        } else if (in == ParamIn.query) {
+        }
+        else if (in == ParamIn.query) {
             handlerDataMap(value, extract, jsonData, queryParam, name);
         }
 
@@ -305,7 +411,8 @@ public class ActionFlowExecute {
             Object o = executeAction(fileName, jsonData, fromAction);
             Object exData = factory.extract(o, el);
             dataMap.put(name, gson.toJson(exData));
-        } else {
+        }
+        else {
             dataMap.put(name, value);
         }
     }
@@ -342,7 +449,8 @@ public class ActionFlowExecute {
                 Object o = executeAction(fileName, jsonData, fromAction);
                 Object exData = factory.extract(o, el);
                 args[i] = exData;
-            } else {
+            }
+            else {
                 args[i] = value;
             }
 

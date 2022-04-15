@@ -40,8 +40,11 @@ public class FieldXMLParse implements ParseXML<FieldXML> {
 
 
         Element filedName = element.element(FIELD_NAME_NODE);
-        String filedNameStr = filedName.getTextTrim();
-        fieldXML.setFieldName(filedNameStr);
+        if (filedName != null) {
+
+            String filedNameStr = filedName.getTextTrim();
+            fieldXML.setFieldName(filedNameStr);
+        }
 
         Element type = element.element(TYPE_NODE);
         String typeStr = type.getTextTrim();
@@ -58,7 +61,6 @@ public class FieldXMLParse implements ParseXML<FieldXML> {
             List<FieldExecuteEntity> prop = new ArrayList<>();
             for (Element element1 : field) {
                 Element fieldName = element1.element(FIELD_NAME_NODE);
-                System.out.println(fieldName.getTextTrim());
                 FieldXML parse1 = parse(element1);
                 prop.add(parse1);
             }

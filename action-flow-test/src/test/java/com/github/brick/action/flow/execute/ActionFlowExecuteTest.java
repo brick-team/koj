@@ -14,13 +14,25 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.enums;
+package com.github.brick.action.flow.execute;
 
-public enum FieldType {
-    OBJECT,
-    ARRAY,
-    INTEGER,
-    LONG,
-    STRING,
-    ARRAY_OBJECT
+
+import com.github.brick.action.flow.method.content.ActionFlowXmlContent;
+import com.github.brick.action.flow.model.enums.StorageType;
+import org.junit.Test;
+
+/**
+ * @author Zen Huifer
+ */
+public class ActionFlowExecuteTest {
+
+    @Test
+    public void testResultHandler() {
+
+        ActionFlowXmlContent content = new ActionFlowXmlContent(StorageType.MEMORY, "resultHandler.xml");
+        String execute = content.execute("resultHandler.xml", "1", "");
+        System.out.println(execute);
+    }
+
+
 }

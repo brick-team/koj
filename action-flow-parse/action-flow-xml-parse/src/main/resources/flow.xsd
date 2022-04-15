@@ -57,7 +57,7 @@
       <xs:attribute type="xs:string" name="className" use="optional"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="fieldName">
+  <xs:element name="fieldName" >
   </xs:element>
   <xs:element name="type">
     <xs:simpleType>
@@ -66,13 +66,15 @@
         <xs:enumeration value="Integer"/>
         <xs:enumeration value="Number"/>
         <xs:enumeration value="object"/>
+        <xs:enumeration value="array"/>
+        <xs:enumeration value="array_object"/>
       </xs:restriction>
     </xs:simpleType>
   </xs:element>
   <xs:element name="field">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="act:fieldName" xmlns:act="http://www.github.com/brick-team/action-flow"/>
+        <xs:element ref="act:fieldName" xmlns:act="http://www.github.com/brick-team/action-flow" />
         <xs:element ref="act:type" xmlns:act="http://www.github.com/brick-team/action-flow"/>
         <xs:element ref="act:extract" xmlns:act="http://www.github.com/brick-team/action-flow"/>
         <xs:element ref="act:properties" minOccurs="0"

@@ -19,6 +19,7 @@ package com.github.brick.action.flow.model.execute;
 import com.github.brick.action.flow.model.enums.FieldType;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -26,6 +27,7 @@ public class FieldExecuteEntity {
     private String fieldName;
     private FieldType type;
     private ExtractExecuteEntity extract;
-    private List<FieldExecuteEntity> properties;
+    private List<FieldExecuteEntity> properties = new ArrayList<>();
+
 
 }
