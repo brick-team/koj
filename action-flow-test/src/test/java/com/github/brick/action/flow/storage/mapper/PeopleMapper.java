@@ -14,16 +14,17 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.core.context;
+package com.github.brick.action.flow.storage.mapper;
 
-import org.junit.Test;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
-public class ActionFlowContentTest {
-
-    @Test
-    public void init() {
-
-
-    }
-
+/**
+ * @author Zen Huifer
+ */
+@Mapper
+public interface PeopleMapper {
+    @Insert("INSERT INTO `action-flow`.`people` (`id`, `va`) VALUES (#{id},#{va} )")
+    int insert(@Param("id") int id, @Param("va") String va);
 }

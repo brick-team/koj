@@ -14,16 +14,18 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.core.context;
+package com.github.brick.action.flow.method.resource;
 
-import org.junit.Test;
+import com.github.brick.action.flow.model.xml.ActionFlowXML;
 
-public class ActionFlowContentTest {
+import java.util.Map;
 
-    @Test
-    public void init() {
+/**
+ * @author Zen Huifer
+ */
+public interface Resource {
+    Map<String, ActionFlowXML> loads(String... actionFlowFileNames) throws Exception;
 
 
-    }
-
+    ActionFlowXML load(String actionFlowFineName) throws Exception;
 }

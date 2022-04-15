@@ -54,7 +54,6 @@
         <dependency>
             <groupId>com.github.brick</groupId>
             <artifactId>action-flow-core</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.brick</groupId>

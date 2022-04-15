@@ -175,7 +175,11 @@ public class ActionFlowExecute {
     }
 
     public String execute(String flowId, String jsonData) {
+        Map<String, Object> res = getStringObjectMap(flowId, jsonData);
+        return gson.toJson(res);
+    }
 
+    public Map<String, Object> getStringObjectMap(String flowId, String jsonData) {
         FlowExecuteEntity flowExecuteEntity = flowExecuteEntityStorage.getFlow(fileName, flowId);
 
         ResultExecuteEntity resultExecuteEntity = resultExecuteEntityStorage.getResult(fileName, flowId);
@@ -188,7 +192,7 @@ public class ActionFlowExecute {
         }
 
         Map<String, Object> res = handlerResult(resultExecuteEntity, stepWorkResult);
-        return gson.toJson(res);
+        return res;
     }
 
     protected Map<String, Object> handlerResult(ResultExecuteEntity resultExecuteEntity, Map<String, Object> stepWorkResult) {

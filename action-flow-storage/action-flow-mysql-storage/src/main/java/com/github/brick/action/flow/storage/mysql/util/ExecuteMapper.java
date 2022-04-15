@@ -14,16 +14,14 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.core.context;
+package com.github.brick.action.flow.storage.mysql.util;
 
-import org.junit.Test;
+import org.apache.ibatis.session.SqlSession;
 
-public class ActionFlowContentTest {
-
-    @Test
-    public void init() {
-
-
-    }
+/**
+ * @author Zen Huifer
+ */
+public interface ExecuteMapper {
+    void work(SqlSession session) throws Exception;
 
 }

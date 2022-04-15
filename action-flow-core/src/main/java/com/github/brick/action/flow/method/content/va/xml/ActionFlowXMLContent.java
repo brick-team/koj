@@ -14,30 +14,22 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.mysql;
+package com.github.brick.action.flow.method.content.va.xml;
 
-import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
-import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
+import com.github.brick.action.flow.method.content.va.ActionFlowContent;
 
-import java.io.Serializable;
-import java.util.List;
-
-public class ActionExecuteEntityMySqlStorage implements ActionExecuteEntityStorage {
-
-
-    /**
-     * 构造的时候设置基础依赖
-     */
-    public ActionExecuteEntityMySqlStorage() {
+/**
+ * @author Zen Huifer
+ */
+public abstract class ActionFlowXMLContent extends ActionFlowContent {
+    public ActionFlowXMLContent(String[] actionFlowFileNames) {
+        super(actionFlowFileNames);
     }
 
-    @Override
-    public void save(String fileName, List<ActionExecuteEntity> actions) {
+    public ActionFlowXMLContent(String[] actionFlowFileNames, boolean startMetrics) {
+        super(actionFlowFileNames, startMetrics);
     }
 
-    @Override
-    public ActionExecuteEntity getAction(String fileName, Serializable refId) {
-        return null;
-
+    public ActionFlowXMLContent() {
     }
 }

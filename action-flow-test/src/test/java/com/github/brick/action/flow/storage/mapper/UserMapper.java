@@ -14,16 +14,15 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.core.context;
+package com.github.brick.action.flow.storage.mapper;
 
-import org.junit.Test;
+import org.apache.ibatis.annotations.Mapper;
 
-public class ActionFlowContentTest {
+/**
+ * @author Zen Huifer
+ */
+@Mapper
+public interface UserMapper {
 
-    @Test
-    public void init() {
-
-
-    }
 
 }

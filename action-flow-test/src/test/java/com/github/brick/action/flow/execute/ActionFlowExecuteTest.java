@@ -17,7 +17,6 @@
 package com.github.brick.action.flow.execute;
 
 
-import com.github.brick.action.flow.method.content.ActionFlowXmlContent;
 import com.github.brick.action.flow.model.enums.StorageType;
 import org.junit.Test;
 
@@ -29,9 +28,6 @@ public class ActionFlowExecuteTest {
     @Test
     public void testResultHandler() {
 
-        ActionFlowXmlContent content = new ActionFlowXmlContent(StorageType.MEMORY, "resultHandler.xml");
-        String execute = content.execute("resultHandler.xml", "1", "");
-        System.out.println(execute);
     }
 
 
