@@ -76,7 +76,7 @@
                 <field>
                     <fieldName>objData</fieldName>
                     <type>array_object</type>
-                    <extract el="$.obj" step="1"></extract>
+                    <extract el="$.arrayObj" step="1"></extract>
                     <properties>
                         <fields>
                             <field>

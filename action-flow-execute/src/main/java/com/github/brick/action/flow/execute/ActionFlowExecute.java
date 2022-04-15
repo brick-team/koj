@@ -232,7 +232,7 @@ public class ActionFlowExecute {
 
     private Object handlerResultArrayObject(List<FieldExecuteEntity> properties, Object objDataFrom, Map<String, Object> stepWorkResult) {
         List<Map> res = new ArrayList<>();
-        // objDataFrom 不同数据类型
+        // todo:  objDataFrom 不同数据类型
         if (objDataFrom instanceof LinkedHashMap) {
 
             Map<String, Object> data = new HashMap<>();
@@ -247,6 +247,23 @@ public class ActionFlowExecute {
             }
             res.add(data);
         }
+        if (objDataFrom instanceof JSONArray) {
+            for (Object k : ((JSONArray) objDataFrom)) {
+                Map<String, Object> data = new HashMap<>();
+
+                for (FieldExecuteEntity field : properties) {
+                    String fieldName = field.getFieldName();
+                    ExtractExecuteEntity extract = field.getExtract();
+                    ExtractModel elType = extract.getElType();
+                    Extract factory = this.extractFactory.factory(elType);
+                    Object elValue = factory.extract(k, extract.getEl());
+                    data.put(fieldName, elValue);
+                }
+                res.add(data);
+            }
+        }
+
+
         return res;
     }
 
