@@ -17,18 +17,6 @@ MySQL 设计基于 xref:xml-core-design.adoc#xml-design-notes[Action Flow XML �
 
 本节将对候选配置进行设计说明，根据前文所述候选配置应当有 REST_API 相关信息、Java_Method、取值表达式相关信息。下面先进行 Action 相关设计。
 
-[source,sql]
-----
-CREATE TABLE `action` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `type` int DEFAULT NULL COMMENT '1:rest_api,2:java_method',
-  `url` varchar(255) DEFAULT NULL COMMENT 'type=1时表示HTTP请求地址',
-  `method` varchar(255) DEFAULT NULL COMMENT 'type=1时表示HTTP请求方式(POST\\GET\\DELETE\\PUT)\r\ntype=2时表示java函数名称',
-  `class_name` varchar(255) DEFAULT NULL COMMENT 'type=2时表示需要执行的类全路径',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-----
-
 Action表结构
 |===
 
@@ -62,20 +50,6 @@ Action表结构
 |===
 
 表 action 和 XML 模式下的 action 标签直接映射，含义相同，接下来是 action 下的两种参数信息，REST_API 对应的参数表设计如下:
-
-[source,sql]
-----
-CREATE TABLE `rest_api_param` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `action_id` int DEFAULT NULL,
-  `in` varchar(255) DEFAULT NULL COMMENT '参数所在位置',
-  `name` varchar(255) DEFAULT NULL COMMENT '参数名称',
-  `require` tinyint DEFAULT NULL COMMENT '是否必填',
-  `value` varchar(255) DEFAULT NULL COMMENT '默认值',
-  `pid` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-----
 
 rest_api_param表结构
 
@@ -120,19 +94,6 @@ rest_api_param表结构
 
 JAVA_METHOD 对应的参数表设计如下:
 
-[source,sql]
-----
-CREATE TABLE `java_method_param` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `action_id` int DEFAULT NULL,
-  `index` varchar(255) DEFAULT NULL COMMENT '参数索引，从0开始计数',
-  `type` varchar(255) DEFAULT NULL COMMENT '参数类型，类全路径',
-  `name` varchar(255) DEFAULT NULL COMMENT '参数名称',
-  `value` varchar(255) DEFAULT NULL COMMENT '默认值',
-  `pid` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-----
 
 java_method_param 表结构
 
@@ -150,8 +111,8 @@ java_method_param 表结构
 |action表关联id
 
 |index
-|varchar
-|否
+|int
+|是
 |参数索引，从0开始计数
 
 |type
@@ -161,7 +122,7 @@ java_method_param 表结构
 
 |name
 |varchar
-|否
+|是
 |参数名称
 
 |value
@@ -182,15 +143,6 @@ java_method_param 表结构
 
 运行时配置主要围绕 flow 标签进行设计，flow 标签对应的数据表结构如下：
 
-[source,sql]
-----
-CREATE TABLE `flow` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL COMMENT '工作流名称',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-----
-
 flow表结构
 
 |===
@@ -205,6 +157,28 @@ flow表结构
 |varchar
 |是
 |工作流名称
+|===
+
+watcher表结构
+
+|===
+| 字段名 | 类型 | 是否可为空 | 注释
+
+|id
+|int
+|否
+|主键
+
+|condition
+|varchar
+|否
+|条件表达式
+
+|el_type
+|varchar
+|否
+|取值表达式类型
+
 |===
 
 
@@ -226,31 +200,6 @@ work表结构
 |action表关联id
 |===
 
-
-[source,sql]
-----
-CREATE TABLE `flow_work` (
-    `id` int NOT NULL AUTO_INCREMENT,
-    `flow_id` int DEFAULT NULL,
-    `step` varchar(255) DEFAULT NULL,
-    `ref_id` int default  null,
-    `type` varchar(255) default  null comment '是否是顶层',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE `flow_watcher` (
-    `id` int NOT NULL AUTO_INCREMENT,
-    `flow_work_id` int DEFAULT NULL,
-    `condition` varchar(255) DEFAULT NULL,
-    `el_type` varchar(255) DEFAULT NULL,
-    `then_or_cat` varchar(255) DEFAULT NULL,
-    `next_flow_work_id` int  DEFAULT NULL COMMENT '指向flow_work表的id',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-----
-
 flow_work表结构
 
 |===
@@ -271,7 +220,7 @@ flow_work表结构
 |否
 |步骤值
 
-|ref_id
+|work_id
 |int
 |否
 |关联work表id
@@ -280,6 +229,16 @@ flow_work表结构
 |varchar
 |是
 |是否是顶层
+
+|async
+|int
+|否
+|是否异步(异步：后续所有流程都与之脱离)
+
+|sort
+|int
+|否
+|排序字段（只有顶层具备）
 |===
 
 flow_watcher表结构
@@ -297,16 +256,6 @@ flow_watcher表结构
 |是
 |flow_work表关联id
 
-|condition
-|varchar
-|是
-|条件
-
-|el_type
-|varchar
-|是
-|取值表达式类型
-
 |then_or_cat
 |varchar
 |否
@@ -316,6 +265,16 @@ flow_watcher表结构
 |int
 |否
 |指向flow_work表的id
+
+|watcher_id
+|int
+|否
+|指向watcher表的id
+
+|sort
+|int
+|否
+|排序字段
 |===
 
 extract标签下直接绑定在param表或result表下 数据结构如下
@@ -329,6 +288,16 @@ extract表结构
 |int
 |否
 |主键
+
+|flow_id
+|int
+|否
+|flow表主键
+
+|flow_work_id
+|int
+|否
+|flow_work表主键
 
 |ref_id
 |int
@@ -355,6 +324,38 @@ extract表结构
 |否
 |取值表达式
 
+|===
+
+result表结构
+
+|===
+| 字段名 | 类型 | 是否可为空 | 注释
+
+|id
+|int
+|否
+|主键
+
+|parent_id
+|int
+|是
+|上级id 可为空
+
+
+|field_name
+|varchar
+|否
+|字段名
+
+|type
+|varchar
+|否
+|值类型
+
+|value
+|varchar
+|是
+|字段值
 |===
 
 
