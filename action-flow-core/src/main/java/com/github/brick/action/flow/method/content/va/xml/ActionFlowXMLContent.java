@@ -25,6 +25,7 @@ import com.github.brick.action.flow.model.xml.ActionFlowXML;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
+import org.springframework.context.ApplicationContext;
 
 import java.util.Map;
 
@@ -38,6 +39,8 @@ public abstract class ActionFlowXMLContent extends ActionFlowContent {
     protected ActionExecuteEntityStorage actionExecuteEntityStorage;
     protected FlowExecuteEntityStorage flowExecuteEntityStorage;
     protected ResultExecuteEntityStorage resultExecuteEntityStorage;
+    protected boolean beanFromSpring = false;
+    protected ApplicationContext context;
     ResourceLoader<ActionFlowXML, Map<String, ActionFlowXML>>
             xmlResource = new XMLResourceImplLoader();
     Map<String, ActionFlowXML> loads;
@@ -80,10 +83,17 @@ public abstract class ActionFlowXMLContent extends ActionFlowContent {
     }
 
     @Override
-    protected void initActionFlowExecute() {
+    protected void initActionFlowExecute() throws Exception {
         this.actionFlowExecute =
                 new ActionFlowExecute(null, this.actionExecuteEntityStorage,
                         this.flowExecuteEntityStorage, this.resultExecuteEntityStorage);
+        actionFlowExecute.setObjectSearchFromSpring(this.beanFromSpring);
+        if (this.beanFromSpring) {
+            if (context == null) {
+                throw new Exception("bean希望从spring容器中寻找，但spring容器不存在");
+            }
+            actionFlowExecute.setContext(context);
+        }
     }
 
     protected abstract void storage(Map<String, ActionFlowXML> loads) throws Exception;

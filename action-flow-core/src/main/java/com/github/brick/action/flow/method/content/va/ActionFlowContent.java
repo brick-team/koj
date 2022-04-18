@@ -74,7 +74,7 @@ public abstract class ActionFlowContent {
     /**
      * 用于初始化成员变量 {@link ActionFlowContent#actionFlowExecute}
      */
-    protected abstract void initActionFlowExecute();
+    protected abstract void initActionFlowExecute() throws Exception;
 
 
 }

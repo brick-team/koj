@@ -27,7 +27,7 @@
                 <extract fromAction="" el="" elType=""/>
             </param>
         </action>
-        <action id="java_method_1" type="java_method" className="" method="">
+        <action id="java_method_1" type="java_method" className="" method="" qualifier="">
             <param index="0" type="java.lang.String" name="" value=""/>
         </action>
     </actions>

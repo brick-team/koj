@@ -26,6 +26,7 @@ import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
 import com.github.brick.action.flow.storage.mysql.config.MysqlConfig;
+import org.springframework.context.ApplicationContext;
 
 import java.util.Map;
 
@@ -46,9 +47,17 @@ public class ActionFlowXMLMysqlContent extends ActionFlowXMLContent {
             new JDBCResourceLoaderImpl();
     private JdbcConfig jdbcConfig;
 
-
     public ActionFlowXMLMysqlContent(String[] actionFlowFileNames) throws Exception {
         super(actionFlowFileNames);
+    }
+
+    public ActionFlowXMLMysqlContent(String[] actionFlowFileNames, boolean beanFromSpring,
+                                     ApplicationContext context)
+            throws Exception {
+
+        super(actionFlowFileNames);
+        this.beanFromSpring = beanFromSpring;
+        this.context = context;
     }
 
     public ActionFlowXMLMysqlContent(JdbcConfig jdbcConfig) {

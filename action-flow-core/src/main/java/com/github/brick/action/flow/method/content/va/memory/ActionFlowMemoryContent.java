@@ -25,6 +25,7 @@ import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 /**
  * action flow 非文件模式， 存储媒介：内存
@@ -36,21 +37,37 @@ public class ActionFlowMemoryContent extends ActionFlowContent {
             LoggerFactory.getLogger(ActionFlowMemoryContent.class);
     protected static StorageType storageType;
 
+
+
     static {
         storageType = StorageType.MEMORY;
     }
 
-
-    @Override
-    protected void initActionFlowExecute() {
-        this.actionFlowExecute =
-                new ActionFlowExecute(null, this.actionExecuteEntityStorage,
-                        this.flowExecuteEntityStorage, this.resultExecuteEntityStorage);
-    }
-
+    protected boolean beanFromSpring = false;
+    protected ApplicationContext context;
     ActionExecuteEntityStorage actionExecuteEntityStorage;
     FlowExecuteEntityStorage flowExecuteEntityStorage;
     ResultExecuteEntityStorage resultExecuteEntityStorage;
+
+    public ActionFlowMemoryContent(boolean beanFromSpring, ApplicationContext context) {
+        this.beanFromSpring = beanFromSpring;
+        this.context = context;
+    }
+
+    @Override
+    protected void initActionFlowExecute() throws Exception {
+        this.actionFlowExecute =
+                new ActionFlowExecute(null, this.actionExecuteEntityStorage,
+                        this.flowExecuteEntityStorage, this.resultExecuteEntityStorage);
+        actionFlowExecute.setObjectSearchFromSpring(this.beanFromSpring);
+        if (this.beanFromSpring) {
+            if (context == null) {
+                throw new Exception("bean希望从spring容器中寻找，但spring容器不存在");
+            }
+            actionFlowExecute.setContext(context);
+        }
+
+    }
 
     @Override
     public void start() throws Exception {

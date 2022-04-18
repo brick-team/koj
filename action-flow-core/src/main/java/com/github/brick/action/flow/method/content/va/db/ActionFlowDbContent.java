@@ -29,6 +29,7 @@ import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
 import com.github.brick.action.flow.storage.mysql.config.MysqlConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 import java.util.Map;
 
@@ -47,6 +48,8 @@ public class ActionFlowDbContent extends ActionFlowContent {
         storageType = StorageType.MYSQL;
     }
 
+    protected boolean beanFromSpring = false;
+    protected ApplicationContext context;
     ResourceLoader<JdbcConfig, Map<String, JdbcConfig>> resourceLoader =
             new JDBCResourceLoaderImpl();
     ActionExecuteEntityStorage actionExecuteEntityStorage;
@@ -58,11 +61,23 @@ public class ActionFlowDbContent extends ActionFlowContent {
         this.jdbcConfig = datasource;
     }
 
+    public ActionFlowDbContent(boolean beanFromSpring, ApplicationContext context) {
+        this.beanFromSpring = beanFromSpring;
+        this.context = context;
+    }
+
     @Override
-    protected void initActionFlowExecute() {
+    protected void initActionFlowExecute() throws Exception {
         this.actionFlowExecute =
                 new ActionFlowExecute(null, this.actionExecuteEntityStorage,
                         this.flowExecuteEntityStorage, this.resultExecuteEntityStorage);
+        actionFlowExecute.setObjectSearchFromSpring(this.beanFromSpring);
+        if (this.beanFromSpring) {
+            if (context == null) {
+                throw new Exception("bean希望从spring容器中寻找，但spring容器不存在");
+            }
+            actionFlowExecute.setContext(context);
+        }
     }
 
     @Override

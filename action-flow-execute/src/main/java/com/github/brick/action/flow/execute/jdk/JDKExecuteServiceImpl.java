@@ -40,6 +40,36 @@ public class JDKExecuteServiceImpl implements JDKExecuteService {
     }
 
     @Override
+    public Object execute(Object object,
+                          String method,
+                          String[] methodParamType,
+                          Object... args)
+            throws ClassNotFoundException, InvocationTargetException,
+            NoSuchMethodException, InstantiationException, IllegalAccessException {
+        Class<?>[] methodParamType1 = new Class<?>[methodParamType.length];
+
+        for (int i = 0; i < methodParamType.length; i++) {
+            String s = methodParamType[i];
+            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+            Class<?> aClass = contextClassLoader.loadClass(s);
+            methodParamType1[i] = aClass;
+        }
+        Class<?> aClass = object.getClass();
+        Method declaredMethod = aClass.getDeclaredMethod(method, methodParamType1);
+
+
+
+
+        for (int i = 0; i < methodParamType1.length; i++) {
+            Class<?> paramClazz = methodParamType1[i];
+            // todo: 类型转换
+        }
+
+
+        return execute(object,declaredMethod,args);
+    }
+
+    @Override
     public Object execute(String className, String method, Class<?>[] methodParamType, Object... args) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         Class<?> aClass = contextClassLoader.loadClass(className);

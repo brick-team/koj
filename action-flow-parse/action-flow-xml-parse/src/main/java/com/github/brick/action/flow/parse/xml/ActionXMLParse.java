@@ -38,6 +38,7 @@ public class ActionXMLParse extends CommonParseAndValidateImpl<List<ActionExecut
     private static final String CLASS_NAME_ATTR = "className";
     private static final String PARAM_NODE = "param";
     private static final String URL_ATTR = "url";
+    private static final String QUALIFIER_ATTR = "qualifier";
     ParamXMLForRestApiParse paramXMLForRestApiParse = new ParamXMLForRestApiParse();
     ParamXMLForJavaMethodParse paramXMLForJavaMethodParse = new ParamXMLForJavaMethodParse();
 
@@ -88,6 +89,8 @@ public class ActionXMLParse extends CommonParseAndValidateImpl<List<ActionExecut
         ActionXML.ForJavaMethod javaMethod = new ActionXML.ForJavaMethod();
         String method = elm.attributeValue(METHOD_ATTR);
         javaMethod.setMethod(method);
+        String qualifier = elm.attributeValue(QUALIFIER_ATTR);
+        javaMethod.setQualifier(qualifier);
 
         String className = elm.attributeValue(CLASS_NAME_ATTR);
         javaMethod.setClassName(className);

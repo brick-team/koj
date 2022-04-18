@@ -22,6 +22,7 @@ import com.github.brick.action.flow.model.xml.ActionFlowXML;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
+import org.springframework.context.ApplicationContext;
 
 import java.util.Map;
 
@@ -38,6 +39,15 @@ public class ActionFlowXMLMemoryContent extends ActionFlowXMLContent {
 
     public ActionFlowXMLMemoryContent(String[] actionFlowFileNames) throws Exception {
         super(actionFlowFileNames);
+    }
+
+    public ActionFlowXMLMemoryContent(String[] actionFlowFileNames,
+                                      boolean beanFromSpring,
+                                      ApplicationContext context) throws Exception {
+
+        super(actionFlowFileNames);
+        this.beanFromSpring = beanFromSpring;
+        this.context = context;
     }
 
     @Override

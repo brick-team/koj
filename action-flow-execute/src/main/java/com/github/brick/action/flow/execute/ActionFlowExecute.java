@@ -37,6 +37,7 @@ import lombok.Data;
 import net.minidev.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -55,11 +56,44 @@ import java.util.stream.Collectors;
 public class ActionFlowExecute {
     public static final String DROOL = "$.";
     private static final Logger logger = LoggerFactory.getLogger(ActionFlowExecute.class);
-    private static final String[] ops = new String[]{">", ">=", "==", "<", "<=", "&&", "||",};
+    private static final String[] ops =
+            new String[] {">", ">=", "==", "<", "<=", "&&", "||",};
     static SpelExpressionParser parser = new SpelExpressionParser();
     private final ActionExecuteEntityStorage actionExecuteEntityStorage;
     private final FlowExecuteEntityStorage flowExecuteEntityStorage;
     private final ResultExecuteEntityStorage resultExecuteEntityStorage;
+
+    private boolean objectSearchFromSpring = false;
+
+
+    private ApplicationContext context;
+    private String fileName;
+
+    public ActionFlowExecute(ActionExecuteEntityStorage actionExecuteEntityStorage,
+                             FlowExecuteEntityStorage flowExecuteEntityStorage,
+                             ResultExecuteEntityStorage resultExecuteEntityStorage,
+                             boolean objectSearchFromSpring) {
+        this.actionExecuteEntityStorage = actionExecuteEntityStorage;
+        this.flowExecuteEntityStorage = flowExecuteEntityStorage;
+        this.resultExecuteEntityStorage = resultExecuteEntityStorage;
+        this.objectSearchFromSpring = objectSearchFromSpring;
+        this.extractFactory = new ExtractActionFlowFactory();
+    }
+
+    public ActionFlowExecute(String fileName,
+                             ActionExecuteEntityStorage actionExecuteEntityStorage,
+                             FlowExecuteEntityStorage flowExecuteEntityStorage,
+                             ResultExecuteEntityStorage resultExecuteEntityStorage) {
+        this.fileName = fileName;
+        this.actionExecuteEntityStorage = actionExecuteEntityStorage;
+        this.flowExecuteEntityStorage = flowExecuteEntityStorage;
+        this.resultExecuteEntityStorage = resultExecuteEntityStorage;
+        extractFactory = new ExtractActionFlowFactory();
+    }
+
+    public ApplicationContext getContext() {
+        return context;
+    }
 
     public String getFileName() {
         return fileName;
@@ -69,18 +103,20 @@ public class ActionFlowExecute {
         this.fileName = fileName;
     }
 
-    private  String fileName;
+    public void setContext(ApplicationContext context) {
+        this.context = context;
+    }
     private final ActionFlowFactory<ExtractModel, Extract> extractFactory;
     Gson gson = new Gson();
     JDKExecuteService jdkExecuteService = new JDKExecuteServiceImpl();
     ActionMetricsImpl actionMetrics = new ActionMetricsImpl();
 
-    public ActionFlowExecute(String fileName, ActionExecuteEntityStorage actionExecuteEntityStorage, FlowExecuteEntityStorage flowExecuteEntityStorage, ResultExecuteEntityStorage resultExecuteEntityStorage) {
-        this.fileName = fileName;
-        this.actionExecuteEntityStorage = actionExecuteEntityStorage;
-        this.flowExecuteEntityStorage = flowExecuteEntityStorage;
-        this.resultExecuteEntityStorage = resultExecuteEntityStorage;
-        extractFactory = new ExtractActionFlowFactory();
+    public boolean isObjectSearchFromSpring() {
+        return objectSearchFromSpring;
+    }
+
+    public void setObjectSearchFromSpring(boolean objectSearchFromSpring) {
+        this.objectSearchFromSpring = objectSearchFromSpring;
     }
 
     private static boolean inOps(String aChar) {
@@ -489,9 +525,27 @@ public class ActionFlowExecute {
 
         indexAndTypes.sort(Comparator.comparing(IndexAndType::getIndex));
 
-        List<String> paramTypes = indexAndTypes.stream().map(IndexAndType::getTyp).collect(Collectors.toList());
+        List<String> paramTypes = indexAndTypes.stream().map(IndexAndType::getTyp)
+                .collect(Collectors.toList());
 
-        return jdkExecuteService.execute(className, method, paramTypes.toArray(new String[]{}), args);
+        if (!this.objectSearchFromSpring) {
+            Object execute = jdkExecuteService.execute(className, method,
+                    paramTypes.toArray(new String[] {}), args);
+            return execute;
+        } else {
+            Object bean;
+            String qualifier = javaMethod.getQualifier();
+            if ("".equals(qualifier) || qualifier == null) {
+                bean = this.context.getBean(Thread.currentThread().getContextClassLoader()
+                        .loadClass(className));
+            } else {
+                bean = this.context.getBean(qualifier);
+            }
+            return jdkExecuteService.execute(bean, method,
+                    paramTypes.toArray(new String[] {}), args);
+
+
+        }
     }
 
     @Data

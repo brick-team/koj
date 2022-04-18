@@ -29,6 +29,9 @@ public abstract class ActionExecuteEntity {
     private ForRestApi restApi;
     private ForJavaMethod javaMethod;
 
+    public abstract Serializable getId();
+
+
     @Data
     public static class ForRestApi {
         private String url;
@@ -36,13 +39,15 @@ public abstract class ActionExecuteEntity {
         private List<ParamExecuteEntity> param;
     }
 
-    public abstract Serializable getId();
-
 
     @Data
     public static class ForJavaMethod {
         private String className;
         private String method;
+        /**
+         * 该属性用于和spring 进行整合使用，在一个类多实例的情况下提供候选机制
+         */
+        private String qualifier;
         private List<ParamExecuteEntity> param;
 
     }
