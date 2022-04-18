@@ -44,7 +44,6 @@ public class MybatisTransactional {
         SqlSession session = MybatisUtil.getThreadLocalSqlSession();
         PeopleMapper mapper = session.getMapper(PeopleMapper.class);
         mapper.insert(1, "f");
-//            int i = 1 / 0;
     }
 
     private void extracted2() throws Exception {

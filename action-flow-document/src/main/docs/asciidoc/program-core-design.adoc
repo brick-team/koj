@@ -115,7 +115,95 @@ public class FlowExecuteEntityMemoryStorage implements FlowExecuteEntityStorage 
 
 
 === 数据库存储
-数据存储
+数据库存储采用 Mybatis 作为 ORM 框架，使用 Mybatis 需要核心解决的问题有两项：
+
+. mybatis 初始化
+. mybatis  事务
+
+mybatis 初始化交给 MysqlConfig 类进行，具体代码如下:
+[source,java]
+----
+public class MysqlConfig {
+    Class<?>[] mappers = new Class[]{
+
+    };
+    private final String user;
+    private final String password;
+    private final String url;
+    private final String dbDriver;
+
+    public MysqlConfig(String user, String password, String url, String dbDriver) {
+        this.user = user;
+        this.password = password;
+        this.url = url;
+        this.dbDriver = dbDriver;
+        // 初始化 MybatisUtils
+        MybatisUtil mybatisUtil = new MybatisUtil(user, password, url, dbDriver, mappers);
+    }
+}
+----
+
+在研发阶段需要将所需要使用的 Mapper 接口放置在 MysqlConfig#mappers 属性中，使用时仅需要构建 MysqlConfig 对象即可完成 Mybatis 初始化。
+
+
+mybatis 事务相关处理采用手动处理模式，具体实现在 MybatisUtil#work 方法中，具体代码如下：
+[source,java]
+----
+    public static void work(ExecuteMapper executeMapper) throws Exception {
+
+        SqlSession open = open();
+        try {
+            executeMapper.work(open);
+            open.commit();
+        } catch (Exception e) {
+            open.rollback();
+            throw e;
+        } finally {
+            close(open);
+        }
+    }
+
+----
+
+在上述代码中会通过 open 打开 SqlSession 然后通过常见的 `try{} catch{} finally{}` 执行函数，在执行成功时进行提交操作，如果有异常则进行回滚，最后会进行关闭操作。
+在 ExecuteMapper 接口中执行的work函数是实际需要执行的操作，如果需要获取 Mapper 应当按照如下操作进行获取:
+
+[source,java]
+----
+SqlSession session = MybatisUtil.getThreadLocalSqlSession();
+PeopleMapper mapper = session.getMapper(PeopleMapper.class);
+----
+
+MybatisUtil的例子：
+[source,java]
+----
+   @Test
+    public void session() throws Exception {
+        MybatisUtil.gen().work(session -> {
+            extracted1();
+            extracted2();
+
+        });
+
+
+    }
+
+    private void extracted1() throws Exception {
+        SqlSession session = MybatisUtil.getThreadLocalSqlSession();
+        PeopleMapper mapper = session.getMapper(PeopleMapper.class);
+        mapper.insert(1, "f");
+    }
+
+    private void extracted2() throws Exception {
+        SqlSession session = MybatisUtil.getThreadLocalSqlSession();
+
+        PeopleMapper mapper = session.getMapper(PeopleMapper.class);
+        mapper.insert(1, "2");
+        int i = 1 / 0;
+    }
+----
+
+上述代码说明： session 方法作为入口函数，它需要通过 MybatisUtil.gen() 获取 MybatisUtil 实例，然后调用work方法进行实际业务操作。在实际操作中需要使用到 extracted1 方法和 extracted2 方法在这两个方法中进行实际数据库操作。由于 extracted1 方法和 extracted2 方法是最小粒度的操作这两个方法可以不用关注事务的处理，而 session 方法是作为联合调度方，因此 session 需要关注事务相关处理，因此它需要使用 MybatisUtil 提供的 work 方法来进行事务统一处理，即打开 SqlSession 执行不同mapper 操作，提交或回滚，关闭 SqlSession。
 
 
 === 存储模块使用
