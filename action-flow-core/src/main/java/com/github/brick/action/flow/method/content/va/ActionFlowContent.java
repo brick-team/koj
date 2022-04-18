@@ -30,6 +30,12 @@ public abstract class ActionFlowContent {
     protected boolean startMetrics = false;
     protected ActionFlowExecute actionFlowExecute;
 
+    /**
+     * 用于启动
+     * 注意:<b>需要在子类中调用 {@link ActionFlowContent#initActionFlowExecute()} 方法完成成员变量 {@link ActionFlowContent#actionFlowExecute} </b>
+     *
+     * @throws Exception
+     */
     public abstract void start() throws Exception;
 
     /**
@@ -44,6 +50,9 @@ public abstract class ActionFlowContent {
         }
     }
 
+    /**
+     * 核心执行方法
+     */
     protected String execute(String fileName, Serializable flowId, String jsonData) {
         if (this.actionFlowExecute != null) {
             actionFlowExecute.setFileName(fileName);
@@ -52,6 +61,19 @@ public abstract class ActionFlowContent {
         throw new RuntimeException("执行器为空无法执行");
     }
 
+    /**
+     * 核心执行方法
+     */
+    protected String execute(Serializable flowId, String jsonData) {
+        if (this.actionFlowExecute != null) {
+            return actionFlowExecute.execute(flowId, jsonData);
+        }
+        throw new RuntimeException("执行器为空无法执行");
+    }
+
+    /**
+     * 用于初始化成员变量 {@link ActionFlowContent#actionFlowExecute}
+     */
     protected abstract void initActionFlowExecute();
 
 

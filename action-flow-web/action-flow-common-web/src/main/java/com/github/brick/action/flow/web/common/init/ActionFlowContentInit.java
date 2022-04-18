@@ -17,7 +17,7 @@
 package com.github.brick.action.flow.web.common.init;
 
 import com.github.brick.action.flow.method.content.va.db.ActionFlowDbContent;
-import com.github.brick.action.flow.method.content.va.xml.ActionFlowXMLMysqlContent;
+import com.github.brick.action.flow.method.content.va.memory.ActionFlowMemoryContent;
 import com.github.brick.action.flow.web.common.config.ActionFlowConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,9 +36,21 @@ public class ActionFlowContentInit {
     @Bean
     public ActionFlowDbContent actionFlowMysqlContent(
             @Autowired ActionFlowConfiguration actionFlowConfiguration
-    ) {
+    ) throws Exception {
 
-        return new ActionFlowDbContent(actionFlowConfiguration.getDatasource());
+        ActionFlowDbContent actionFlowDbContent =
+                new ActionFlowDbContent(actionFlowConfiguration.getDatasource());
+        actionFlowDbContent.start();
+        return actionFlowDbContent;
+    }
+
+    @ConditionalOnProperty(value = "action-flow.storage.type", havingValue = "memory")
+    @Bean
+    public ActionFlowMemoryContent actionFlowMemoryContent(
+    ) throws Exception {
+        ActionFlowMemoryContent actionFlowMemoryContent = new ActionFlowMemoryContent();
+        actionFlowMemoryContent.start();
+        return actionFlowMemoryContent;
     }
 
 
