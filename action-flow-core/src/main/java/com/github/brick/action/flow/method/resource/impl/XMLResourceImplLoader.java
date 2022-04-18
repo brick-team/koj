@@ -14,8 +14,9 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.resource;
+package com.github.brick.action.flow.method.resource.impl;
 
+import com.github.brick.action.flow.method.resource.XmlResourceLoader;
 import com.github.brick.action.flow.model.xml.ActionFlowXML;
 import com.github.brick.action.flow.parse.api.ActionFlowXMLParseApi;
 import com.github.brick.action.flow.parse.xml.ActionFlowXMLParseApiImpl;
@@ -26,22 +27,21 @@ import java.util.Map;
 /**
  * @author Zen Huifer
  */
-public class XMLResource implements Resource {
+public class XMLResourceImplLoader implements XmlResourceLoader {
 
-    ActionFlowXMLParseApi actionFlowXMLParseApi = new ActionFlowXMLParseApiImpl();
+	ActionFlowXMLParseApi actionFlowXMLParseApi = new ActionFlowXMLParseApiImpl();
 
-    @Override
-    public Map<String, ActionFlowXML> loads(String... actionFlowFileNames) throws Exception {
-        Map<String, ActionFlowXML> map = new HashMap<>();
-        for (String actionFlowFileName : actionFlowFileNames) {
-            map.put(actionFlowFileName, load(actionFlowFileName));
-        }
-        return map;
-    }
+	@Override public Map<String, ActionFlowXML> loads(String... actionFlowFileNames)
+			throws Exception {
+		Map<String, ActionFlowXML> map = new HashMap<>();
+		for (String actionFlowFileName : actionFlowFileNames) {
+			map.put(actionFlowFileName, load(actionFlowFileName));
+		}
+		return map;
+	}
 
-    @Override
-    public ActionFlowXML load(String actionFlowFineName) throws Exception {
-        return actionFlowXMLParseApi.parseFile(actionFlowFineName);
-    }
+	@Override public ActionFlowXML load(String actionFlowFineName) throws Exception {
+		return actionFlowXMLParseApi.parseFile(actionFlowFineName);
+	}
 
 }

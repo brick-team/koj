@@ -25,6 +25,7 @@ import org.junit.Test;
 
 
 /**
+ * Testing for {@link  MybatisUtil}
  * @author Zen Huifer
  */
 public class MybatisTransactional {

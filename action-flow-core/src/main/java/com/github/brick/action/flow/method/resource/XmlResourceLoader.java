@@ -14,22 +14,19 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.mysql.config;
+package com.github.brick.action.flow.method.resource;
 
-import com.github.brick.action.flow.storage.mysql.util.MybatisUtil;
+import com.github.brick.action.flow.model.xml.ActionFlowXML;
+
+import java.util.Map;
 
 /**
- * mysql 配置类
- *
  * @author Zen Huifer
  */
-public class MysqlConfig {
-    static Class<?>[] mappers = new Class[] {
+public interface XmlResourceLoader
+		extends ResourceLoader<ActionFlowXML,Map<String, ActionFlowXML>> {
+	Map<String, ActionFlowXML> loads(String... actionFlowFileNames) throws Exception;
 
-    };
 
-
-    public static void init(String user, String password, String url, String dbDriver) {
-        MybatisUtil mybatisUtil = new MybatisUtil(user, password, url, dbDriver, mappers);
-    }
+	ActionFlowXML load(String actionFlowFineName) throws Exception;
 }

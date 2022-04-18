@@ -17,11 +17,15 @@
 package com.github.brick.action.flow.method.content.va.xml;
 
 import com.github.brick.action.flow.method.factory.storage.StorageFactory;
+import com.github.brick.action.flow.method.resource.ResourceLoader;
+import com.github.brick.action.flow.method.resource.impl.JDBCResourceLoaderImpl;
+import com.github.brick.action.flow.model.config.JdbcConfig;
 import com.github.brick.action.flow.model.enums.StorageType;
 import com.github.brick.action.flow.model.xml.ActionFlowXML;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
+import com.github.brick.action.flow.storage.mysql.config.MysqlConfig;
 
 import java.util.Map;
 
@@ -29,28 +33,41 @@ import java.util.Map;
  * @author Zen Huifer
  */
 public class ActionFlowMysqlContent extends ActionFlowXMLContent {
-	protected static StorageType storageType;
+    public static final String MYSQL_CONFIG_FILE = "action_flow_jdbc.properties";
+    protected static StorageType storageType;
 
-	static {
-		storageType = StorageType.MYSQL;
-	}
+    static {
+        storageType = StorageType.MYSQL;
+    }
 
-	public ActionFlowMysqlContent(String[] actionFlowFileNames) {
-		super(actionFlowFileNames);
-	}
+    ResourceLoader<JdbcConfig, Map<String, JdbcConfig>> resourceLoader =
+            new JDBCResourceLoaderImpl();
 
-	@Override protected void storage(Map<String, ActionFlowXML> loads) {
-		ActionExecuteEntityStorage actionExecuteEntityStorage = StorageFactory.factory(
-				storageType, ActionExecuteEntityStorage.class);
-		FlowExecuteEntityStorage flowExecuteEntityStorage = StorageFactory.factory(
-				storageType, FlowExecuteEntityStorage.class);
-		ResultExecuteEntityStorage resultExecuteEntityStorage = StorageFactory.factory(
-				storageType, ResultExecuteEntityStorage.class);
+    public ActionFlowMysqlContent(String[] actionFlowFileNames) {
+        super(actionFlowFileNames);
+    }
 
-		loads.forEach((k, v) -> {
-			actionExecuteEntityStorage.save(k, v.getActions());
-			flowExecuteEntityStorage.save(k, v.getFlows());
-			resultExecuteEntityStorage.save(k, v.getResults());
-		});
-	}
+    @Override
+    protected void storage(Map<String, ActionFlowXML> loads) throws Exception {
+        beforeStorage();
+        ActionExecuteEntityStorage actionExecuteEntityStorage = StorageFactory.factory(
+                storageType, ActionExecuteEntityStorage.class);
+        FlowExecuteEntityStorage flowExecuteEntityStorage = StorageFactory.factory(
+                storageType, FlowExecuteEntityStorage.class);
+        ResultExecuteEntityStorage resultExecuteEntityStorage = StorageFactory.factory(
+                storageType, ResultExecuteEntityStorage.class);
+
+        loads.forEach((k, v) -> {
+            actionExecuteEntityStorage.save(k, v.getActions());
+            flowExecuteEntityStorage.save(k, v.getFlows());
+            resultExecuteEntityStorage.save(k, v.getResults());
+        });
+    }
+
+    protected void beforeStorage() throws Exception {
+        JdbcConfig load = this.resourceLoader.load(MYSQL_CONFIG_FILE);
+        MysqlConfig.init(
+                load.getUsername(), load.getPassword(), load.getUrl(), load.getDriver()
+        );
+    }
 }

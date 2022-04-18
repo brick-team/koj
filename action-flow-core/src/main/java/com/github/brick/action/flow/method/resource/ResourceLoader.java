@@ -16,16 +16,15 @@
 
 package com.github.brick.action.flow.method.resource;
 
-import com.github.brick.action.flow.model.xml.ActionFlowXML;
-
-import java.util.Map;
-
 /**
+ * 资源解析
+ * @param <T> 解析单个文件得到的结果
+ * @param <T> 解析多个文件得到的结果
  * @author Zen Huifer
  */
-public interface Resource {
-    Map<String, ActionFlowXML> loads(String... actionFlowFileNames) throws Exception;
+public interface ResourceLoader<T, More> {
+	More loads(String... files) throws Exception;
 
+	T load(String file) throws Exception;
 
-    ActionFlowXML load(String actionFlowFineName) throws Exception;
 }
