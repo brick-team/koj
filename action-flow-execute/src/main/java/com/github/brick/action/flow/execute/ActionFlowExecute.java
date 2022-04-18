@@ -60,7 +60,16 @@ public class ActionFlowExecute {
     private final ActionExecuteEntityStorage actionExecuteEntityStorage;
     private final FlowExecuteEntityStorage flowExecuteEntityStorage;
     private final ResultExecuteEntityStorage resultExecuteEntityStorage;
-    private final String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    private  String fileName;
     private final ActionFlowFactory<ExtractModel, Extract> extractFactory;
     Gson gson = new Gson();
     JDKExecuteService jdkExecuteService = new JDKExecuteServiceImpl();
@@ -174,12 +183,12 @@ public class ActionFlowExecute {
         return value;
     }
 
-    public String execute(String flowId, String jsonData) {
+    public String execute(Serializable flowId, String jsonData) {
         Map<String, Object> res = getStringObjectMap(flowId, jsonData);
         return gson.toJson(res);
     }
 
-    public Map<String, Object> getStringObjectMap(String flowId, String jsonData) {
+    private Map<String, Object> getStringObjectMap(Serializable flowId, String jsonData) {
         FlowExecuteEntity flowExecuteEntity = flowExecuteEntityStorage.getFlow(fileName, flowId);
 
         ResultExecuteEntity resultExecuteEntity = resultExecuteEntityStorage.getResult(fileName, flowId);

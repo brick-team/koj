@@ -16,7 +16,6 @@
 
 package com.github.brick.action.flow.web.independent;
 
-import com.github.brick.action.flow.method.content.va.xml.ActionFlowMysqlContent;
 import com.github.brick.action.flow.web.common.config.EnableActionFlowServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,10 +26,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 )
 @EnableActionFlowServer
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext run = SpringApplication.run(App.class, args);
-        ActionFlowMysqlContent actionFlowMysqlContent = new ActionFlowMysqlContent(new String[]{"flow.xml"});
-        System.out.println();
     }
 
 

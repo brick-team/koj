@@ -16,6 +16,7 @@
 
 package com.github.brick.action.flow.web.common.config;
 
+import com.github.brick.action.flow.model.config.JdbcConfig;
 import com.github.brick.action.flow.model.enums.StorageType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -34,6 +35,15 @@ public class ActionFlowConfiguration {
      */
     private StorageConfiguration storage;
 
+    private DBConfiguration datasource;
+
+    public DBConfiguration getDatasource() {
+        return datasource;
+    }
+
+    public void setDatasource(DBConfiguration datasource) {
+        this.datasource = datasource;
+    }
 
     public StorageConfiguration getStorage() {
         return storage;
@@ -64,6 +74,7 @@ public class ActionFlowConfiguration {
         }
     }
 
+
     public static class SecurityConfiguration {
         private boolean enable;
 
@@ -75,5 +86,11 @@ public class ActionFlowConfiguration {
             this.enable = enable;
         }
     }
+
+
+    public static class DBConfiguration extends JdbcConfig {
+
+    }
+
 
 }

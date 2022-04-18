@@ -26,25 +26,31 @@ import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
 import java.util.Map;
 
 /**
+ * action flow xml 存储媒介：内存
  * @author Zen Huifer
  */
-public class ActionFlowMemoryContent extends ActionFlowXMLContent {
+public class ActionFlowXMLMemoryContent extends ActionFlowXMLContent {
     protected static StorageType storageType;
 
     static {
         storageType = StorageType.MEMORY;
     }
 
-    public ActionFlowMemoryContent(String[] actionFlowFileNames) {
+    public ActionFlowXMLMemoryContent(String[] actionFlowFileNames) throws Exception {
         super(actionFlowFileNames);
     }
 
     @Override
     protected void storage(Map<String, ActionFlowXML> loads) {
-        ActionExecuteEntityStorage actionExecuteEntityStorage = StorageFactory.factory(storageType, ActionExecuteEntityStorage.class);
-        FlowExecuteEntityStorage flowExecuteEntityStorage = StorageFactory.factory(storageType, FlowExecuteEntityStorage.class);
-        ResultExecuteEntityStorage resultExecuteEntityStorage = StorageFactory.factory(storageType, ResultExecuteEntityStorage.class);
-
+        ActionExecuteEntityStorage actionExecuteEntityStorage =
+                StorageFactory.factory(storageType, ActionExecuteEntityStorage.class);
+        this.actionExecuteEntityStorage = actionExecuteEntityStorage;
+        FlowExecuteEntityStorage flowExecuteEntityStorage =
+                StorageFactory.factory(storageType, FlowExecuteEntityStorage.class);
+        this.flowExecuteEntityStorage = flowExecuteEntityStorage;
+        ResultExecuteEntityStorage resultExecuteEntityStorage =
+                StorageFactory.factory(storageType, ResultExecuteEntityStorage.class);
+        this.resultExecuteEntityStorage = resultExecuteEntityStorage;
         loads.forEach((k, v) -> {
             actionExecuteEntityStorage.save(k, v.getActions());
             flowExecuteEntityStorage.save(k, v.getFlows());

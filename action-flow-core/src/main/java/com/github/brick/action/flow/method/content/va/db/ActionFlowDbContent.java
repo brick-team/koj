@@ -14,26 +14,33 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.method.content.va.xml;
+package com.github.brick.action.flow.method.content.va.db;
 
+import com.github.brick.action.flow.execute.ActionFlowExecute;
+import com.github.brick.action.flow.method.content.va.ActionFlowContent;
 import com.github.brick.action.flow.method.factory.storage.StorageFactory;
 import com.github.brick.action.flow.method.resource.ResourceLoader;
 import com.github.brick.action.flow.method.resource.impl.JDBCResourceLoaderImpl;
 import com.github.brick.action.flow.model.config.JdbcConfig;
 import com.github.brick.action.flow.model.enums.StorageType;
-import com.github.brick.action.flow.model.xml.ActionFlowXML;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
 import com.github.brick.action.flow.storage.mysql.config.MysqlConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 /**
+ * action flow 非文件模式， 存储媒介：mysql
+ *
  * @author Zen Huifer
  */
-public class ActionFlowMysqlContent extends ActionFlowXMLContent {
+public class ActionFlowDbContent extends ActionFlowContent {
     public static final String MYSQL_CONFIG_FILE = "action_flow_jdbc.properties";
+    private static final Logger logger =
+            LoggerFactory.getLogger(ActionFlowDbContent.class);
     protected static StorageType storageType;
 
     static {
@@ -42,32 +49,48 @@ public class ActionFlowMysqlContent extends ActionFlowXMLContent {
 
     ResourceLoader<JdbcConfig, Map<String, JdbcConfig>> resourceLoader =
             new JDBCResourceLoaderImpl();
+    ActionExecuteEntityStorage actionExecuteEntityStorage;
+    FlowExecuteEntityStorage flowExecuteEntityStorage;
+    ResultExecuteEntityStorage resultExecuteEntityStorage;
+    private JdbcConfig jdbcConfig;
 
-    public ActionFlowMysqlContent(String[] actionFlowFileNames) {
-        super(actionFlowFileNames);
+    public ActionFlowDbContent(JdbcConfig datasource) {
+        this.jdbcConfig = datasource;
     }
 
     @Override
-    protected void storage(Map<String, ActionFlowXML> loads) throws Exception {
-        beforeStorage();
-        ActionExecuteEntityStorage actionExecuteEntityStorage = StorageFactory.factory(
-                storageType, ActionExecuteEntityStorage.class);
-        FlowExecuteEntityStorage flowExecuteEntityStorage = StorageFactory.factory(
-                storageType, FlowExecuteEntityStorage.class);
-        ResultExecuteEntityStorage resultExecuteEntityStorage = StorageFactory.factory(
-                storageType, ResultExecuteEntityStorage.class);
-
-        loads.forEach((k, v) -> {
-            actionExecuteEntityStorage.save(k, v.getActions());
-            flowExecuteEntityStorage.save(k, v.getFlows());
-            resultExecuteEntityStorage.save(k, v.getResults());
-        });
+    protected void initActionFlowExecute() {
+        this.actionFlowExecute =
+                new ActionFlowExecute(null, this.actionExecuteEntityStorage,
+                        this.flowExecuteEntityStorage, this.resultExecuteEntityStorage);
     }
 
-    protected void beforeStorage() throws Exception {
-        JdbcConfig load = this.resourceLoader.load(MYSQL_CONFIG_FILE);
+    @Override
+    public void start() throws Exception {
+        logger.info("action flow 非文件模式启动，存储媒介：mysql");
+
+        if (jdbcConfig == null) {
+            JdbcConfig load = this.resourceLoader.load(MYSQL_CONFIG_FILE);
+            this.jdbcConfig = load;
+        }
+
         MysqlConfig.init(
-                load.getUsername(), load.getPassword(), load.getUrl(), load.getDriver()
+                jdbcConfig.getUsername(), jdbcConfig.getPassword(), jdbcConfig.getUrl(),
+                jdbcConfig.getDriver()
         );
+
+        ActionExecuteEntityStorage actionExecuteEntityStorage = StorageFactory.factory(
+                storageType, ActionExecuteEntityStorage.class);
+        this.actionExecuteEntityStorage = actionExecuteEntityStorage;
+        FlowExecuteEntityStorage flowExecuteEntityStorage = StorageFactory.factory(
+                storageType, FlowExecuteEntityStorage.class);
+        this.flowExecuteEntityStorage = flowExecuteEntityStorage;
+        ResultExecuteEntityStorage resultExecuteEntityStorage = StorageFactory.factory(
+                storageType, ResultExecuteEntityStorage.class);
+        this.resultExecuteEntityStorage = resultExecuteEntityStorage;
+
+        // 初始化执行器
+        initActionFlowExecute();
+
     }
 }

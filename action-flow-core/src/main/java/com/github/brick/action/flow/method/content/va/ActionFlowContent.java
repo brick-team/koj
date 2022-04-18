@@ -16,12 +16,10 @@
 
 package com.github.brick.action.flow.method.content.va;
 
-import com.github.brick.action.flow.method.resource.ResourceLoader;
-import com.github.brick.action.flow.method.resource.impl.XMLResourceImplLoader;
+import com.github.brick.action.flow.execute.ActionFlowExecute;
 import com.github.brick.action.flow.metrics.ActionFlowMetricRegistry;
-import com.github.brick.action.flow.model.xml.ActionFlowXML;
 
-import java.util.Map;
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,54 +27,32 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class ActionFlowContent {
 
-	ResourceLoader<ActionFlowXML, Map<String, ActionFlowXML>> xmlResource = new XMLResourceImplLoader();
-	Map<String, ActionFlowXML> loads;
-	private String[] actionFlowFileNames;
-	private boolean startMetrics = false;
+    protected boolean startMetrics = false;
+    protected ActionFlowExecute actionFlowExecute;
 
-	public ActionFlowContent(String[] actionFlowFileNames) throws Exception {
-		this(actionFlowFileNames, false);
-	}
+    public abstract void start() throws Exception;
 
-	public ActionFlowContent(String[] actionFlowFileNames, boolean startMetrics)
-			throws Exception {
-		this.actionFlowFileNames = actionFlowFileNames;
-		this.startMetrics = startMetrics;
-		start();
-	}
+    /**
+     * 启动监控相关
+     *
+     * @param b 是否启用,默认采用false
+     */
+    protected void startMetrics(boolean b) {
+        if (b) {
+            ActionFlowMetricRegistry.getConsoleReporter().start(1, TimeUnit.SECONDS);
+            ActionFlowMetricRegistry.getSlf4jReporter().start(1, TimeUnit.SECONDS);
+        }
+    }
 
-	public ActionFlowContent() {
-	}
+    protected String execute(String fileName, Serializable flowId, String jsonData) {
+        if (this.actionFlowExecute != null) {
+            actionFlowExecute.setFileName(fileName);
+            return actionFlowExecute.execute(flowId, jsonData);
+        }
+        throw new RuntimeException("执行器为空无法执行");
+    }
 
-	public void start() throws Exception {
-		load();
-		storage(this.loads);
-		startMetrics(this.startMetrics);
-	}
+    protected abstract void initActionFlowExecute();
 
-	/**
-	 * 启动监控相关
-	 *
-	 * @param b 是否启用,默认采用false
-	 */
-	protected void startMetrics(boolean b) {
-		if (b) {
-			ActionFlowMetricRegistry.getConsoleReporter().start(1, TimeUnit.SECONDS);
-			ActionFlowMetricRegistry.getSlf4jReporter().start(1, TimeUnit.SECONDS);
-		}
-	}
 
-	protected abstract void storage(Map<String, ActionFlowXML> loads) throws Exception;
-
-	protected void load() {
-		try {
-			Map<String, ActionFlowXML> loads = this.xmlResource.loads(
-					actionFlowFileNames);
-			this.loads = loads;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
 }
