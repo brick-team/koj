@@ -16,6 +16,8 @@
 
 package com.github.brick.action.flow.execute;
 
+import com.github.brick.action.flow.execute.condition.ActionFlowCondition;
+import com.github.brick.action.flow.execute.condition.ActionFlowConditionImpl;
 import com.github.brick.action.flow.execute.extract.Extract;
 import com.github.brick.action.flow.execute.extract.ExtractActionFlowFactory;
 import com.github.brick.action.flow.execute.http.HttpWorker;
@@ -54,11 +56,9 @@ import java.util.stream.Collectors;
  * @author Zen Huifer
  */
 public class ActionFlowExecute {
-    public static final String DROOL = "$.";
     private static final Logger logger = LoggerFactory.getLogger(ActionFlowExecute.class);
     private static final String[] ops =
             new String[] {">", ">=", "==", "<", "<=", "&&", "||",};
-    static SpelExpressionParser parser = new SpelExpressionParser();
     private final ActionExecuteEntityStorage actionExecuteEntityStorage;
     private final FlowExecuteEntityStorage flowExecuteEntityStorage;
     private final ResultExecuteEntityStorage resultExecuteEntityStorage;
@@ -119,105 +119,9 @@ public class ActionFlowExecute {
         this.objectSearchFromSpring = objectSearchFromSpring;
     }
 
-    private static boolean inOps(String aChar) {
-        for (String op : ops) {
-            if (op.contains(aChar)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean inOps(char aChar) {
-        for (String op : ops) {
-            if (op.contains(Character.toString(aChar))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Boolean handlerLeftRight(String s2, ExtractModel elType, Object o) {
-        char[] chars = s2.toCharArray();
-        Extract extract = this.extractFactory.factory(elType);
-
-        if (s2.contains("(") && s2.contains(")")) {
 
 
-            StringBuilder sb = new StringBuilder();
-            int start = 0;
-            int end = 0;
-            for (int i = 0; i < chars.length; i++) {
-                char aChar = chars[i];
-                sb.append(aChar);
-                if (aChar == '(') {
-                    start = i;
-                }
-                if (aChar == ')') {
-                    end = i;
-                }
-                if (end != 0) {
-                    String s = sb.toString();
 
-                    String substring = s.substring(start + 1, end);
-                    String[] s1 = substring.trim().split(" ");
-                    if (s1.length == 3) {
-
-                        Boolean value = handlerLeftAndRightCondition(s1[0], s1[1], s1[2], extract, o);
-                        s2 = s2.replace(substring, value.toString());
-                    }
-                    start = 0;
-                    end = 0;
-                }
-            }
-            Expression expression = parser.parseExpression(s2);
-            EvaluationContext context = new StandardEvaluationContext();
-            Boolean value = expression.getValue(context, Boolean.class);
-            return value;
-        }
-        else {
-            int start = 0;
-            int end = 0;
-            for (int i = 0; i < chars.length; i++) {
-                char aChar = chars[i];
-                if (inOps(aChar)) {
-                    start = i;
-                    if (inOps(Character.toString(aChar) + chars[i + 1])) {
-                        end = i + 1;
-                        break;
-
-                    }
-                    else {
-                        end = i;
-                    }
-                }
-            }
-
-            Boolean value = handlerLeftAndRightCondition(s2.substring(0, start), s2.substring(start, end + 1), s2.substring(end + 1), extract, o);
-            return value;
-        }
-
-    }
-
-    private Boolean handlerLeftAndRightCondition(String s2, String s21, String s22, Extract extract, Object o) {
-        String left = s2;
-        String op = s21;
-        String right = s22;
-        Object leftVal = null;
-        Object rightVal = null;
-        if (left.contains(DROOL)) {
-            leftVal = extract.extract(o, left);
-        }
-        if (right.contains(DROOL)) {
-            rightVal = extract.extract(o, right);
-        }
-
-
-        Expression expression = parser.parseExpression(leftVal + op + rightVal);
-        EvaluationContext context = new StandardEvaluationContext();
-        Boolean value = expression.getValue(context, Boolean.class);
-        return value;
-    }
 
     public String execute(Serializable flowId, String jsonData) {
         Map<String, Object> res = getStringObjectMap(flowId, jsonData);
@@ -353,7 +257,11 @@ public class ActionFlowExecute {
         return map;
     }
 
-    private Object executeWork(String jsonData, Map<String, Object> stepWorkResult, WorkExecuteEntity work) {
+    ActionFlowCondition actionFlowCondition = new ActionFlowConditionImpl();
+
+    private Object executeWork(String jsonData,
+                               Map<String, Object> stepWorkResult,
+                               WorkExecuteEntity work) {
         String refId = work.getRefId();
         // 执行action
         Object o = executeAction(fileName, jsonData, refId);
@@ -364,14 +272,13 @@ public class ActionFlowExecute {
         for (WatcherExecuteEntity watcher : watchers) {
             ExtractModel elType = watcher.getElType();
             String condition = watcher.getCondition();
-            Boolean aBoolean = handlerLeftRight(condition, elType, o);
+            boolean aBoolean = actionFlowCondition.condition(condition, elType, o);
             if (aBoolean) {
                 List<WorkExecuteEntity> then = watcher.getThen();
                 for (WorkExecuteEntity workExecuteEntity : then) {
                     executeWork(jsonData, stepWorkResult, workExecuteEntity);
                 }
-            }
-            else {
+            } else {
                 List<WorkExecuteEntity> cat = watcher.getCat();
                 for (WorkExecuteEntity workExecuteEntity : cat) {
                     executeWork(jsonData, stepWorkResult, workExecuteEntity);
