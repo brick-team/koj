@@ -14,14 +14,23 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.enums;
+package com.github.brick.action.flow.extract;
 
-public enum ExtractModel implements Type {
-    JSON_PATH,XPATH,JAVA_SCRIPT,PYTHON, GROOVY,
-    ;
+import groovy.lang.GroovyShell;
+import groovy.lang.Script;
+import groovy.util.GroovyScriptEngine;
 
-    @Override
-    public String type() {
-        return name();
+/**
+ * @author Zen Huifer
+ */
+public class gc {
+    public static void main(String[] args) throws Exception {
+        GroovyShell shell = new GroovyShell();
+
+
+
+
+
+        System.out.println();
     }
 }

@@ -14,14 +14,21 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.enums;
+package com.github.brick.action.flow.execute.condition;
 
-public enum ExtractModel implements Type {
-    JSON_PATH,XPATH,JAVA_SCRIPT,PYTHON, GROOVY,
-    ;
+import com.github.brick.action.flow.model.enums.ExtractModel;
+
+/**
+ * @author Zen Huifer
+ */
+public class ActionFlowConditionImpl implements ActionFlowCondition {
+    @Override
+    public boolean condition(String condition, ExtractModel elType, Object o) {
+        return false;
+    }
 
     @Override
-    public String type() {
-        return name();
+    public boolean condition(String condition, ExtractModel elType, String json) {
+        return false;
     }
 }

@@ -14,14 +14,15 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.enums;
-
-public enum ExtractModel implements Type {
-    JSON_PATH,XPATH,JAVA_SCRIPT,PYTHON, GROOVY,
-    ;
-
-    @Override
-    public String type() {
-        return name();
-    }
-}
+/**
+ * flow :
+ * 1. 平均执行时间
+ * 2. 最小执行时间
+ * 3. 最大执行时间
+ * action:
+ * 1. 平均执行时间
+ * 2. 最小执行时间
+ * 3. 最大执行时间
+ * @author Zen Huifer
+ */
+package com.github.brick.action.flow.method.memge;
