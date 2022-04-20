@@ -69,9 +69,18 @@ public class ParamXMLForJavaMethodParse extends CommonParseAndValidateImpl<Param
      */
     @Override
     public void validate(ParamXML paramXml) throws IllegalArgumentException {
-        if (paramXml.getJavaMethod().getType() == null
-                || "".equals(paramXml.getJavaMethod().getType())){
-            throw new IllegalArgumentException("JavaMethod方式参数类型不能为空");
+        ParamExecuteEntity.ForJavaMethod javaMethod = paramXml.getJavaMethod();
+
+        if (javaMethod.getIndex() != null){
+
+            if (javaMethod.getType() == null || "".equals(javaMethod.getType())){
+                throw new IllegalArgumentException("JavaMethod参数类型不能为空");
+            }
+
+            if ((javaMethod.getName() == null || "".equals(javaMethod.getName()))
+                    && javaMethod.getExtract() == null){
+                throw new IllegalArgumentException("JavaMethod参数必须包含name或extract其中一个");
+            }
         }
     }
 }

@@ -16,13 +16,7 @@
 
 package com.github.brick.action.flow.model.jdk;
 
-import com.github.brick.action.flow.model.swagger.ApiParamEntity;
-import jdk.jfr.DataAmount;
 import lombok.Data;
-
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Zen Huifer

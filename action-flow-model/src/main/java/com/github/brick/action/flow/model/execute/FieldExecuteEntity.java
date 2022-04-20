@@ -26,6 +26,7 @@ import java.util.List;
 public class FieldExecuteEntity {
     private String fieldName;
     private FieldType type;
+    private String value;
     private ExtractExecuteEntity extract;
     private List<FieldExecuteEntity> properties = new ArrayList<>();
 

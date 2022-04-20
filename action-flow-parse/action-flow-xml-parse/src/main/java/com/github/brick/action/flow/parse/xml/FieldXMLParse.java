@@ -88,5 +88,9 @@ public class FieldXMLParse extends CommonParseAndValidateImpl<FieldXML>
         if (fieldXml.getType() == null){
             throw new IllegalArgumentException("流程结果 type 不能为空");
         }
+
+        if (fieldXml.getExtract() == null && (fieldXml.getValue() == null || "".equals(fieldXml.getValue()))){
+            throw new IllegalArgumentException("流程结果 " + fieldXml.getFieldName() + " 属性中必须包含extract或value其中一个");
+        }
     }
 }

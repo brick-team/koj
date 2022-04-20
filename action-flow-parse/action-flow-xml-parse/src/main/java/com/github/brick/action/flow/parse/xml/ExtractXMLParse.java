@@ -49,10 +49,10 @@ public class ExtractXMLParse extends CommonParseAndValidateImpl<ExtractXML> impl
     }
 
     @Override
-    public void validate(ExtractXML extractXML) throws IllegalArgumentException {
-        String el = extractXML.getEl();
+    public void validate(ExtractXML extractXml) throws IllegalArgumentException {
+        String el = extractXml.getEl();
         if (el == null || "".equals(el)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("extract中el表达式不能为空");
         }
     }
 }
