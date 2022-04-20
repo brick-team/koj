@@ -25,7 +25,8 @@ import org.dom4j.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResultXMLParse implements ParseXML<List<ResultExecuteEntity>> {
+public class ResultXMLParse extends CommonParseAndValidateImpl<List<ResultExecuteEntity>>
+        implements ParseXML<List<ResultExecuteEntity>>{
     private static final String RESULT_NODE = "result";
     private static final String RESULTS_NODE = "results";
     private static final String FLOW_ID_ATTR = "flowId";
@@ -55,5 +56,11 @@ public class ResultXMLParse implements ParseXML<List<ResultExecuteEntity>> {
             resultList.add(resultXML);
         }
         return resultList;
+    }
+
+    @Override
+    public void validate(List<ResultExecuteEntity> resultExecuteEntities) throws IllegalArgumentException {
+
+
     }
 }

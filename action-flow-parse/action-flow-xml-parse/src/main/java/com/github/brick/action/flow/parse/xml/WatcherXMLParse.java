@@ -20,7 +20,8 @@ import com.github.brick.action.flow.model.enums.ExtractModel;
 import com.github.brick.action.flow.model.xml.WatcherXML;
 import org.dom4j.Element;
 
-public class WatcherXMLParse implements ParseXML<WatcherXML> {
+public class WatcherXMLParse extends CommonParseAndValidateImpl<WatcherXML>
+        implements ParseXML<WatcherXML>, ValidateXMLParseData<WatcherXML> {
     private static final String CONDITION_ATTR = "condition";
     private static final String EL_TYPE_ATTR = "elType";
 
@@ -37,6 +38,24 @@ public class WatcherXMLParse implements ParseXML<WatcherXML> {
             watcherXML.setElType(ExtractModel.valueOf(elType.toUpperCase()));
         }
         return watcherXML;
+    }
+
+    /**
+     * 验证watcher数据
+     *
+     * @param watcherXml watcherXml
+     * @throws IllegalArgumentException 非法参数异常
+     */
+    @Override
+    public void validate(WatcherXML watcherXml) throws IllegalArgumentException {
+
+        if (watcherXml.getCondition() == null || "".equals(watcherXml.getCondition())){
+            throw new IllegalArgumentException("watcher中condition不能为空");
+        }
+
+        if (watcherXml.getElType() == null){
+            throw new IllegalArgumentException("watcher中type不能为空");
+        }
     }
 }
 

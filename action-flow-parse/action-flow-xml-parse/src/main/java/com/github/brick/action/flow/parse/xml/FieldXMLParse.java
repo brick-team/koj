@@ -25,7 +25,8 @@ import org.dom4j.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FieldXMLParse implements ParseXML<FieldXML> {
+public class FieldXMLParse extends CommonParseAndValidateImpl<FieldXML>
+        implements ParseXML<FieldXML>, ValidateXMLParseData<FieldXML> {
     private static final String FIELD_NAME_NODE = "fieldName";
     private static final String TYPE_NODE = "type";
     private static final String EXTRACT_NODE = "extract";
@@ -69,5 +70,23 @@ public class FieldXMLParse implements ParseXML<FieldXML> {
 
 
         return fieldXML;
+    }
+
+    /**
+     * 验证flow结果集
+     *
+     * @param fieldXml 参数xml
+     * @throws IllegalArgumentException 非法参数异常
+     */
+    @Override
+    public void validate(FieldXML fieldXml) throws IllegalArgumentException {
+
+        if (fieldXml.getFieldName() == null || "".equals(fieldXml.getFieldName())){
+            throw new IllegalArgumentException("流程结果 fieldName 不能为空");
+        }
+
+        if (fieldXml.getType() == null){
+            throw new IllegalArgumentException("流程结果 type 不能为空");
+        }
     }
 }

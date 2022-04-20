@@ -26,7 +26,8 @@ import org.dom4j.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkXMLParse implements ParseXML<WorkXML> {
+public class WorkXMLParse extends CommonParseAndValidateImpl<WorkXML>
+        implements ParseXML<WorkXML>, ValidateXMLParseData<WorkXML> {
     private static final String STEP_ATTR = "step";
     private static final String REF_ID_ATTR = "ref_id";
     private static final String WATCHER_ATTR = "watcher";
@@ -44,7 +45,7 @@ public class WorkXMLParse implements ParseXML<WorkXML> {
         List<Element> watcher = element.elements(WATCHER_ATTR);
 
         for (Element element1 : watcher) {
-            WatcherXML parse = watcherXMLParse.parse(element1);
+            WatcherXML parse = watcherXMLParse.parasAndValidate(element1);
             ArrayList<WorkExecuteEntity> then1 = new ArrayList<>();
             Element then = element1.element(THEN_ATTR);
             if (then != null) {
@@ -72,5 +73,23 @@ public class WorkXMLParse implements ParseXML<WorkXML> {
         workXML.setWatchers(watchers);
 
         return workXML;
+    }
+
+    /**
+     * 验证work数据
+     *
+     * @param workXml workXml
+     * @throws IllegalArgumentException 非法参数异常
+     */
+    @Override
+    public void validate(WorkXML workXml) throws IllegalArgumentException {
+
+        if (workXml.getRefId() == null || "".equals(workXml.getRefId())){
+            throw new IllegalArgumentException("work中refId不能为空");
+        }
+
+        if (workXml.getStep() == null || "".equals(workXml.getStep())){
+            throw new IllegalArgumentException("work中step不能为空");
+        }
     }
 }

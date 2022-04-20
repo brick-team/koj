@@ -99,7 +99,7 @@ public class ActionXMLParse extends CommonParseAndValidateImpl<List<ActionExecut
         List<Element> param = elm.elements(PARAM_NODE);
 
         for (Element paramElement : param) {
-            ParamXML parse = paramXMLForJavaMethodParse.parse(paramElement);
+            ParamXML parse = paramXMLForJavaMethodParse.parasAndValidate(paramElement);
             methodParam.add(parse);
         }
         javaMethod.setParam(methodParam);
@@ -117,7 +117,7 @@ public class ActionXMLParse extends CommonParseAndValidateImpl<List<ActionExecut
         List<Element> param = elm.elements(PARAM_NODE);
 
         for (Element paramElement : param) {
-            ParamXML parse = paramXMLForRestApiParse.parse(paramElement);
+            ParamXML parse = paramXMLForRestApiParse.parasAndValidate(paramElement);
             apiParam.add(parse);
         }
         restApi.setParam(apiParam);

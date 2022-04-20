@@ -23,7 +23,8 @@ import lombok.Data;
 import org.dom4j.Element;
 
 @Data
-public class ParamXMLForJavaMethodParse implements ParseXML<ParamXML> {
+public class ParamXMLForJavaMethodParse extends CommonParseAndValidateImpl<ParamXML>
+        implements ParseXML<ParamXML>, ValidateXMLParseData<ParamXML> {
     private static final String NAME_ATTR = "name";
     private static final String INDEX_ATTR = "index";
     private static final String TYPE_ATTR = "type";
@@ -41,7 +42,7 @@ public class ParamXMLForJavaMethodParse implements ParseXML<ParamXML> {
         String value = element.attributeValue(VALUE_ATTR);
 
 
-        ExtractXML extract = extractXMLParse.parse(element.element(EXTRACT_NODE));
+        ExtractXML extract = extractXMLParse.parasAndValidate(element.element(EXTRACT_NODE));
 
 
         ParamExecuteEntity.ForJavaMethod javaMethod = new ParamExecuteEntity.ForJavaMethod();
@@ -58,5 +59,19 @@ public class ParamXMLForJavaMethodParse implements ParseXML<ParamXML> {
 
 
         return paramXML;
+    }
+
+    /**
+     * 验证javaMethod参数
+     *
+     * @param paramXml 参数xml
+     * @throws IllegalArgumentException 非法参数异常
+     */
+    @Override
+    public void validate(ParamXML paramXml) throws IllegalArgumentException {
+        if (paramXml.getJavaMethod().getType() == null
+                || "".equals(paramXml.getJavaMethod().getType())){
+            throw new IllegalArgumentException("JavaMethod方式参数类型不能为空");
+        }
     }
 }
