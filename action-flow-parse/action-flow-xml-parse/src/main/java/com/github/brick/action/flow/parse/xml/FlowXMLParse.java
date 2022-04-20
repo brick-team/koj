@@ -48,7 +48,7 @@ public class FlowXMLParse extends CommonParseAndValidateImpl<List<FlowExecuteEnt
 
             ArrayList<WorkExecuteEntity> works = new ArrayList<>();
             for (Element element2 : work) {
-                works.add(workXMLParse.parse(element2));
+                works.add(workXMLParse.parasAndValidate(element2));
             }
             flowXML.setWorks(works);
             res.add(flowXML);
