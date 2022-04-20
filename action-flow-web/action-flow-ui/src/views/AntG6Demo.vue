@@ -131,7 +131,7 @@ export default {
       width,
       height: 700,
       modes: {
-        default: ['drag-canvas', 'click-select', "drag-node"]
+        default: ['drag-canvas', 'click-select', "drag-node",'drag-node']
       },
       // 节点类型及样式
       defaultNode: {
