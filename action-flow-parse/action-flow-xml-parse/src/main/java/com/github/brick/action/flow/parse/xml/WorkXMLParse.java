@@ -44,7 +44,7 @@ public class WorkXMLParse implements ParseXML<WorkXML> {
         List<Element> watcher = element.elements(WATCHER_ATTR);
 
         for (Element element1 : watcher) {
-            WatcherXML parse = watcherXMLParse.parse(element1);
+            WatcherXML parse = watcherXMLParse.parasAndValidate(element1);
             ArrayList<WorkExecuteEntity> then1 = new ArrayList<>();
             Element then = element1.element(THEN_ATTR);
             if (then != null) {

@@ -136,6 +136,42 @@ java_method_param 表结构
 |父级id
 |===
 
+rest_api_result表结构
+
+|===
+| 字段名 | 类型 | 是否可为空 | 注释
+
+|id
+|int
+|否
+|主键
+
+|action_id
+|int
+|否
+|action表关联id
+
+|parent_id
+|int
+|是
+|上级id 可为空
+
+|field_name
+|varchar
+|否
+|字段名
+
+|type
+|varchar
+|否
+|值类型
+
+|value
+|varchar
+|是
+|字段值
+|===
+
 
 在这个设计中并未将 XML 模式中 param 的下级标签 extract 与参数表直接绑定，这类 extract 标签认为是运行时配置会交给执行器相关配置进行设置。
 
@@ -157,6 +193,11 @@ flow表结构
 |varchar
 |是
 |工作流名称
+
+|qualifier
+|varchar
+|是
+|与spring 进行整合使用
 |===
 
 watcher表结构

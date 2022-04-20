@@ -22,7 +22,8 @@ import com.github.brick.action.flow.model.xml.ExtractXML;
 import com.github.brick.action.flow.model.xml.ParamXML;
 import org.dom4j.Element;
 
-public class ParamXMLForRestApiParse implements ParseXML<ParamXML> {
+public class ParamXMLForRestApiParse extends CommonParseAndValidateImpl<ParamXML>
+        implements ParseXML<ParamXML>, ValidateXMLParseData<ParamXML> {
     private static final String IN_ATTR = "in";
     private static final String NAME_ATTR = "name";
     private static final String REQUIRE_ATTR = "require";
@@ -47,7 +48,7 @@ public class ParamXMLForRestApiParse implements ParseXML<ParamXML> {
 
         restApi.setValue(value);
 
-        ExtractXML extract = extractXMLParse.parse(element.element(EXTRACT_NODE));
+        ExtractXML extract = extractXMLParse.parasAndValidate(element.element(EXTRACT_NODE));
         restApi.setExtract(extract);
 
 
@@ -55,5 +56,18 @@ public class ParamXMLForRestApiParse implements ParseXML<ParamXML> {
 
 
         return paramXML;
+    }
+
+    /**
+     * 验证RestApi参数
+     *
+     * @param paramXml 参数xml
+     * @throws IllegalArgumentException 非法参数异常
+     */
+    @Override
+    public void validate(ParamXML paramXml) throws IllegalArgumentException {
+        if (paramXml.getRestApi().getIn() == null){
+            throw new IllegalArgumentException("restApi参数所在位置不能为空");
+        }
     }
 }
