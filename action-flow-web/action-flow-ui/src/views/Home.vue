@@ -1,121 +1,163 @@
 <template>
-  <div id="app">
-    <div id="container"></div>
+  <div>
 
-    <div
-      v-if="tooltip && !isMouseDown"
-      :style="`top: ${top}px; left: ${left}px;`"
-      class="g6-tooltip"
-    >
-      id: {{ tooltip }}
-    </div>
+    <el-button @click="hhhh">aaa</el-button>
+    <div id="mountNode"></div>
+
+
   </div>
 </template>
 
 <script>
 import G6 from '@antv/g6';
-import DEFAULT_DATA from "../options/index";
 
 export default {
-  name: 'gpolyline',
+  name: 'polyline',
   data() {
     return {
       graph: {},
-      data: {},
+      data: {
+        nodes: [{
+          id: 'node1',
+          x: 100,
+          y: 200
+        }, {
+          id: 'node2',
+          x: 300,
+          y: 200
+        }, {
+          id: 'node3',
+          x: 300,
+          y: 300
+        }],
+        edges: [{
+          id: 'edge1',
+          target: 'node2',
+          source: 'node1'
+        }]
+      }
+      ,
       tooltip: "",
       top: 0,
-      left: 0,
+      left: 0, addedCount: 0,
+
     };
   },
   methods: {
-    createGraphic() {
-      const vm = this;
-      const grid = new G6.Grid();
-      const menu = new G6.Menu({
-        offsetX: -20,
-        offsetY: -50,
-        itemTypes: ['node', 'edge'],
-        getContent(e) {
-          const outDiv = document.createElement('div');
-
-          outDiv.style.width = '80px';
-          outDiv.style.cursor = 'pointer';
-          outDiv.innerHTML = '<p id="deleteNode">删除节点</p>';
-          return outDiv;
-        },
-        handleMenuClick(target, item) {
-          // 触发删除操作
-          console.log("开始删除节点")
-        },
-      });
-      const minimap = new G6.Minimap({
-        size: [100, 100],
-      });
-      this.graph = new G6.Graph({
-        container: 'container',
-        width: window.innerWidth,
-        height: window.innerHeight,
-        modes: {
-
-          default: ['drag-canvas', 'drag-shadow-node', 'canvas-event', 'delete-item', 'select-node', 'hover-node', 'active-edge'],
-          originDrag: ['drag-canvas', 'drag-node', 'canvas-event', 'delete-item', 'select-node', 'hover-node', 'active-edge'],
-        },
-        // 节点类型及样式
-        defaultNode: {
-          type: 'rect',
-          size: [150, 50],
-          style: {
-            fill: '#DEE9FF',
-            stroke: '#5B8FF9'
-          }
-        },
-        // 连线类型及样式
-        defaultEdge: {
-          type: 'polyline',
-          style: {
-            // stroke: '#F6BD16',
-            offset: 25,
-            endArrow: true,
-            lineWidth: 2,
-            stroke: '#333'
-          }
-        },
-        plugins: [menu, minimap, grid],
-
-
-      })
-      this.graph.read(DEFAULT_DATA);
+    hhhh() {
+      this.graph.setMode("addNode");
     },
-    initGraphEvent() {
-      this.graph.on('node:click', e => {
-        console.log("节点选择")
-      });
-      this.graph.on('node:drop', e => {
-        // 节点删除
-        e.item.getOutEdges().forEach(edge => {
-          edge.clearStates('edgeState');
-        });
-      });
-
-
-      this.graph.on('node:mouseover', e => {
-        console.log("111")
-        if (e && e.item) {
-          this.tooltip = e.item.get('model').id;
-          this.left = e.clientX + 40;
-          this.top = e.clientY - 20;
+    ff() {
+      console.log("ff");
+      G6.registerBehavior('click-add-edge', {
+        getEvents() {
+          return {
+            'node:click': 'onClick',
+            mousemove: 'onMousemove',
+            'edge:click': 'onEdgeClick' // 点击空白处，取消边
+          };
+        },
+        onClick(ev) {
+          const node = ev.item;
+          const graph = this.graph;
+          const point = {
+            x: ev.x,
+            y: ev.y
+          };
+          const model = node.getModel();
+          if (this.addingEdge && this.edge) {
+            graph.updateItem(this.edge, {
+              target: model.id
+            });
+            // graph.setItemState(this.edge, 'selected', true);
+            this.edge = null;
+            this.addingEdge = false;
+          } else {
+            this.edge = graph.addItem('edge', {
+              source: model.id,
+              target: point
+            });
+            this.addingEdge = true;
+          }
+        },
+        onMousemove(ev) {
+          const point = {
+            x: ev.x,
+            y: ev.y
+          };
+          if (this.addingEdge && this.edge) {
+            this.graph.updateItem(this.edge, {
+              target: point
+            });
+          }
+        },
+        onEdgeClick(ev) {
+          const currentEdge = ev.item;
+          // 拖拽过程中，点击会点击到新增的边上
+          if (this.addingEdge && this.edge == currentEdge) {
+            this.graph.removeItem(this.edge);
+            this.edge = null;
+            this.addingEdge = false;
+          }
         }
       });
 
+      // Register a custom behavior to add node
+      G6.registerBehavior('click-add-node', {
+        getEvents() {
+          return {
+            'canvas:click': 'onClick'
+          };
+        },
+        addedCount: 0,
+        onClick(ev) {
 
+          const graph = this.graph;
+          const node = this.graph.addItem('node', {
+            x: ev.canvasX,
+            y: ev.canvasY,
+            id: `node-${this.addedCount}`, // 生成唯一的 id
+          });
+          this.addedCount++;
+        }
+      });
+    },
+    createGraphic() {
+
+
+      this.graph = new G6.Graph({
+        container: 'mountNode',
+        width: 500,
+        height: 500,
+        modes: {
+          default: ['drag-node', 'click-select'],
+          addNode: ['click-add-node', 'click-select'],
+          addEdge: ['click-add-edge', 'click-select']
+        },
+        // The node styles in different states
+        nodeStateStyles: {
+          // The node styles in selected state, corresponds to the built-in click-select behavior
+          selected: {
+            stroke: '#666',
+            lineWidth: 2,
+            fill: 'steelblue'
+          }
+        }
+      });
+
+      this.graph.data(this.data);
+      this.graph.render();
+    },
+    initGraphEvent() {
     },
   },
   mounted() {
     this.$nextTick(() => {
+      this.ff();
       this.createGraphic();
       this.initGraphEvent();
       console.log(this.graph);
-    })
+    });
   }
 };
 </script>
