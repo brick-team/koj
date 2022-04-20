@@ -47,7 +47,7 @@ public class ResultXMLParse extends CommonParseAndValidateImpl<List<ResultExecut
             Element fields1 = element1.element(FIELDS_NODE);
             List<Element> field = fields1.elements(FIELD_NODE);
             for (Element element2 : field) {
-                FieldXML parse = this.fieldXMLParse.parse(element2);
+                FieldXML parse = this.fieldXMLParse.parasAndValidate(element2);
                 fields.add(parse);
             }
 
@@ -61,6 +61,11 @@ public class ResultXMLParse extends CommonParseAndValidateImpl<List<ResultExecut
     @Override
     public void validate(List<ResultExecuteEntity> resultExecuteEntities) throws IllegalArgumentException {
 
+        for (ResultExecuteEntity resultExecuteEntity : resultExecuteEntities) {
+            if (resultExecuteEntity.getFlowId() == null || "".equals(resultExecuteEntity.getFlowId())){
+                throw new IllegalArgumentException("result中flowId不能为空");
+            }
+        }
 
     }
 }

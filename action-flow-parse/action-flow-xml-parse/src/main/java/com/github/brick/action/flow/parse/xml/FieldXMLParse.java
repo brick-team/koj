@@ -51,7 +51,7 @@ public class FieldXMLParse extends CommonParseAndValidateImpl<FieldXML>
         String typeStr = type.getTextTrim();
         fieldXML.setType(FieldType.valueOf(typeStr.toUpperCase()));
         Element extract = element.element(EXTRACT_NODE);
-        ExtractXML parse = extractXMLParse.parse(extract);
+        ExtractXML parse = extractXMLParse.parasAndValidate(extract);
         fieldXML.setExtract(parse);
 
         Element properties = element.element(PROPERTIES_NODE);
