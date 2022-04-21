@@ -1,7 +1,6 @@
 package com.github.brick.action.flow.model.entity;
 
 import lombok.Data;
-import java.util.Date;
 
 /**
  * 条件判断(Watcher)实体类

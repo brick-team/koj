@@ -1,7 +1,6 @@
 package com.github.brick.action.flow.model.entity;
 
 import lombok.Data;
-import java.util.Date;
 
 /**
  * rest_api参数表(RestApiParam)实体类
@@ -33,13 +32,11 @@ public class RestApiParam{
     */
     private String name;
     /**
-    * 	
-是否必填
+    * 是否必填
     */
     private Integer require;
     /**
-    * 	
-默认值
+    * 默认值
     */
     private String value;
 

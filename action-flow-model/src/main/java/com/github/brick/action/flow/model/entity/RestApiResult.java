@@ -1,7 +1,6 @@
 package com.github.brick.action.flow.model.entity;
 
 import lombok.Data;
-import java.util.Date;
 
 /**
  * rest_api结果表(RestApiResult)实体类
@@ -29,8 +28,7 @@ public class RestApiResult{
     */
     private String fieldName;
     /**
-    * 	
-值类型
+    * 值类型
     */
     private String type;
     /**

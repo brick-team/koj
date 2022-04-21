@@ -1,7 +1,6 @@
 package com.github.brick.action.flow.model.entity;
 
 import lombok.Data;
-import java.util.Date;
 
 /**
  * 执行工作表(Work)实体类

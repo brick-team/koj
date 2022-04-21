@@ -1,7 +1,6 @@
 package com.github.brick.action.flow.model.entity;
 
 import lombok.Data;
-import java.util.Date;
 
 /**
  * java_method参数表(JavaMethodParam)实体类
