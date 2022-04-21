@@ -48,7 +48,7 @@ public class ActionFlowContentInit {
     @Bean
     public ActionFlowMemoryContent actionFlowMemoryContent(
     ) throws Exception {
-        ActionFlowMemoryContent actionFlowMemoryContent = new ActionFlowMemoryContent();
+        ActionFlowMemoryContent actionFlowMemoryContent = new ActionFlowMemoryContent(false,null);
         actionFlowMemoryContent.start();
         return actionFlowMemoryContent;
     }
