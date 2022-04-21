@@ -79,10 +79,14 @@ export default {
           }
         },
         onClick(ev) {
+
+          const point = this.graph.getPointByClient(ev.clientX, ev.clientY)
+
+
           const graph = this.graph
           const node = this.graph.addItem('node', {
-            x: ev.canvasX,
-            y: ev.canvasY,
+            x: point.x,
+            y: point.y,
             id: `node-${_this.addedCount}`  // 生成唯一的 id
 
           });
