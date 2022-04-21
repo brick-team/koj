@@ -1,62 +1,100 @@
 <template>
   <div>
+    <el-button @click="aaa">视图模式</el-button>
+    <el-button type="text" @click="dialogVisible = true"
+    >添加点
+    </el-button
+    >
 
-    <el-button @click="hhhh">aaa</el-button>
+    <el-dialog
+      v-model="dialogVisible"
+      title="Tips"
+      width="30%"
+    >
+      <span>添加点咯</span>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="aaa_dalig_quxiao">取消</el-button>
+        <el-button type="primary" @click="aaa_dalig_queding "
+        >确认</el-button
+        >
+      </span>
+      </template>
+    </el-dialog>
 
-    <div id="mountNode" />
+
+    <el-button @click="bbb">添加线段</el-button>
+
   </div>
+  <div id="mountNode"></div>
 </template>
 
 <script>
-import G6 from '@antv/g6'
+import G6 from '@antv/g6';
+import DEFAULT_DATA from "@/options";
 
 export default {
-  name: 'Polyline1',
-  data() {
-    return {
-      graph: {},
-      data: {
-        nodes: [{
-          id: 'node1',
-          x: 100,
-          y: 200
-        }, {
-          id: 'node2',
-          x: 300,
-          y: 200
-        }, {
-          id: 'node3',
-          x: 300,
-          y: 300
-        }],
-        edges: [{
-          id: 'edge1',
-          target: 'node2',
-          source: 'node1'
-        }]
-      },
-      tooltip: '',
-      top: 0,
-      left: 0,
-      addedCount: 0
+  name: "start",
+  created() {
 
-    }
   },
   mounted() {
-    this.$nextTick(() => {
-      this.ff()
-      this.createGraphic()
-      this.initGraphEvent()
-      console.log(this.graph)
-    })
+    this.initG6()
+  },
+  data() {
+    return {
+      g: {},
+      nodeType: '',
+      dialogVisible: false,
+      addNode: false,
+      addedCount: 0,
+
+
+    };
   },
   methods: {
-    hhhh() {
-      this.graph.setMode('addNode')
+    aaa() {
+      this.g.setMode("default");
+
     },
-    ff() {
-      const _this = this
-      console.log('ff')
+    aaa_dalig_queding() {
+      this.dialogVisible = false;
+      this.addNode = true;
+      this.g.setMode("addNode");
+
+    },
+    aaa_dalig_quxiao() {
+      this.dialogVisible = false;
+      this.addNode = false;
+      this.g.setMode("default");
+    }, bbb() {
+      this.g.setMode("addEdge");
+    },
+    initG6() {
+      const _this = this;
+      G6.registerBehavior('click-add-node', {
+        getEvents() {
+          return {
+            'canvas:click': 'onClick'
+          }
+        },
+        onClick(ev) {
+
+          const point = this.graph.getPointByClient(ev.clientX, ev.clientY)
+
+
+          const graph = this.graph
+          const node = this.graph.addItem('node', {
+            x: point.x,
+            y: point.y,
+            id: `node-${_this.addedCount}`  // 生成唯一的 id
+
+          });
+          _this.addedCount++;
+        },
+
+      })
+
       G6.registerBehavior('click-add-edge', {
         getEvents() {
           return {
@@ -111,79 +149,59 @@ export default {
         }
       })
 
-      // Register a custom behavior to add node
-      G6.registerBehavior('click-add-node', {
-        getEvents() {
-          return {
-            'canvas:click': 'onClick'
-          }
-        },
-        addedCount: 0,
-        onClick(ev) {
-          const graph = this.graph
-          const node = this.graph.addItem('node', {
-            x: ev.canvasX,
-            y: ev.canvasY,
-            id: `node-${this.addedCount}` // 生成唯一的 id
-          })
-          this.addedCount++
-        }
-      })
-    },
-    createGraphic() {
-      this.graph = new G6.Graph({
+      const graph = new G6.Graph({
         container: 'mountNode',
-        width: 500,
-        height: 500,
+        width: window.innerWidth,
+        height: window.innerHeight,
         modes: {
-          default: ['drag-node', 'click-select'],
-          addNode: ['click-add-node', 'click-select'],
-          addEdge: ['click-add-edge', 'click-select']
+          default: ['drag-canvas', 'click-select', "drag-node", 'drag-node'],
+          addNode: ['click-add-node', 'drag-canvas'],
+          addEdge: ['click-add-edge', 'drag-canvas']
         },
-        // The node styles in different states
-        nodeStateStyles: {
-          // The node styles in selected state, corresponds to the built-in click-select behavior
-          selected: {
-            stroke: '#666',
-            lineWidth: 2,
-            fill: 'steelblue'
+        // 节点类型及样式
+        defaultNode: {
+          type: 'rect',
+          size: [150, 50],
+          style: {
+            fill: '#DEE9FF',
+            stroke: '#5B8FF9'
           }
+        },
+        // 连线类型及样式
+        defaultEdge: {
+          type: 'polyline-edge', // polyline
+          style: {
+            radius: 6,
+            offset: 15,
+            stroke: '#aab7c3',
+            lineAppendWidth: 10, // 防止线太细没法点中
+            /* startArrow:      {
+                path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+                fill: '#aab7c3',
+            }, */
+            endArrow: {
+              path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+              fill: '#aab7c3',
+              stroke: '#aab7c3',
+            },
+          },
         }
-      })
-
-      this.graph.data(this.data)
-      this.graph.render()
-    },
-    initGraphEvent() {
+      });
+      graph.read(DEFAULT_DATA);
+      this.g = graph;
     }
   }
-}
-</script>
+};
 
+</script>
 <style>
-#container {
+#mountNode {
   width: 100%;
   height: 100%;
   border: 1px saddlebrown solid;
 }
 
-.g6-tooltip {
-  position: fixed;
-  top: 0;
-  left: 0;
-  font-size: 12px;
-  color: #545454;
-  border-radius: 4px;
-  border: 1px solid #e2e2e2;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: rgb(174, 174, 174) 0 0 10px;
-  padding: 10px 8px;
-}
-
-.g6-minimap {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  background: #fff;
+.dialog-footer button:first-child {
+  margin-right: 10px;
 }
 </style>

@@ -54,6 +54,11 @@ public class ActionFlowMemoryContent extends ActionFlowContent {
         this.context = context;
     }
 
+    public ActionFlowMemoryContent() {
+        this.beanFromSpring = false;
+        this.context = null;
+    }
+
     @Override
     protected void initActionFlowExecute() throws Exception {
         this.actionFlowExecute =
