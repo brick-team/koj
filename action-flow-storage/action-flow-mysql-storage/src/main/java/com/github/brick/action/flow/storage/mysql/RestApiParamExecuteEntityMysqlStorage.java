@@ -14,24 +14,13 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.enums;
+package com.github.brick.action.flow.storage.mysql;
 
-import lombok.Getter;
-
-@Getter
-public enum ActionType implements Type {
-    REST_API(1),
-    JAVA_METHOD(2)
-    ;
-
-    public Integer code;
-
-    ActionType(Integer code) {
-        this.code = code;
-    }
-
-    @Override
-    public String type() {
-        return name();
-    }
+/**
+ * @author xupenggao
+ * @version 1.0
+ * @description restApi参数处理
+ * @date 2022/4/21
+ */
+public class RestApiParamExecuteEntityMysqlStorage {
 }

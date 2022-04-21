@@ -16,10 +16,17 @@
 
 package com.github.brick.action.flow.storage.mysql;
 
+import com.github.brick.action.flow.model.entity.Action;
+import com.github.brick.action.flow.model.enums.ActionType;
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
+import com.github.brick.action.flow.storage.mysql.mapper.ActionMapper;
+import com.github.brick.action.flow.storage.mysql.util.MybatisUtil;
+import org.apache.ibatis.session.SqlSession;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActionExecuteEntityMySqlStorage implements ActionExecuteEntityStorage {
@@ -33,10 +40,47 @@ public class ActionExecuteEntityMySqlStorage implements ActionExecuteEntityStora
 
     @Override
     public void save(String fileName, List<ActionExecuteEntity> actions) {
+
+        List<Action> actionList = new ArrayList<>(actions.size());
+        for (ActionExecuteEntity action : actions) {
+
+            Action actionEntity = new Action();
+            ActionType actionType = action.getType();
+            actionEntity.setType(actionType.getCode());
+
+            List<ParamExecuteEntity> javaParam = new ArrayList<>();
+
+            if (actionType == ActionType.JAVA_METHOD){
+                actionEntity.setClassName(action.getJavaMethod().getClassName());
+                actionEntity.setMethod(action.getJavaMethod().getMethod());
+
+                javaParam = action.getJavaMethod().getParam();
+
+            }else if (actionType == ActionType.REST_API){
+                actionEntity.setUrl(action.getRestApi().getUrl());
+                actionEntity.setMethod(action.getRestApi().getMethod());
+
+                javaParam = action.getRestApi().getParam();
+            }
+
+            actionList.add(actionEntity);
+
+        }
+
+        SqlSession sqlSession = MybatisUtil.getThreadLocalSqlSession();
+        ActionMapper actionMapper = sqlSession.getMapper(ActionMapper.class);
+
+        actionMapper.insertAll(actionList);
     }
 
     @Override
     public ActionExecuteEntity getAction(String fileName, Serializable refId) {
+        SqlSession sqlSession = MybatisUtil.getThreadLocalSqlSession();
+        ActionMapper actionMapper = sqlSession.getMapper(ActionMapper.class);
+
+        List<Action> actionList = actionMapper.queryById(refId);
+        // TODO ActionExecuteEntity组装
+
         return null;
 
     }

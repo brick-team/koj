@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.brick.action.flow.storage.mysql.mapper.ActionMapper">
+
+    <resultMap id="BaseResultMap" type="com.github.brick.action.flow.model.entity.Action">
+        <!--@Table action-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="method" column="method" jdbcType="VARCHAR"/>
+        <result property="className" column="class_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertAll">
+        insert into action_flow.action(type, url, method, class_name)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.type}, #{item.url}, #{item.method}, #{item.className})
+        </foreach>
+
+    </insert>
+
+    <select id="queryById" resultMap="BaseResultMap">
+        select id, type, url, method, class_name from action_flow.action
+        where id = #{id}
+    </select>
+
+
+</mapper>
