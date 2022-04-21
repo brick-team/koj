@@ -74,12 +74,16 @@ public class ParamXMLForJavaMethodParse extends CommonParseAndValidateImpl<Param
         if (javaMethod.getIndex() != null){
 
             if (javaMethod.getType() == null || "".equals(javaMethod.getType())){
-                throw new IllegalArgumentException("JavaMethod参数类型不能为空");
+                throw new IllegalArgumentException("JavaMethod参数type不能为空");
             }
 
-            if ((javaMethod.getName() == null || "".equals(javaMethod.getName()))
+            if (javaMethod.getName() == null || "".equals(javaMethod.getName())){
+                throw new IllegalArgumentException("JavaMethod参数name不能为空");
+            }
+
+            if ((javaMethod.getValue() == null || "".equals(javaMethod.getValue()))
                     && javaMethod.getExtract() == null){
-                throw new IllegalArgumentException("JavaMethod参数必须包含name或extract其中一个");
+                throw new IllegalArgumentException("JavaMethod参数必须包含value或extract其中一个");
             }
         }
     }

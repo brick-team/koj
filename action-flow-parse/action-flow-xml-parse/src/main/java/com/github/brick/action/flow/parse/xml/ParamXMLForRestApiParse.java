@@ -71,8 +71,12 @@ public class ParamXMLForRestApiParse extends CommonParseAndValidateImpl<ParamXML
             throw new IllegalArgumentException("restApi参数所在位置不能为空");
         }
 
-        if ((restApi.getName() == null || "".equals(restApi.getName())) && restApi.getExtract() == null){
-            throw new IllegalArgumentException("restApi参数必须包含name或extract其中一个");
+        if (restApi.getName() == null || "".equals(restApi.getName())){
+            throw new IllegalArgumentException("restApi参数name不能为空");
+        }
+
+        if ((restApi.getValue() == null || "".equals(restApi.getValue())) && restApi.getExtract() == null){
+            throw new IllegalArgumentException("restApi参数必须包含value或extract其中一个");
         }
     }
 }
