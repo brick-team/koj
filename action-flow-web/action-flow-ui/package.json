@@ -10,7 +10,7 @@
     "dependencies": {
         "@antv/g6": "^4.6.4",
         "core-js": "^3.6.5",
-        "element-plus": "^2.1.7",
+        "element-plus": "^2.1.10",
         "vue": "^3.0.0",
         "vue-router": "^4.0.0-0"
     },
