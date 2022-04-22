@@ -11,6 +11,7 @@
       title="Tips"
       width="30%"
     >
+<!--      todo: 添加下拉框和输入框，用来确认加入的是work节点还是watcher节点-->
       <span>添加点咯</span>
       <template #footer>
       <span class="dialog-footer">
@@ -22,7 +23,7 @@
       </template>
     </el-dialog>
 
-
+<!--todo: 添加线段的时候需要控制三个类型：1. work->watcher watcher->then watcher->cat-->
     <el-button @click="bbb">添加线段</el-button>
 
   </div>
@@ -49,7 +50,6 @@ export default {
       addNode: false,
       addedCount: 0,
 
-
     };
   },
   methods: {
@@ -67,7 +67,8 @@ export default {
       this.dialogVisible = false;
       this.addNode = false;
       this.g.setMode("default");
-    }, bbb() {
+    },
+    bbb() {
       this.g.setMode("addEdge");
     },
     initG6() {
@@ -87,7 +88,9 @@ export default {
           const node = this.graph.addItem('node', {
             x: point.x,
             y: point.y,
+            type: "star", // 根据第一个弹框加入不同类型的
             id: `node-${_this.addedCount}`  // 生成唯一的 id
+
 
           });
           _this.addedCount++;
@@ -122,7 +125,7 @@ export default {
           } else {
             this.edge = graph.addItem('edge', {
               source: model.id,
-              target: point
+              target: point,
             })
             this.addingEdge = true
           }
