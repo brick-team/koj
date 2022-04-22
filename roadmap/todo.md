@@ -1,0 +1,5 @@
+- [ ] 添加点弹框
+  - 根据不同类型设计不同输入框，work 节点和 watcher 节点
+  - work 节点选择 action id 需要弹出 action 搜索框 
+- [ ] 添加线段弹框
+  - 先选择连接方式，然后连接。work 不允许和work连接。 work 只能指向 watcher 每个节点不允许互相指。
