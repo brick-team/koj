@@ -51,4 +51,4 @@ jobs:
           # User email for git commits
           user_email: hufier97@163.com
           # Environment variable containing the token to use for push
-          push_token: ${{secrets.TOKEN}}
+          push_token: ${{TOKEN}}
