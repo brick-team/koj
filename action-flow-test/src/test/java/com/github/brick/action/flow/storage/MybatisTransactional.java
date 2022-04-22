@@ -17,6 +17,7 @@
 package com.github.brick.action.flow.storage;
 
 import com.github.brick.action.flow.storage.mapper.PeopleMapper;
+import com.github.brick.action.flow.storage.mysql.mapper.ActionMapper;
 import com.github.brick.action.flow.storage.mysql.util.MybatisUtil;
 import com.mysql.cj.jdbc.Driver;
 import org.apache.ibatis.session.SqlSession;
@@ -44,6 +45,8 @@ public class MybatisTransactional {
     private void extracted1() throws Exception {
         SqlSession session = MybatisUtil.getThreadLocalSqlSession();
         PeopleMapper mapper = session.getMapper(PeopleMapper.class);
+        ActionMapper mapper2 = session.getMapper(ActionMapper.class);
+
         mapper.insert(1, "f");
     }
 
@@ -64,6 +67,6 @@ public class MybatisTransactional {
         String dbDriver = Driver.class.getName();
 
 
-        MybatisUtil mybatisUtil = new MybatisUtil(user, password, databasenameURL, dbDriver, PeopleMapper.class);
+        MybatisUtil mybatisUtil = new MybatisUtil(user, password, databasenameURL, dbDriver, PeopleMapper.class,ActionMapper.class);
     }
 }
