@@ -66,6 +66,7 @@ public class MybatisUtil {
 
             configuration.addMapper(aClass);
         }
+        configuration.addLoadedResource("resources/mapper/*.xml");
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
         this.sqlSessionFactory = sqlSessionFactory;
     }
