@@ -61,6 +61,7 @@ public class MybatisUtil {
         TransactionFactory transactionFactory = new JdbcTransactionFactory();
         Environment environment = new Environment("development", transactionFactory, dataSource());
         Configuration configuration = new Configuration(environment);
+        configuration.addLoadedResource("resources/mapper/*.xml");
         for (Class<?> aClass : clazz) {
 
             configuration.addMapper(aClass);
