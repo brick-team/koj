@@ -47,6 +47,7 @@ public class ActionExecuteEntityMySqlStorage implements ActionExecuteEntityStora
             Action actionEntity = new Action();
             ActionType actionType = action.getType();
             actionEntity.setType(actionType.getCode());
+            actionEntity.setFileName(fileName);
 
             List<ParamExecuteEntity> javaParam = new ArrayList<>();
 
