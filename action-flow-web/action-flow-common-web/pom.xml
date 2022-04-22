@@ -15,8 +15,8 @@
   ~    limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>action-flow-web</artifactId>
@@ -74,6 +74,7 @@
                 <version>1.6</version>
                 <configuration>
                     <workingDirectory>${project.parent.basedir}/action-flow-ui</workingDirectory>
+                    <skip>true</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -85,6 +86,7 @@
                             <nodeVersion>v16.14.0</nodeVersion>
                             <npmVersion>8.3.1</npmVersion>
                         </configuration>
+
                     </execution>
                     <!-- Install all project dependencies -->
                     <execution>
@@ -129,7 +131,9 @@
                             <resources>
                                 <resource>
                                     <!-- 从前端打包的目录dist进行指定文件、文件夹内容的复制-->
-                                    <directory>${project.parent.basedir}/action-flow-ui/dist</directory>
+                                    <directory>
+                                        ${project.parent.basedir}/action-flow-ui/dist
+                                    </directory>
                                     <includes>
                                         <!-- 具体根据实际前端代码、及目录结构进行配置-->
                                         <include>css/</include>
