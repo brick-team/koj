@@ -16,22 +16,26 @@
 
 package com.github.brick.action.flow.storage.mysql;
 
+import com.github.brick.action.flow.model.entity.Action;
 import com.github.brick.action.flow.model.enums.ActionType;
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 import com.github.brick.action.flow.storage.mysql.mapper.ActionMapper;
+import com.github.brick.action.flow.storage.mysql.util.ExecuteMapper;
 import com.github.brick.action.flow.storage.mysql.util.MybatisUtil;
+import org.apache.ibatis.session.SqlSession;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ActionExecuteEntityMySqlStorageTest {
 
-    @Before
-    public void before() {
+    @Before public void before() throws Exception {
 
         String user = "root";
         String password = "admin123";
@@ -87,8 +91,19 @@ public class ActionExecuteEntityMySqlStorageTest {
 
     }
 
-    @Test
-    public void getAction() throws Exception{
+    @Test public void dd() throws Exception {
+        MybatisUtil.gen().work(session -> {
+            ActionMapper mapper = session.getMapper(ActionMapper.class);
+            ArrayList<Action> list = new ArrayList<>();
+            Action e = new Action();
+            e.setClassName("11");
+            list.add(e);
+            mapper.insertAll(list);
+        });
+
+    }
+
+    @Test public void getAction() throws Exception {
         MybatisUtil gen = MybatisUtil.gen();
         ActionExecuteEntityStorage storage = new ActionExecuteEntityMySqlStorage();
 
