@@ -22,7 +22,11 @@ package com.github.brick.action.flow.storage.api;
  * @description
  * @date 2022/4/24
  */
-public interface DataSaveAndValidate<T> extends DataSave<T>, DataValidate<T> {
+public abstract class CommonSaveAndValidateImpl<T> implements DataSaveAndValidate<T>{
 
-    void saveAndValidate(T t) throws Exception;
+    @Override
+    public void saveAndValidate(T t) throws Exception {
+        this.validate(t);
+        this.save(t);
+    }
 }

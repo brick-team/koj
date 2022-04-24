@@ -66,7 +66,11 @@ public class ActionExecuteEntityMySqlStorage implements ActionExecuteEntityStora
                 param = action.getRestApi().getParam();
             }
 
-            actionExecuteMySqlStorageDao.save(actionEntity);
+            try {
+                actionExecuteMySqlStorageDao.saveAndValidate(actionEntity);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             System.out.println("[保存成功]  id = " + actionEntity.getId());
 
