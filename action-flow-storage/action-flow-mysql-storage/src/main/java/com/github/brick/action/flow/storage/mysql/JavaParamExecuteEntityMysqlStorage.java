@@ -16,11 +16,21 @@
 
 package com.github.brick.action.flow.storage.mysql;
 
+import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
+import com.github.brick.action.flow.storage.api.child.ParamExecuteEntityStorage;
+
+import java.util.List;
+
 /**
  * @author xupenggao
  * @version 1.0
  * @description java参数处理
  * @date 2022/4/21
  */
-public class JavaParamExecuteEntityMysqlStorage {
+public class JavaParamExecuteEntityMysqlStorage implements ParamExecuteEntityStorage {
+
+    @Override
+    public void save(List<ParamExecuteEntity> param) {
+
+    }
 }

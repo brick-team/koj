@@ -21,13 +21,14 @@ import com.github.brick.action.flow.model.enums.ActionType;
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 import com.github.brick.action.flow.storage.mysql.mapper.ActionMapper;
-import com.github.brick.action.flow.storage.mysql.util.ExecuteMapper;
 import com.github.brick.action.flow.storage.mysql.util.MybatisUtil;
-import org.apache.ibatis.session.SqlSession;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -39,18 +40,29 @@ public class ActionExecuteEntityMySqlStorageTest {
 
         String user = "root";
         String password = "admin123";
-        String databasenameURL = "jdbc:h2:~/action-flow";
+        String databasenameURL = "jdbc:h2:~/action-flow;MODE=MySQL;DATABASE_TO_LOWER=TRUE";
         String dbDriver = "org.h2.Driver";
 
 
         MybatisUtil mybatisUtil = new MybatisUtil(user, password, databasenameURL, dbDriver,
                 ActionMapper.class);
+        mybatisUtil.work(session -> {
+            Connection connection = session.getConnection();
+            Statement statement = connection.createStatement();
+
+            List<String> allLines = Files.readAllLines(Paths.get("src/test/resources/h2database.sql"), StandardCharsets.UTF_8);
+
+            StringBuilder buffer = new StringBuilder();
+            allLines.forEach(buffer::append);
+
+            statement.execute(buffer.toString());
+            connection.commit();
+        });
     }
 
 
     @Test
     public void save() throws Exception{
-        MybatisUtil gen = MybatisUtil.gen();
         ActionExecuteEntityStorage storage = new ActionExecuteEntityMySqlStorage();
         List<ActionExecuteEntity> actions = new ArrayList<>();
 
@@ -85,9 +97,7 @@ public class ActionExecuteEntityMySqlStorageTest {
 
         actions.add(entity1);
 
-        gen.work(session -> {
-            storage.save("test", actions);
-        });
+        storage.save("test", actions);
 
     }
 
@@ -98,7 +108,7 @@ public class ActionExecuteEntityMySqlStorageTest {
             Action e = new Action();
             e.setClassName("11");
             list.add(e);
-            mapper.insertAll(list);
+            mapper.insert(e);
         });
 
     }

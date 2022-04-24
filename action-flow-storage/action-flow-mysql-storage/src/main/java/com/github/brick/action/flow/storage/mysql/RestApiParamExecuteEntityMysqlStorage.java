@@ -16,11 +16,32 @@
 
 package com.github.brick.action.flow.storage.mysql;
 
+import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
+import com.github.brick.action.flow.storage.api.child.ParamExecuteEntityStorage;
+
+import java.util.List;
+
 /**
  * @author xupenggao
  * @version 1.0
  * @description restApi参数处理
  * @date 2022/4/21
  */
-public class RestApiParamExecuteEntityMysqlStorage {
+public class RestApiParamExecuteEntityMysqlStorage implements ParamExecuteEntityStorage {
+
+    @Override
+    public void save(List<ParamExecuteEntity> restApiParam){
+
+        for (ParamExecuteEntity entity : restApiParam) {
+
+            ParamExecuteEntity.ForRestApi restApi = entity.getRestApi();
+
+            List<ParamExecuteEntity.ForRestApi> restApis = restApi.getRestApis();
+            if (restApis != null && !restApis.isEmpty()){
+
+            }
+
+        }
+    }
+
 }

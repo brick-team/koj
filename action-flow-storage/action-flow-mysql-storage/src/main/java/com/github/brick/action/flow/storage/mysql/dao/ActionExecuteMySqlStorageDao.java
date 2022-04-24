@@ -14,39 +14,32 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.mysql.mapper;
+package com.github.brick.action.flow.storage.mysql.dao;
 
 import com.github.brick.action.flow.model.entity.Action;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import java.io.Serializable;
-import java.util.List;
+import com.github.brick.action.flow.storage.mysql.mapper.ActionMapper;
+import com.github.brick.action.flow.storage.mysql.util.MybatisUtil;
 
 /**
  * @author xupenggao
  * @version 1.0
- * @description action表Mapper文件
- * @date 2022/4/21
+ * @description action相关数据持久化操作
+ * @date 2022/4/24
  */
+public class ActionExecuteMySqlStorageDao {
 
-@Mapper
-public interface ActionMapper {
+    public void save(Action actionEntity) {
 
-    /**
-     * 批量插入
-     *
-     * @param list 数据列表
-     * @return int
-     */
-    int insert(Action list);
+        MybatisUtil gen = MybatisUtil.gen();
 
-    /**
-     * 查询通过id
-     *
-     * @param id id
-     * @return {@link List}<{@link Action}>
-     */
-    List<Action> queryById(@Param("id") Serializable id);
+        try {
+            gen.work(session -> {
+                ActionMapper actionMapper = session.getMapper(ActionMapper.class);
 
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }

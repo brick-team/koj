@@ -21,6 +21,7 @@ import com.github.brick.action.flow.model.enums.ActionType;
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
 import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
+import com.github.brick.action.flow.storage.mysql.dao.ActionExecuteMySqlStorageDao;
 import com.github.brick.action.flow.storage.mysql.mapper.ActionMapper;
 import com.github.brick.action.flow.storage.mysql.util.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
@@ -31,17 +32,18 @@ import java.util.List;
 
 public class ActionExecuteEntityMySqlStorage implements ActionExecuteEntityStorage {
 
+    private final ActionExecuteMySqlStorageDao actionExecuteMySqlStorageDao;
 
     /**
      * 构造的时候设置基础依赖
      */
     public ActionExecuteEntityMySqlStorage() {
+        actionExecuteMySqlStorageDao = new ActionExecuteMySqlStorageDao();
     }
 
     @Override
     public void save(String fileName, List<ActionExecuteEntity> actions) {
 
-        List<Action> actionList = new ArrayList<>(actions.size());
         for (ActionExecuteEntity action : actions) {
 
             Action actionEntity = new Action();
@@ -49,29 +51,26 @@ public class ActionExecuteEntityMySqlStorage implements ActionExecuteEntityStora
             actionEntity.setType(actionType.getCode());
             actionEntity.setFileName(fileName);
 
-            List<ParamExecuteEntity> javaParam = new ArrayList<>();
+            List<ParamExecuteEntity> param = new ArrayList<>();
 
-            if (actionType == ActionType.JAVA_METHOD){
+            if (actionType == ActionType.JAVA_METHOD) {
                 actionEntity.setClassName(action.getJavaMethod().getClassName());
                 actionEntity.setMethod(action.getJavaMethod().getMethod());
 
-                javaParam = action.getJavaMethod().getParam();
+                param = action.getJavaMethod().getParam();
 
-            }else if (actionType == ActionType.REST_API){
+            } else if (actionType == ActionType.REST_API) {
                 actionEntity.setUrl(action.getRestApi().getUrl());
                 actionEntity.setMethod(action.getRestApi().getMethod());
 
-                javaParam = action.getRestApi().getParam();
+                param = action.getRestApi().getParam();
             }
 
-            actionList.add(actionEntity);
+            actionExecuteMySqlStorageDao.save(actionEntity);
+
+            System.out.println("[保存成功]  id = " + actionEntity.getId());
 
         }
-
-        SqlSession sqlSession = MybatisUtil.getThreadLocalSqlSession();
-        ActionMapper actionMapper = sqlSession.getMapper(ActionMapper.class);
-
-        actionMapper.insertAll(actionList);
     }
 
     @Override
