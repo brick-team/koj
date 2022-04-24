@@ -14,15 +14,14 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.api;
+package com.github.brick.action.flow.storage.api.validate;
 
 /**
+ * 数据保存
+ *
  * @author xupenggao
- * @version 1.0
- * @description
- * @date 2022/4/24
  */
-public interface DataSaveAndValidate<T> extends DataSave<T>, DataValidate<T> {
+public interface DataSave<T> {
 
-    void saveAndValidate(T t) throws Exception;
+    void save(T t) throws Exception;
 }

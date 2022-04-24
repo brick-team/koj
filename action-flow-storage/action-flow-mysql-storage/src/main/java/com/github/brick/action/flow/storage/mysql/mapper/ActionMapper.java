@@ -24,10 +24,9 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * action表Mapper文件
+ *
  * @author xupenggao
- * @version 1.0
- * @description action表Mapper文件
- * @date 2022/4/21
  */
 
 @Mapper

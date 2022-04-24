@@ -14,19 +14,14 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.api;
+package com.github.brick.action.flow.storage.api.validate;
 
 /**
+ * 数据校验保存整合
+ *
  * @author xupenggao
- * @version 1.0
- * @description
- * @date 2022/4/24
  */
-public abstract class CommonSaveAndValidateImpl<T> implements DataSaveAndValidate<T>{
+public interface DataSaveAndValidate<T> extends DataSave<T>, DataValidate<T> {
 
-    @Override
-    public void saveAndValidate(T t) throws Exception {
-        this.validate(t);
-        this.save(t);
-    }
+    void saveAndValidate(T t) throws Exception;
 }
