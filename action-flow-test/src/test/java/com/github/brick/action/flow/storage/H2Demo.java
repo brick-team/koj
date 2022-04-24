@@ -37,7 +37,7 @@ public class H2Demo {
 
         String user = "sa";
         String password = "sa";
-        String databasenameURL = "jdbc:h2:~/test";
+        String databasenameURL = "jdbc:h2:~/22;MODE=MySQL;DATABASE_TO_LOWER=TRUE";
         String dbDriver = "org.h2.Driver";
 
 
