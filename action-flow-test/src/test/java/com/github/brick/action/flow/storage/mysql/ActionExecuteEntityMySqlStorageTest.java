@@ -19,13 +19,13 @@ package com.github.brick.action.flow.storage.mysql;
 import com.github.brick.action.flow.model.entity.Action;
 import com.github.brick.action.flow.model.enums.ActionType;
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.model.xml.ActionXML;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 import com.github.brick.action.flow.storage.mysql.mapper.ActionMapper;
 import com.github.brick.action.flow.storage.mysql.util.MybatisUtil;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -66,12 +66,7 @@ public class ActionExecuteEntityMySqlStorageTest {
         ActionExecuteEntityStorage storage = new ActionExecuteEntityMySqlStorage();
         List<ActionExecuteEntity> actions = new ArrayList<>();
 
-        ActionExecuteEntity entity = new ActionExecuteEntity() {
-            @Override
-            public Serializable getId() {
-                return 1;
-            }
-        };
+        ActionExecuteEntity entity = new ActionXML();
         entity.setType(ActionType.REST_API);
 
         ActionExecuteEntity.ForRestApi restApi = new ActionExecuteEntity.ForRestApi();
@@ -82,12 +77,7 @@ public class ActionExecuteEntityMySqlStorageTest {
         actions.add(entity);
 
 
-        ActionExecuteEntity entity1 = new ActionExecuteEntity() {
-            @Override
-            public Serializable getId() {
-                return 2;
-            }
-        };
+        ActionExecuteEntity entity1 = new ActionXML();
 
         entity1.setType(ActionType.JAVA_METHOD);
         ActionExecuteEntity.ForJavaMethod javaMethod = new ActionExecuteEntity.ForJavaMethod();

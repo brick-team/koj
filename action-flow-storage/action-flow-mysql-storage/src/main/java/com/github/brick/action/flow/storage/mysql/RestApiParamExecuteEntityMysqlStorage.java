@@ -22,10 +22,9 @@ import com.github.brick.action.flow.storage.api.child.ParamExecuteEntityStorage;
 import java.util.List;
 
 /**
+ * restApi参数处理
+ *
  * @author xupenggao
- * @version 1.0
- * @description restApi参数处理
- * @date 2022/4/21
  */
 public class RestApiParamExecuteEntityMysqlStorage implements ParamExecuteEntityStorage {
 

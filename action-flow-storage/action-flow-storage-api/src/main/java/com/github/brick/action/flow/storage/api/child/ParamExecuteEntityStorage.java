@@ -21,10 +21,9 @@ import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
 import java.util.List;
 
 /**
+ * 参数处理
+ *
  * @author xupenggao
- * @version 1.0
- * @description 参数处理
- * @date 2022/4/22
  */
 public interface ParamExecuteEntityStorage {
 

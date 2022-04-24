@@ -17,9 +17,7 @@
 package com.github.brick.action.flow.storage.mysql.dao;
 
 import com.github.brick.action.flow.model.entity.Action;
-import com.github.brick.action.flow.storage.api.CommonSaveAndValidateImpl;
-import com.github.brick.action.flow.storage.api.DataSave;
-import com.github.brick.action.flow.storage.api.DataValidate;
+import com.github.brick.action.flow.storage.api.validate.DataSaveAndValidate;
 import com.github.brick.action.flow.storage.mysql.mapper.ActionMapper;
 import com.github.brick.action.flow.storage.mysql.util.MybatisUtil;
 
@@ -27,13 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * action相关数据持久化操作
+ *
  * @author xupenggao
- * @version 1.0
- * @description action相关数据持久化操作
- * @date 2022/4/24
  */
-public class ActionExecuteMySqlStorageDao extends CommonSaveAndValidateImpl<Action>
-        implements DataValidate<Action>, DataSave<Action> {
+public class ActionExecuteMySqlStorageDao implements DataSaveAndValidate<Action> {
 
     @Override
     public void save(Action action) throws Exception{
@@ -65,5 +61,11 @@ public class ActionExecuteMySqlStorageDao extends CommonSaveAndValidateImpl<Acti
             }
         });
 
+    }
+
+    @Override
+    public void saveAndValidate(Action action) throws Exception {
+        this.validate(action);
+        this.save(action);
     }
 }

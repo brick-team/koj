@@ -14,15 +14,14 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.api;
+package com.github.brick.action.flow.storage.api.validate;
 
 /**
+ * 数据入库前校验
+ *
  * @author xupenggao
- * @version 1.0
- * @description 数据保存
- * @date 2022/4/24
  */
-public interface DataSave<T> {
+public interface DataValidate<T> {
 
-    void save(T t) throws Exception;
+    void validate(T t) throws IllegalArgumentException, Exception;
 }
