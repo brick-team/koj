@@ -50,53 +50,51 @@ public class H2Demo {
     public void hh() throws Exception {
         MybatisUtil gen = MybatisUtil.gen();
 
-//        gen.work(new ExecuteMapper() {
-//            @Override
-//            public void work(SqlSession session) throws Exception {
-//                Connection connection = session.getConnection();
-//                Statement statement = connection.createStatement();
-//                statement.execute(
-//                        "create table grade\n"
-//                                + "(\n"
-//                                + "id int primary key not null,\n"
-//                                + "teachername varchar(20) null\n"
-//                                + ")\n");
-//                connection.commit();
-//            }
-//        });
-
-//        gen.work(new ExecuteMapper() {
-//            @Override
-//            public void work(SqlSession session) throws Exception {
-//                Connection connection = session.getConnection();
-//                Statement statement = connection.createStatement();
-//                statement.execute("insert into grade VALUES(1,'22')");
-//                connection.commit();
-//            }
-//        });
-
         gen.work(new ExecuteMapper() {
-            @Override
-            public void work(SqlSession session) throws Exception {
+            @Override public void work(SqlSession session) throws Exception {
                 Connection connection = session.getConnection();
                 Statement statement = connection.createStatement();
-
-                ResultSet rs = statement.executeQuery("select * from grade");
-
-                while(rs.next()){
-                    //检索
-                    int id  = rs.getInt("id");
-                    String name = rs.getString("teachername");
-
-                    //显示
-                    System.out.print("ID: " + id);
-                    System.out.print(", Name: " + name);
-                    System.out.println();
-                }
-
-                System.out.println();
+                statement.execute(
+"DROP TABLE IF EXISTS `work`;\n" + "CREATE TABLE `work` (\n"
+        + "                        `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',\n"
+        + "                        `action_id` int NOT NULL COMMENT 'action表关联id'\n"
+        + ") ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
+                connection.commit();
             }
         });
+
+        //        gen.work(new ExecuteMapper() {
+        //            @Override
+        //            public void work(SqlSession session) throws Exception {
+        //                Connection connection = session.getConnection();
+        //                Statement statement = connection.createStatement();
+        //                statement.execute("insert into grade VALUES(1,'22')");
+        //                connection.commit();
+        //            }
+        //        });
+
+        //        gen.work(new ExecuteMapper() {
+        //            @Override
+        //            public void work(SqlSession session) throws Exception {
+        //                Connection connection = session.getConnection();
+        //                Statement statement = connection.createStatement();
+        //
+        //                ResultSet rs = statement.executeQuery("select * from grade");
+        //
+        //                while(rs.next()){
+        //                    //检索
+        //                    int id  = rs.getInt("id");
+        //                    String name = rs.getString("teachername");
+        //
+        //                    //显示
+        //                    System.out.print("ID: " + id);
+        //                    System.out.print(", Name: " + name);
+        //                    System.out.println();
+        //                }
+        //
+        //                System.out.println();
+        //            }
+        //        });
 
     }
 }

@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
 @RequestMapping("/action_flow/search")
 public class SearchBeanController {
     @Autowired
