@@ -26,19 +26,18 @@
         <result property="url" column="url" jdbcType="VARCHAR"/>
         <result property="method" column="method" jdbcType="VARCHAR"/>
         <result property="className" column="class_name" jdbcType="VARCHAR"/>
+        <result property="fileName" column="file_name" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <insert id="insertAll">
-        insert into action_flow.action(type, url, method, class_name)
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into `action`(type, url, method, class_name, file_name)
         values
-        <foreach collection="list" item="item" separator=",">
-            (#{item.type}, #{item.url}, #{item.method}, #{item.className})
-        </foreach>
+        (#{type}, #{url}, #{method}, #{className}, #{fileName})
 
     </insert>
 
     <select id="queryById" resultMap="BaseResultMap">
-        select id, type, url, method, class_name from action_flow.action
+        select id, type, url, method, class_name, file_name from `action`
         where id = #{id}
     </select>
 

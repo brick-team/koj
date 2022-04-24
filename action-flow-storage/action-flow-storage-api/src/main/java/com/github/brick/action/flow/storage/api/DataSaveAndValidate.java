@@ -14,39 +14,14 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.mysql.mapper;
-
-import com.github.brick.action.flow.model.entity.Action;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import java.io.Serializable;
-import java.util.List;
+package com.github.brick.action.flow.storage.api;
 
 /**
  * @author xupenggao
  * @version 1.0
- * @description action表Mapper文件
- * @date 2022/4/21
+ * @description 数据入库前校验
+ * @date 2022/4/24
  */
-
-@Mapper
-public interface ActionMapper {
-
-    /**
-     * 批量插入
-     *
-     * @param list 数据列表
-     * @return int
-     */
-    int insert(Action list);
-
-    /**
-     * 查询通过id
-     *
-     * @param id id
-     * @return {@link List}<{@link Action}>
-     */
-    List<Action> queryById(@Param("id") Serializable id);
+public interface DataSaveAndValidate {
 
 }

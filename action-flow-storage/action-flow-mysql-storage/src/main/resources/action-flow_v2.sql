@@ -23,7 +23,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `action`;
 CREATE TABLE `action`  (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `type` tinyint NOT NULL COMMENT '	\r\n1:rest_api,2:java_method',
+  `type` tinyint NOT NULL COMMENT ':rest_api,2:java_method',
   `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'type=1时表示HTTP请求地址',
   `method` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'type=1时表示HTTP请求方式(POST\\\\GET\\\\DELETE\\\\PUT) type=2时表示java函数名称',
   `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'type=2时表示需要执行的类全路径',
