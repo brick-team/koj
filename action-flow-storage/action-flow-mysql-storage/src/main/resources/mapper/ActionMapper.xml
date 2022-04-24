@@ -40,6 +40,18 @@
         select id, type, url, method, class_name, file_name from `action`
         where id = #{id}
     </select>
+    <select id="queryByFileName" resultType="com.github.brick.action.flow.model.entity.Action">
+        select id, type, url, method, class_name, file_name from `action`
+        where
+        <if test="fileName != null and fileName != ''">
+            file_name = #{fileName}
+        </if>
+
+        <if test="fileName == null or fileName == ''">
+            file_name is null
+        </if>
+
+    </select>
 
 
 </mapper>

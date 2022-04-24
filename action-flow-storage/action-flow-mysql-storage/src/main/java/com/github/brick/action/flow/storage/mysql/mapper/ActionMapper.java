@@ -49,4 +49,11 @@ public interface ActionMapper {
      */
     List<Action> queryById(@Param("id") Serializable id);
 
+    /**
+     * 通过文件名称查询
+     *
+     * @param fileName 文件名称
+     * @return {@link List}<{@link Action}>
+     */
+    List<Action> queryByFileName(@Param("fileName") String fileName);
 }

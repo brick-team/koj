@@ -112,13 +112,4 @@ public class ActionExecuteEntityMySqlStorageTest {
         });
 
     }
-
-    @Test public void getAction() throws Exception {
-        MybatisUtil gen = MybatisUtil.gen();
-        ActionExecuteEntityStorage storage = new ActionExecuteEntityMySqlStorage();
-
-        gen.work(session -> {
-            storage.getAction("test", 1);
-        });
-    }
 }

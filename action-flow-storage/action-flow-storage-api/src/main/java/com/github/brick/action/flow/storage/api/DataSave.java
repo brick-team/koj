@@ -19,10 +19,10 @@ package com.github.brick.action.flow.storage.api;
 /**
  * @author xupenggao
  * @version 1.0
- * @description
+ * @description 数据保存
  * @date 2022/4/24
  */
-public interface DataSaveAndValidate<T> extends DataSave<T>, DataValidate<T> {
+public interface DataSave<T> {
 
-    void saveAndValidate(T t) throws Exception;
+    void save(T t) throws Exception;
 }

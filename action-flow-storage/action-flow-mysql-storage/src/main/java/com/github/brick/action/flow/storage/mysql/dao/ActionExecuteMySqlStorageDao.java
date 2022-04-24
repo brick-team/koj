@@ -17,8 +17,14 @@
 package com.github.brick.action.flow.storage.mysql.dao;
 
 import com.github.brick.action.flow.model.entity.Action;
+import com.github.brick.action.flow.storage.api.CommonSaveAndValidateImpl;
+import com.github.brick.action.flow.storage.api.DataSave;
+import com.github.brick.action.flow.storage.api.DataValidate;
 import com.github.brick.action.flow.storage.mysql.mapper.ActionMapper;
 import com.github.brick.action.flow.storage.mysql.util.MybatisUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author xupenggao
@@ -26,20 +32,38 @@ import com.github.brick.action.flow.storage.mysql.util.MybatisUtil;
  * @description action相关数据持久化操作
  * @date 2022/4/24
  */
-public class ActionExecuteMySqlStorageDao {
+public class ActionExecuteMySqlStorageDao extends CommonSaveAndValidateImpl<Action>
+        implements DataValidate<Action>, DataSave<Action> {
 
-    public void save(Action actionEntity) {
+    @Override
+    public void save(Action action) throws Exception{
 
         MybatisUtil gen = MybatisUtil.gen();
 
-        try {
-            gen.work(session -> {
-                ActionMapper actionMapper = session.getMapper(ActionMapper.class);
+        gen.work(session -> {
+            ActionMapper actionMapper = session.getMapper(ActionMapper.class);
+            actionMapper.insert(action);
+        });
 
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    }
+
+    @Override
+    public void validate(Action action) throws IllegalArgumentException, Exception {
+        MybatisUtil gen = MybatisUtil.gen();
+
+        String fileName = action.getFileName();
+
+        gen.work(session -> {
+            ActionMapper actionMapper = session.getMapper(ActionMapper.class);
+            List<Action> actionList = actionMapper.queryByFileName(fileName);
+
+            List<Integer> ids = new ArrayList<>();
+            actionList.forEach(t -> ids.add(t.getId()));
+
+            if (ids.contains(action.getId())){
+                throw new IllegalArgumentException("当前actionId = " + action.getId() + " 已存在");
+            }
+        });
 
     }
 }
