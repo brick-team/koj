@@ -1,32 +1,37 @@
 <template>
   <div>
     <el-button @click="aaa">视图模式</el-button>
-    <el-button type="text" @click="dialogVisible = true"
-    >添加点
-    </el-button
-    >
+    <el-button type="text" @click="addNodeDialogVisible = true">添加点</el-button>
+    <el-button @click="bbb">添加线段</el-button>
+  </div>
 
-    <el-dialog
-      v-model="dialogVisible"
-      title="Tips"
-      width="30%"
-    >
-<!--      todo: 添加下拉框和输入框，用来确认加入的是work节点还是watcher节点-->
-      <span>添加点咯</span>
-      <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="aaa_dalig_quxiao">取消</el-button>
-        <el-button type="primary" @click="aaa_dalig_queding "
-        >确认</el-button
-        >
-      </span>
-      </template>
-    </el-dialog>
+<el-dialog title="添加节点"
+  v-model="addNodeDialogVisible"
+  width="30%"
+  :before-close="handleAddNodeDialogClose"
+>
+<!-- todo: 添加下拉框和输入框，用来确认加入的是work节点还是watcher节点-->
+  <el-form ref="addNodeForm"
+    :model="addNodeForm"
+    :rules="addNodeRules"
+  >
+    <el-form-item label="节点类型">
+      <el-select v-model="addNodeForm.type" placeholder="请选择节点类型">
+        <el-option label="work" value="work"></el-option>
+        <el-option label="watcher" value="watcher"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="节点名称">
+      <el-input v-model="addNodeForm.label" placeholder="请输入节点名称"></el-input>
+    </el-form-item>
+  </el-form>
+  <template #footer class="dialog-footer">
+      <el-button @click="handleAddNodeDialogClose">取消</el-button>
+      <el-button type="primary" @click="func_addNode">确认</el-button>
+  </template>
+</el-dialog>
 
 <!--todo: 添加线段的时候需要控制三个类型：1. work->watcher watcher->then watcher->cat-->
-    <el-button @click="bbb">添加线段</el-button>
-
-  </div>
   <div id="mountNode"></div>
 </template>
 
@@ -44,9 +49,14 @@ export default {
   },
   data() {
     return {
+      addNodeForm: {type: '', label: ''},
+      addNodeRules: {
+        type: [{required: true, message: '请选择节点类型', trigger: 'blur'}],
+        label: [{required: true, message: '请输入节点名称', trigger: 'blur'}]
+      },
       g: {},
       nodeType: '',
-      dialogVisible: false,
+      addNodeDialogVisible: false,
       addNode: false,
       addedCount: 0,
 
@@ -57,14 +67,22 @@ export default {
       this.g.setMode("default");
 
     },
-    aaa_dalig_queding() {
-      this.dialogVisible = false;
-      this.addNode = true;
-      this.g.setMode("addNode");
-
+    handleAddNodeDialogClose() {
+      this.addNodeForm = {type: '', label: ''}
+      this.addNodeDialogVisible = false
+    },
+    func_addNode() {
+      this.$refs.addNodeForm.validate((valid) => {
+        if (!valid) {
+          return;
+        }
+        this.g.setMode("addNode");
+        this.handleAddNodeDialogClose();
+        this.addNode = true;
+      })
     },
     aaa_dalig_quxiao() {
-      this.dialogVisible = false;
+      this.addNodeDialogVisible = false;
       this.addNode = false;
       this.g.setMode("default");
     },
