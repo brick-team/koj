@@ -108,9 +108,16 @@ public class MybatisUtil {
     }
 
     private SqlSession open() {
-        SqlSession sqlSession = this.sqlSessionFactory.openSession();
-        sqlSessionThreadLocal.set(sqlSession);
-        return sqlSession;
+        SqlSession sqlSession1 = sqlSessionThreadLocal.get();
+        if (sqlSession1 == null) {
+
+            SqlSession sqlSession = this.sqlSessionFactory.openSession();
+            sqlSessionThreadLocal.set(sqlSession);
+            return sqlSession;
+        }
+        else {
+            return sqlSession1;
+        }
     }
 
     public void work(ExecuteMapper executeMapper) throws Exception {
