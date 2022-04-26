@@ -1,0 +1,10 @@
+server:
+  port: 8000 #访问端口号
+
+eureka:
+  client:
+    fetch-registry: false #表示是否从Eureka Server获取注册的服务信息
+    register-with-eureka: false #表示是否将自己注册到Eureka Server
+  server:
+    enable-self-preservation: false #开关自我保护机制
+    eviction-interval-timer-in-ms: 3000 # 清理间隔（单位毫秒，默认是60*1000）
