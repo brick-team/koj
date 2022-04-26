@@ -19,6 +19,7 @@ package com.github.brick.action.flow.web.common.ctr;
 import com.github.brick.action.flow.model.swagger.ApiEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ public interface SwaggerCtr {
      * @param file swagger文件
      * @return true 成功 ，false 失败
      */
-    List<ApiEntity> handlerWithFile(MultipartFile file);
+    List<ApiEntity> handlerWithFile(MultipartFile file) throws IOException;
 
     /**
      * 处理swagger地址
@@ -64,7 +65,7 @@ public interface SwaggerCtr {
      * @param file swagger文件
      * @return true 成功 ，false 失败
      */
-    boolean handlerWithFileWithStorage(MultipartFile file);
+    boolean handlerWithFileWithStorage(MultipartFile file) throws IOException;
 
     /**
      * 处理swagger地址,携带存储

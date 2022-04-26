@@ -22,6 +22,9 @@ import java.io.Serializable;
 import java.util.List;
 @Data
 public abstract class ResultExecuteEntity {
+
+    public abstract Serializable getId();
+
     public abstract Serializable getFlowId();
 
     private List<FieldExecuteEntity> fields;

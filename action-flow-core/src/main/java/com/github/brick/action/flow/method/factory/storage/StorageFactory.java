@@ -16,14 +16,14 @@
 
 package com.github.brick.action.flow.method.factory.storage;
 
-import com.github.brick.action.flow.model.enums.StorageType;
 import com.github.brick.action.flow.model.ActionFlowFactory;
+import com.github.brick.action.flow.model.enums.StorageType;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
-import com.github.brick.action.flow.storage.memory.nv.ActionExecuteEntityMemoryStorage;
-import com.github.brick.action.flow.storage.memory.nv.FlowExecuteEntityMemoryStorage;
-import com.github.brick.action.flow.storage.memory.nv.ResultExecuteEntityMemoryStorage;
+import com.github.brick.action.flow.storage.api.child.ApiEntityStorage;
+import com.github.brick.action.flow.storage.api.child.ResultEntityStorage;
+import com.github.brick.action.flow.storage.memory.nv.*;
 import com.github.brick.action.flow.storage.mysql.ActionExecuteEntityMySqlStorage;
 import com.github.brick.action.flow.storage.mysql.FlowExecuteEntityMySqlStorage;
 import com.github.brick.action.flow.storage.mysql.ResultExecuteEntityMySqlStorage;
@@ -42,6 +42,8 @@ public final class StorageFactory {
         map.put(ActionExecuteEntityStorage.class, new ActionExecuteEntityStorageFactory());
         map.put(FlowExecuteEntityStorage.class, new FlowExecuteEntityStorageFactory());
         map.put(ResultExecuteEntityStorage.class, new ResultExecuteEntityStorageFactory());
+        map.put(ApiEntityStorage.class, new ApiEntityStorageFactory());
+
     }
 
     @SuppressWarnings(value = {"unchecked"})
@@ -59,6 +61,12 @@ public final class StorageFactory {
             ActionFlowStorageFactory<?> factory = map.get(ResultExecuteEntityStorage.class);
             return (T) factory.factory(storageType);
         }
+        else if (ApiEntityStorage.class.isAssignableFrom(clazz)) {
+            return (T) map.get(ApiEntityStorage.class).factory(storageType);
+        }
+        else if (ResultEntityStorage.class.isAssignableFrom(clazz)) {
+            return (T) map.get(ResultEntityStorage.class).factory(storageType);
+        }
 
         return null;
 
@@ -67,6 +75,52 @@ public final class StorageFactory {
     private interface ActionFlowStorageFactory<T> extends ActionFlowFactory<StorageType, T> {
 
 
+    }
+
+    private final static class ResultEntityStorageFactory implements ActionFlowStorageFactory<ResultEntityStorage> {
+        Map<StorageType, ResultEntityStorage> map = new HashMap<>();
+
+        @Override
+        public ResultEntityStorage factory(StorageType type) {
+            switch (type) {
+                case MEMORY:
+                    ResultEntityStorage apiEntityStorage = map.get(type);
+                    if (apiEntityStorage == null) {
+                        apiEntityStorage = new ResultEntityMemoryStorage();
+                        map.put(type, apiEntityStorage);
+                    }
+                    return apiEntityStorage;
+
+                case MYSQL:
+                    return null;
+
+            }
+
+            return null;
+        }
+    }
+
+
+    private final static class ApiEntityStorageFactory implements ActionFlowStorageFactory<ApiEntityStorage> {
+        Map<StorageType, ApiEntityStorage> map = new HashMap<>();
+
+        @Override
+        public ApiEntityStorage factory(StorageType type) {
+            switch (type) {
+                case MEMORY:
+                    ApiEntityStorage apiEntityStorage = map.get(type);
+                    if (apiEntityStorage == null) {
+                        apiEntityStorage = new ApiEntityMemoryStorage();
+                        map.put(type, apiEntityStorage);
+                    }
+                    return apiEntityStorage;
+
+                case MYSQL:
+                    return null;
+
+            }
+            return null;
+        }
     }
 
     private final static class ActionExecuteEntityStorageFactory implements ActionFlowStorageFactory<ActionExecuteEntityStorage> {
