@@ -16,6 +16,11 @@
 
 package com.github.brick.action.flow.web.common.ctr;
 
+import com.github.brick.action.flow.model.swagger.ApiEntity;
+
+import java.io.Serializable;
+import java.util.Map;
+
 /**
  * api 接口控制器，功能
  * 1. 设置 api 接口 和 接口参数
@@ -23,4 +28,28 @@ package com.github.brick.action.flow.web.common.ctr;
  * 3. 模拟调用 api 接口
  */
 public interface ApiCtr {
+    /**
+     * 保存单个，id 不允许重复
+     *
+     * @param api
+     */
+    void save(ApiEntity api);
+
+    /**
+     * 查找单个
+     *
+     * @param id
+     * @return
+     */
+    ApiEntity findById(Serializable id);
+
+
+    /**
+     * 根据id执行
+     *
+     * @param id
+     * @param jsonData todo: jsonData 数据结构
+     * @return
+     */
+    Object execute(Serializable id, Map<String, Object> jsonData);
 }

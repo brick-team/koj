@@ -32,4 +32,6 @@ public interface ActionFlowCtr {
      * @return 执行结果
      */
     Object execute(String flowId, Map<String, String> param);
+
+    Object execute(String filename, String flowId, Map<String, String> param);
 }

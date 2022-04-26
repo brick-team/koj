@@ -16,10 +16,19 @@
 
 package com.github.brick.action.flow.web.common.ctr;
 
+import com.github.brick.action.flow.model.enums.ExtractModel;
+import com.github.brick.action.flow.model.execute.ResultExecuteEntity;
+
+import java.io.Serializable;
+
 /**
  * 结果器控制器
  * 1. 结果组装信息CRUD
  * 2. 模拟组装结果
  */
 public interface ResultCtr {
+
+    void save(ResultExecuteEntity result);
+
+    Object execute(Serializable id, String jsonData, ExtractModel extractModel);
 }

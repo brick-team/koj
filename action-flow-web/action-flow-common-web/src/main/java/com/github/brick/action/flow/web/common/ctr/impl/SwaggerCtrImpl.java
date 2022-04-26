@@ -16,15 +16,21 @@
 
 package com.github.brick.action.flow.web.common.ctr.impl;
 
+import com.github.brick.action.flow.method.factory.storage.StorageFactory;
+import com.github.brick.action.flow.model.enums.StorageType;
 import com.github.brick.action.flow.model.swagger.ApiEntity;
 import com.github.brick.action.flow.parse.api.ActionFlowSwaggerParseApi;
 import com.github.brick.action.flow.parse.swagger.SwaggerParseImpl;
+import com.github.brick.action.flow.storage.api.child.ApiEntityStorage;
 import com.github.brick.action.flow.web.common.ctr.SwaggerCtr;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.github.brick.action.flow.web.common.security.ActionFlowSecurityAutoConfiguration.ACTION_FLOW_URL_PRE;
@@ -34,6 +40,16 @@ import static com.github.brick.action.flow.web.common.security.ActionFlowSecurit
 public class SwaggerCtrImpl implements SwaggerCtr {
     ActionFlowSwaggerParseApi swaggerParseApi = new SwaggerParseImpl();
 
+    private final StorageType storageType;
+
+    private final ApiEntityStorage apiEntityStorage;
+
+    public SwaggerCtrImpl(StorageType storageType) {
+        this.storageType = storageType;
+        apiEntityStorage = StorageFactory.factory(storageType, ApiEntityStorage.class);
+
+    }
+
     @Override
     public List<ApiEntity> handlerWithData(String swaggerData) {
         List<ApiEntity> apiEntities = swaggerParseApi.parseData(swaggerData);
@@ -41,8 +57,14 @@ public class SwaggerCtrImpl implements SwaggerCtr {
     }
 
     @Override
-    public List<ApiEntity> handlerWithFile(MultipartFile file) {
-        return null;
+    public List<ApiEntity> handlerWithFile(MultipartFile file) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
+        String lineTxt;
+        while ((lineTxt = bufferedReader.readLine()) != null) {
+            System.out.println(lineTxt);
+        }
+        List<ApiEntity> apiEntities = handlerWithData(lineTxt);
+        return apiEntities;
     }
 
     @Override
@@ -53,16 +75,19 @@ public class SwaggerCtrImpl implements SwaggerCtr {
 
     @Override
     public boolean handlerWithDataWithStorage(String swaggerData) {
-        return false;
+        List<ApiEntity> apiEntities = handlerWithData(swaggerData);
+        return apiEntityStorage.save(apiEntities);
     }
 
     @Override
-    public boolean handlerWithFileWithStorage(MultipartFile file) {
-        return false;
+    public boolean handlerWithFileWithStorage(MultipartFile file) throws IOException {
+        List<ApiEntity> apiEntities = handlerWithFile(file);
+        return apiEntityStorage.save(apiEntities);
     }
 
     @Override
     public boolean handlerWithUrlWithStorage(String url) {
-        return false;
+        List<ApiEntity> apiEntities = handlerWithUrl(url);
+        return apiEntityStorage.save(apiEntities);
     }
 }

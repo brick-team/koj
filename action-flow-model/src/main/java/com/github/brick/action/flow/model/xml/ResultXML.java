@@ -19,9 +19,16 @@ package com.github.brick.action.flow.model.xml;
 import com.github.brick.action.flow.model.execute.ResultExecuteEntity;
 import lombok.Data;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.UUID;
 
 @Data
 public class ResultXML extends ResultExecuteEntity {
+
     private String flowId;
+
+    @Override
+    public Serializable getId() {
+        return UUID.randomUUID().toString();
+    }
 }
