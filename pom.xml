@@ -36,6 +36,8 @@
         <module>action-flow-execute</module>
         <module>action-flow-web</module>
         <module>action-flow-document</module>
+        <module>action-flow-sample-cloud</module>
+        <module>action-flow-sample-cloud/eureka</module>
     </modules>
 
     <properties>
@@ -271,6 +273,11 @@
                 <artifactId>groovy-all</artifactId>
                 <version>3.0.8</version>
                 <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>3.19.1</version>
             </dependency>
         </dependencies>
 
