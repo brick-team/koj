@@ -44,6 +44,7 @@ import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -65,6 +66,11 @@ public class ActionFlowExecute {
 
     private boolean objectSearchFromSpring = false;
 
+    private RestTemplate restTemplate;
+
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     private ApplicationContext context;
     private String fileName;
@@ -334,6 +340,8 @@ public class ActionFlowExecute {
 
         }
 
+
+        // TODO: 2022/4/26 此处需要调整，增加 rest template 支持
 
         String work = httpWorker.work(url, method, pathParam, queryParam, headers, formatData, body);
         return work;

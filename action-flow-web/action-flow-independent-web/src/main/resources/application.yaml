@@ -21,6 +21,8 @@ action-flow:
 
 
 spring:
+  application:
+    name: action-flow-server
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306
