@@ -37,6 +37,16 @@ public class ActionFlowConfiguration {
 
     private DBConfiguration datasource;
 
+    private DiscoveryClient discovery;
+
+    public DiscoveryClient getDiscovery() {
+        return discovery;
+    }
+
+    public void setDiscovery(DiscoveryClient discovery) {
+        this.discovery = discovery;
+    }
+
     public DBConfiguration getDatasource() {
         return datasource;
     }
@@ -91,6 +101,19 @@ public class ActionFlowConfiguration {
     public static class DBConfiguration extends JdbcConfig {
 
     }
+
+    public static class DiscoveryClient {
+        private boolean enable;
+
+        public boolean isEnable() {
+            return enable;
+        }
+
+        public void setEnable(boolean enable) {
+            this.enable = enable;
+        }
+    }
+
 
 
 }

@@ -21,8 +21,10 @@ import com.github.brick.action.flow.method.content.va.memory.ActionFlowMemoryCon
 import com.github.brick.action.flow.web.common.config.ActionFlowConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Action flow 初始化
@@ -54,5 +56,11 @@ public class ActionFlowContentInit {
     }
 
 
+    @LoadBalanced
+    @ConditionalOnProperty(value = "spring.cloud.discovery.enabled")
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
 }

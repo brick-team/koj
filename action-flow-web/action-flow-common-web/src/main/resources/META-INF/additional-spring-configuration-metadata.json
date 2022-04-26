@@ -24,6 +24,11 @@
       "type": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.DataSourceConfiguration",
       "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.DataSourceConfiguration",
       "description": "action flow 数据源配置"
+    },{
+      "name": "action-flow.discovery",
+      "type": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.DiscoveryClient",
+      "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.DiscoveryClient",
+      "description": "action flow 服务发现"
     }
   ],
   "properties": [
@@ -60,6 +65,11 @@
       "name": "action-flow.datasource.password",
       "type": "java.lang.String",
       "description": "数据库密码"
+    },
+    {
+      "name": "action-flow.discovery.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否启用服务发现"
     }
   ]
 }
