@@ -3,8 +3,8 @@
     <!-- <button @click="toUpdate">切换数据</button> -->
     <div id="container"></div>
     <div>
-      <el-button @click="addNode">添加节点</el-button>
-      <el-button @click="hh">输出图像信息</el-button>
+      <a-button @click="addNode">添加节点</a-button>
+      <a-button @click="hh">输出图像信息</a-button>
     </div>
   </div>
 </template>

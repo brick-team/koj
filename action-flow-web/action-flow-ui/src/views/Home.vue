@@ -1,30 +1,28 @@
 <template>
   <div>
-    <el-button @click="aaa">视图模式</el-button>
-    <el-button type="text" @click="dialogVisible = true"
-    >添加点
-    </el-button
-    >
+    <a-button type="primary" @click="aaa">视图模式</a-button>
 
-    <el-dialog
-      v-model="dialogVisible"
-      title="Tips"
-      width="30%"
+    <a-button type="primary" @click="ccc">添加点</a-button>
+
+    <a-modal
+        :visible="dialogVisible"
+        title="Tips"
+        width="30%"
     >
-<!--      todo: 添加下拉框和输入框，用来确认加入的是work节点还是watcher节点-->
+      <!--      todo: 添加下拉框和输入框，用来确认加入的是work节点还是watcher节点-->
       <span>添加点咯</span>
       <template #footer>
       <span class="dialog-footer">
-        <el-button @click="aaa_dalig_quxiao">取消</el-button>
-        <el-button type="primary" @click="aaa_dalig_queding "
-        >确认</el-button
+        <a-button @click="aaa_dalig_quxiao">取消</a-button>
+        <a-button type="primary" @click="aaa_dalig_queding "
+        >确认</a-button
         >
       </span>
       </template>
-    </el-dialog>
+    </a-modal>
 
 <!--todo: 添加线段的时候需要控制三个类型：1. work->watcher watcher->then watcher->cat-->
-    <el-button @click="bbb">添加线段</el-button>
+    <a-button @click="bbb">添加线段</a-button>
 
   </div>
   <div id="mountNode"></div>
@@ -53,6 +51,10 @@ export default {
     };
   },
   methods: {
+    ccc() {
+      this.dialogVisible = true;
+    },
+
     aaa() {
       this.g.setMode("default");
 

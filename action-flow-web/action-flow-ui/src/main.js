@@ -1,15 +1,9 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router'
-import { ElButton, ElContainer, ElAside, ElMain, ElMenu, ElMenuItem, ElMenuItemGroup, ElSubMenu ,ElDialog} from 'element-plus'
-import 'element-plus/dist/index.css'
+import {DatePicker, Button, Popconfirm,Modal} from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
 
-const elementPlusComponents = [
-    ElButton, ElContainer, ElAside, ElMain, ElMenu, ElMenuItem, ElSubMenu, ElMenuItemGroup,ElDialog
-]
 
-const app = createApp(App)
-elementPlusComponents.forEach(component => {
-    app.component(component.name, component)
-})
-app.use(router).mount('#app')
+const app = createApp(App);
+app.use(router).use(DatePicker).use(Button).use(Popconfirm).use(Modal).mount('#app')
