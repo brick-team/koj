@@ -24,6 +24,6 @@ jobs:
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: main
+          from_branch: develop
           target_branch: circleci-project-setup
           github_token: ${{ github.token }}
