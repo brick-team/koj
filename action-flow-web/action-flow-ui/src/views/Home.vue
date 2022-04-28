@@ -43,6 +43,7 @@ export default {
   data() {
     return {
       g: {},
+      dt: DEFAULT_DATA,
       nodeType: '',
       dialogVisible: false,
       addNode: false,
@@ -154,6 +155,29 @@ export default {
         }
       })
 
+      const menu = new G6.Menu({
+        offsetX:   -20,
+        offsetY:   -50,
+        itemTypes: ['node', 'edge'],
+        getContent(e) {
+          const outDiv = document.createElement('div');
+
+          outDiv.style.width = '80px';
+          outDiv.style.cursor = 'pointer';
+          outDiv.innerHTML = '<p id="deleteNode">删除节点</p>';
+          outDiv.innerHTML += '<p id="info">查看点信息</p>';
+          return outDiv;
+        },
+        handleMenuClick(target, item) {
+          const {id} = target;
+          const clickType = target.id;
+          console.log(clickType);
+          // todo: 不知道如何循环
+          // _this.dt.nodes.remove(item);
+        },
+      });
+
+
       const graph = new G6.Graph({
         container: 'mountNode',
         width: window.innerWidth,
@@ -190,7 +214,9 @@ export default {
               stroke: '#aab7c3',
             },
           },
-        }
+        },
+        plugins: [menu],
+
       });
       graph.read(DEFAULT_DATA);
       this.g = graph;
