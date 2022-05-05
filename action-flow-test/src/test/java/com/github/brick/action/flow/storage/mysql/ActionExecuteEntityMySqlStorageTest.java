@@ -144,6 +144,7 @@ public class ActionExecuteEntityMySqlStorageTest {
             ArrayList<Action> list = new ArrayList<>();
             Action e = new Action();
             e.setClassName("11");
+            e.setType(1);
             list.add(e);
             mapper.insert(e);
         });

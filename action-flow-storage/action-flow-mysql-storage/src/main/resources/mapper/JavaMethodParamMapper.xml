@@ -31,7 +31,7 @@
     </resultMap>
 
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into `action-flow`.`java_method_param`(`action_id`, `pid`, `index`, `type`, `name`, `value`)
+        insert into java_method_param(`action_id`, `pid`, `index`, `type`, `name`, `value`)
         values (#{actionId}, #{pid}, #{index}, #{type}, #{name}, #{value})
     </insert>
 

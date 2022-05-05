@@ -30,18 +30,18 @@
     </resultMap>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        insert into `action`(type, url, method, class_name, file_name)
+        insert into `action`(`type`, url, method, class_name, file_name)
         values
         (#{type}, #{url}, #{method}, #{className}, #{fileName})
 
     </insert>
 
     <select id="queryById" resultMap="BaseResultMap">
-        select id, type, url, method, class_name, file_name from `action`
+        select id, `type`, url, method, class_name, file_name from `action`
         where id = #{id}
     </select>
     <select id="queryByFileName" resultType="com.github.brick.action.flow.model.entity.Action">
-        select id, type, url, method, class_name, file_name from `action`
+        select id, `type`, url, method, class_name, file_name from `action`
         where
         <if test="fileName != null and fileName != ''">
             file_name = #{fileName}
