@@ -16,20 +16,74 @@
 
 package com.github.brick.action.flow.storage.mysql;
 
+import com.github.brick.action.flow.model.entity.JavaMethodParam;
 import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
 import com.github.brick.action.flow.storage.api.child.ParamExecuteEntityStorage;
+import com.github.brick.action.flow.storage.mysql.dao.JavaParamExecuteMysqlStorageDao;
 
 import java.util.List;
 
 /**
  * java参数处理
- * 
+ *
  * @author xupenggao
  */
 public class JavaParamExecuteEntityMysqlStorage implements ParamExecuteEntityStorage {
 
-    @Override
-    public void save(List<ParamExecuteEntity> param) {
+    private final JavaParamExecuteMysqlStorageDao javaParamExecuteMysqlStorageDao;
 
+    public JavaParamExecuteEntityMysqlStorage() {
+        javaParamExecuteMysqlStorageDao = new JavaParamExecuteMysqlStorageDao();
+    }
+
+    /**
+     * 保存javaParam数据
+     *
+     * @param javaParams java参数
+     * @param actionId   actionId
+     * @throws Exception 异常
+     */
+    @Override
+    public void save(List<ParamExecuteEntity> javaParams, Integer actionId) throws Exception {
+
+        for (ParamExecuteEntity entity : javaParams) {
+
+            ParamExecuteEntity.ForJavaMethod javaMethod = entity.getJavaMethod();
+
+            JavaMethodParam param = saveJavaParam(javaMethod, actionId, null);
+
+            List<ParamExecuteEntity.ForJavaMethod> javaMethodList = javaMethod.getRestApis();
+
+            if (javaMethodList != null && !javaMethodList.isEmpty()) {
+                recursiveParam(actionId, param.getId(), javaMethodList);
+            }
+        }
+
+    }
+
+    private void recursiveParam(Integer actionId, Integer pid, List<ParamExecuteEntity.ForJavaMethod> javaMethodList) throws Exception {
+
+        for (ParamExecuteEntity.ForJavaMethod javaMethod : javaMethodList) {
+            JavaMethodParam javaMethodParam = saveJavaParam(javaMethod, actionId, pid);
+
+            if (!javaMethod.getRestApis().isEmpty()) {
+                recursiveParam(actionId, javaMethodParam.getId(), javaMethod.getRestApis());
+            }
+        }
+    }
+
+    private JavaMethodParam saveJavaParam(ParamExecuteEntity.ForJavaMethod javaMethod, Integer actionId, Integer pid) throws Exception{
+
+        JavaMethodParam javaMethodParam = new JavaMethodParam();
+        javaMethodParam.setActionId(actionId);
+        javaMethodParam.setPid(pid);
+        javaMethodParam.setName(javaMethod.getName());
+        javaMethodParam.setValue(javaMethod.getValue());
+        javaMethodParam.setType(javaMethod.getType());
+        javaMethodParam.setIndex(javaMethod.getIndex());
+
+        javaParamExecuteMysqlStorageDao.saveAndValidate(javaMethodParam);
+
+        return javaMethodParam;
     }
 }

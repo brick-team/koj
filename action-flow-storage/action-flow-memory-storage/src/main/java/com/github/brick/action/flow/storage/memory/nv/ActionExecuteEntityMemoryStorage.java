@@ -29,7 +29,7 @@ public class ActionExecuteEntityMemoryStorage implements ActionExecuteEntityStor
     Map<String, Map<Serializable, ActionExecuteEntity>> map = new HashMap<>(32);
 
     @Override
-    public void save(String fileName, List<ActionExecuteEntity> actions) {
+    public void save(String fileName, List<ActionExecuteEntity> actions) throws Exception{
         Map<Serializable, ActionExecuteEntity> collect = actions.stream().collect(Collectors.toMap(ActionExecuteEntity::getId, s -> s));
         map.put(fileName, collect);
     }

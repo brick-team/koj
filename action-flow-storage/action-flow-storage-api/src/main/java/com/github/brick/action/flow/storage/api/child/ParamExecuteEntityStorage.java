@@ -27,5 +27,5 @@ import java.util.List;
  */
 public interface ParamExecuteEntityStorage {
 
-    void save(List<ParamExecuteEntity> param);
+    void save(List<ParamExecuteEntity> params, Integer actionId) throws Exception;
 }

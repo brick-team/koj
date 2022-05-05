@@ -25,24 +25,31 @@ import com.github.brick.action.flow.storage.mysql.dao.ActionExecuteMySqlStorageD
 import com.github.brick.action.flow.storage.mysql.mapper.ActionMapper;
 import com.github.brick.action.flow.storage.mysql.util.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ActionExecuteEntityMySqlStorage implements ActionExecuteEntityStorage {
 
+    public static final Logger log = LoggerFactory.getLogger(ActionExecuteEntityMySqlStorage.class);
+
     private final ActionExecuteMySqlStorageDao actionExecuteMySqlStorageDao;
+    private final RestApiParamExecuteEntityMysqlStorage restApiParamExecuteEntityMysqlStorage;
+    private final JavaParamExecuteEntityMysqlStorage javaParamExecuteEntityMysqlStorage;
 
     /**
      * 构造的时候设置基础依赖
      */
     public ActionExecuteEntityMySqlStorage() {
         actionExecuteMySqlStorageDao = new ActionExecuteMySqlStorageDao();
+        restApiParamExecuteEntityMysqlStorage = new RestApiParamExecuteEntityMysqlStorage();
+        javaParamExecuteEntityMysqlStorage = new JavaParamExecuteEntityMysqlStorage();
     }
 
     @Override
-    public void save(String fileName, List<ActionExecuteEntity> actions) {
+    public void save(String fileName, List<ActionExecuteEntity> actions) throws Exception {
 
         for (ActionExecuteEntity action : actions) {
 
@@ -51,28 +58,28 @@ public class ActionExecuteEntityMySqlStorage implements ActionExecuteEntityStora
             actionEntity.setType(actionType.getCode());
             actionEntity.setFileName(fileName);
 
-            List<ParamExecuteEntity> param = new ArrayList<>();
+            List<ParamExecuteEntity> param;
 
             if (actionType == ActionType.JAVA_METHOD) {
                 actionEntity.setClassName(action.getJavaMethod().getClassName());
                 actionEntity.setMethod(action.getJavaMethod().getMethod());
 
+                actionExecuteMySqlStorageDao.saveAndValidate(actionEntity);
+
                 param = action.getJavaMethod().getParam();
+                javaParamExecuteEntityMysqlStorage.save(param, actionEntity.getId());
 
             } else if (actionType == ActionType.REST_API) {
                 actionEntity.setUrl(action.getRestApi().getUrl());
                 actionEntity.setMethod(action.getRestApi().getMethod());
 
-                param = action.getRestApi().getParam();
-            }
-
-            try {
                 actionExecuteMySqlStorageDao.saveAndValidate(actionEntity);
-            } catch (Exception e) {
-                e.printStackTrace();
+
+                param = action.getRestApi().getParam();
+                restApiParamExecuteEntityMysqlStorage.save(param, actionEntity.getId());
             }
 
-            System.out.println("[保存成功]  id = " + actionEntity.getId());
+            log.info("[保存成功] actionId = {}", actionEntity.getId());
 
         }
     }

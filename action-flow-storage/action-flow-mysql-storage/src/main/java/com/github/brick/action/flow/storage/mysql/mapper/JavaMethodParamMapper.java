@@ -14,15 +14,24 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.api;
+package com.github.brick.action.flow.storage.mysql.mapper;
 
-import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.model.entity.JavaMethodParam;
+import org.apache.ibatis.annotations.Mapper;
 
-import java.io.Serializable;
-import java.util.List;
+/**
+ * 参数表java_method_param参数表(javaParam)表数据库访问层
+ *
+ * @author xupenggao
+ */
+@Mapper
+public interface JavaMethodParamMapper {
 
-public interface ActionExecuteEntityStorage {
-    void save(String fileName, List<ActionExecuteEntity> actions) throws Exception;
-
-    ActionExecuteEntity getAction(String fileName, Serializable refId);
+    /**
+     * 新增数据
+     *
+     * @param javaMethodParam java方法参数
+     * @return int
+     */
+    int insert(JavaMethodParam javaMethodParam);
 }

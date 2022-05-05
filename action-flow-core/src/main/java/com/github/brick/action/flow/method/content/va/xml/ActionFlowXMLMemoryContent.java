@@ -51,7 +51,7 @@ public class ActionFlowXMLMemoryContent extends ActionFlowXMLContent {
     }
 
     @Override
-    protected void storage(Map<String, ActionFlowXML> loads) {
+    protected void storage(Map<String, ActionFlowXML> loads) throws Exception{
         ActionExecuteEntityStorage actionExecuteEntityStorage =
                 StorageFactory.factory(storageType, ActionExecuteEntityStorage.class);
         this.actionExecuteEntityStorage = actionExecuteEntityStorage;
@@ -61,10 +61,15 @@ public class ActionFlowXMLMemoryContent extends ActionFlowXMLContent {
         ResultExecuteEntityStorage resultExecuteEntityStorage =
                 StorageFactory.factory(storageType, ResultExecuteEntityStorage.class);
         this.resultExecuteEntityStorage = resultExecuteEntityStorage;
-        loads.forEach((k, v) -> {
-            actionExecuteEntityStorage.save(k, v.getActions());
-            flowExecuteEntityStorage.save(k, v.getFlows());
-            resultExecuteEntityStorage.save(k, v.getResults());
-        });
+
+        for (Map.Entry<String, ActionFlowXML> entry : loads.entrySet()) {
+            String key = entry.getKey();
+            ActionFlowXML value = entry.getValue();
+
+            actionExecuteEntityStorage.save(key, value.getActions());
+            flowExecuteEntityStorage.save(key, value.getFlows());
+            resultExecuteEntityStorage.save(key, value.getResults());
+        }
+
     }
 }

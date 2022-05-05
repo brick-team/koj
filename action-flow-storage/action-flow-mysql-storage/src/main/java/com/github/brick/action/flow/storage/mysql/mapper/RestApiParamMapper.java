@@ -14,15 +14,25 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.api;
+package com.github.brick.action.flow.storage.mysql.mapper;
 
-import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.model.entity.RestApiParam;
+import org.apache.ibatis.annotations.Mapper;
 
-import java.io.Serializable;
-import java.util.List;
+/**
+ * rest_api参数表(RestApiParam)表数据库访问层
+ *
+ * @author xupenggao
+ */
+@Mapper
+public interface RestApiParamMapper {
 
-public interface ActionExecuteEntityStorage {
-    void save(String fileName, List<ActionExecuteEntity> actions) throws Exception;
+    /**
+     * 新增数据
+     *
+     * @param restApiParam 实例对象
+     * @return 影响行数
+     */
+    int insert(RestApiParam restApiParam);
 
-    ActionExecuteEntity getAction(String fileName, Serializable refId);
 }

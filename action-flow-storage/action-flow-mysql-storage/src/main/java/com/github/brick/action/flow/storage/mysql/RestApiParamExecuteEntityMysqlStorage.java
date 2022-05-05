@@ -16,8 +16,10 @@
 
 package com.github.brick.action.flow.storage.mysql;
 
+import com.github.brick.action.flow.model.entity.RestApiParam;
 import com.github.brick.action.flow.model.execute.ParamExecuteEntity;
 import com.github.brick.action.flow.storage.api.child.ParamExecuteEntityStorage;
+import com.github.brick.action.flow.storage.mysql.dao.RestApiParamExecuteMysqlStorageDao;
 
 import java.util.List;
 
@@ -28,19 +30,59 @@ import java.util.List;
  */
 public class RestApiParamExecuteEntityMysqlStorage implements ParamExecuteEntityStorage {
 
+    private final RestApiParamExecuteMysqlStorageDao restApiParamExecuteMysqlStorageDao;
+
+    public RestApiParamExecuteEntityMysqlStorage() {
+        restApiParamExecuteMysqlStorageDao = new RestApiParamExecuteMysqlStorageDao();
+    }
+
+    /**
+     * 保存RestApiParam数据
+     *
+     * @param restApiParam restApi参数
+     * @param actionId     actionId
+     * @throws Exception 异常
+     */
     @Override
-    public void save(List<ParamExecuteEntity> restApiParam){
+    public void save(List<ParamExecuteEntity> restApiParam, Integer actionId) throws Exception {
 
         for (ParamExecuteEntity entity : restApiParam) {
 
             ParamExecuteEntity.ForRestApi restApi = entity.getRestApi();
 
+            RestApiParam param = saveRestApiParam(restApi, actionId, null);
+
             List<ParamExecuteEntity.ForRestApi> restApis = restApi.getRestApis();
-            if (restApis != null && !restApis.isEmpty()){
 
+            if (restApis != null && !restApis.isEmpty()) {
+                recursiveParam(actionId, param.getId(), restApis);
             }
-
         }
     }
 
+    private void recursiveParam(Integer actionId, Integer pid, List<ParamExecuteEntity.ForRestApi> restApis) throws Exception {
+
+        for (ParamExecuteEntity.ForRestApi restApi : restApis) {
+            RestApiParam restApiParam = saveRestApiParam(restApi, actionId, pid);
+
+            if (!restApi.getRestApis().isEmpty()) {
+                recursiveParam(actionId, restApiParam.getId(), restApi.getRestApis());
+            }
+        }
+    }
+
+    private RestApiParam saveRestApiParam(ParamExecuteEntity.ForRestApi restApi, Integer actionId, Integer pid) throws Exception{
+
+        RestApiParam restApiParam = new RestApiParam();
+        restApiParam.setName(restApi.getName());
+        restApiParam.setActionId(actionId);
+        restApiParam.setRequire(restApi.isRequire() ? 1 : 0);
+        restApiParam.setIn(restApi.getIn().name());
+        restApiParam.setValue(restApi.getValue());
+        restApiParam.setPid(pid);
+
+        restApiParamExecuteMysqlStorageDao.saveAndValidate(restApiParam);
+
+        return restApiParam;
+    }
 }

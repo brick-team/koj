@@ -14,15 +14,18 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.api;
+package com.github.brick.action.flow.storage.api.child;
 
-import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.model.execute.ExtractExecuteEntity;
 
-import java.io.Serializable;
 import java.util.List;
 
-public interface ActionExecuteEntityStorage {
-    void save(String fileName, List<ActionExecuteEntity> actions) throws Exception;
+/**
+ * @author xupenggao
+ * @date 2022/5/5
+ */
+public interface ExtractExecuteEntityStorage {
 
-    ActionExecuteEntity getAction(String fileName, Serializable refId);
+    //TODO 入参
+    void save(List<ExtractExecuteEntity> extractEntityList);
 }

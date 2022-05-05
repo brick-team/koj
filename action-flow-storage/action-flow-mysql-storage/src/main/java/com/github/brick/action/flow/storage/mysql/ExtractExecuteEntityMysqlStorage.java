@@ -14,15 +14,22 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.storage.api;
+package com.github.brick.action.flow.storage.mysql;
 
-import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.model.execute.ExtractExecuteEntity;
+import com.github.brick.action.flow.storage.api.child.ExtractExecuteEntityStorage;
 
-import java.io.Serializable;
 import java.util.List;
 
-public interface ActionExecuteEntityStorage {
-    void save(String fileName, List<ActionExecuteEntity> actions) throws Exception;
+/**
+ * 取值表达式数据处理
+ *
+ * @author xupenggao
+ */
+public class ExtractExecuteEntityMysqlStorage implements ExtractExecuteEntityStorage {
 
-    ActionExecuteEntity getAction(String fileName, Serializable refId);
+    @Override
+    public void save(List<ExtractExecuteEntity> extractEntityList) {
+
+    }
 }
