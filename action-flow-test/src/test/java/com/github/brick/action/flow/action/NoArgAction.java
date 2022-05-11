@@ -16,15 +16,17 @@
 
 package com.github.brick.action.flow.action;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import com.github.brick.action.flow.model.xml.ActionXML;
+import com.google.gson.*;
+
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * @author Zen Huifer
  */
 public class NoArgAction {
-    public Map<String, Object> data() {
+    public static Map<String, Object> data() {
         HashMap<String, Object> stringObjectHashMap = new HashMap<>();
         stringObjectHashMap.put("age", 19);
         stringObjectHashMap.put("array", new String[]{"a", "2", "3"});

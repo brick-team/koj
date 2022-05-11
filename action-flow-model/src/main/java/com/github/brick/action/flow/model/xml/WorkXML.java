@@ -23,5 +23,6 @@ import java.util.List;
 
 @Data
 public class WorkXML extends WorkExecuteEntity {
+    private String refId;
 
 }

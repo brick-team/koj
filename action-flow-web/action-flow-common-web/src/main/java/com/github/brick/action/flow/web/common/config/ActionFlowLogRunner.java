@@ -32,5 +32,9 @@ public class ActionFlowLogRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         logger.info("Action Flow Version: {}", ActionFlowVersion.VERSION);
+
+
+
+
     }
 }

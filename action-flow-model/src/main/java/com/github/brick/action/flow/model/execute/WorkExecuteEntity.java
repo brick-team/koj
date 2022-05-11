@@ -21,9 +21,8 @@ import lombok.Data;
 
 import java.util.List;
 @Data
-public class WorkExecuteEntity {
+public abstract class WorkExecuteEntity {
     private String step;
-    private String refId;
     private boolean async = false;
     private List<WatcherExecuteEntity> watchers;
 }
