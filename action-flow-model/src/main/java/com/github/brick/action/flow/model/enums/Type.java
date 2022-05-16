@@ -18,4 +18,15 @@ package com.github.brick.action.flow.model.enums;
 
 public interface Type {
     public String type();
+
+    static <T extends Type> T getInstance(Class<T> clazz, String code) {
+        T[] constants = clazz.getEnumConstants();
+
+        for (T t : constants) {
+            if (t.type().equals(code)) {
+                return t;
+            }
+        }
+        return null;
+    }
 }

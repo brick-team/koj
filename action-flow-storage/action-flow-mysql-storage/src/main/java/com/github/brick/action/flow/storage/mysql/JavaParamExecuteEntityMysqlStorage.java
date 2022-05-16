@@ -52,7 +52,7 @@ public class JavaParamExecuteEntityMysqlStorage implements ParamExecuteEntitySto
 
             JavaMethodParam param = saveJavaParam(javaMethod, actionId, null);
 
-            List<ParamExecuteEntity.ForJavaMethod> javaMethodList = javaMethod.getRestApis();
+            List<ParamExecuteEntity.ForJavaMethod> javaMethodList = javaMethod.getJavaMethodParams();
 
             if (javaMethodList != null && !javaMethodList.isEmpty()) {
                 recursiveParam(actionId, param.getId(), javaMethodList);
@@ -66,8 +66,8 @@ public class JavaParamExecuteEntityMysqlStorage implements ParamExecuteEntitySto
         for (ParamExecuteEntity.ForJavaMethod javaMethod : javaMethodList) {
             JavaMethodParam javaMethodParam = saveJavaParam(javaMethod, actionId, pid);
 
-            if (!javaMethod.getRestApis().isEmpty()) {
-                recursiveParam(actionId, javaMethodParam.getId(), javaMethod.getRestApis());
+            if (!javaMethod.getJavaMethodParams().isEmpty()) {
+                recursiveParam(actionId, javaMethodParam.getId(), javaMethod.getJavaMethodParams());
             }
         }
     }

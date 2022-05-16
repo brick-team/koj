@@ -30,7 +30,12 @@ import static com.github.brick.action.flow.web.common.security.ActionFlowSecurit
 
 @ResponseBody
 @RequestMapping(ACTION_FLOW_URL_PRE)
+@RestController
 public class ConsoleController {
+    public ConsoleController() {
+        System.out.println();
+    }
+
     @GetMapping("/console")
     public ResponseEntity<Map<String, String>> console() {
         Map<String, String> map = new HashMap<>(8);

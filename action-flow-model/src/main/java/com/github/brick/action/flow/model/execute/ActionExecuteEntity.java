@@ -18,6 +18,7 @@ package com.github.brick.action.flow.model.execute;
 
 import com.github.brick.action.flow.model.enums.ActionType;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
@@ -33,6 +34,7 @@ public abstract class ActionExecuteEntity {
 
 
     @Data
+    @NoArgsConstructor
     public static class ForRestApi {
         private String url;
         private String method;
@@ -41,6 +43,7 @@ public abstract class ActionExecuteEntity {
 
 
     @Data
+    @NoArgsConstructor
     public static class ForJavaMethod {
         private String className;
         private String method;

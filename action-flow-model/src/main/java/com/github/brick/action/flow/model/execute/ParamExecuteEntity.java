@@ -35,7 +35,7 @@ public class ParamExecuteEntity {
         private String value;
         private ExtractExecuteEntity extract;
 
-        private List<ForRestApi> restApis;
+        private List<ForRestApi> restApiParams;
 
     }
 
@@ -48,7 +48,7 @@ public class ParamExecuteEntity {
         private String value;
         private ExtractExecuteEntity extract;
 
-        private List<ForJavaMethod> restApis;
+        private List<ForJavaMethod> javaMethodParams;
 
 
     }

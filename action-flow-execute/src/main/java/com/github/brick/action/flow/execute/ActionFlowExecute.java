@@ -31,6 +31,7 @@ import com.github.brick.action.flow.model.enums.ExtractModel;
 import com.github.brick.action.flow.model.enums.FieldType;
 import com.github.brick.action.flow.model.enums.ParamIn;
 import com.github.brick.action.flow.model.execute.*;
+import com.github.brick.action.flow.model.xml.WorkXML;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
 import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
@@ -40,10 +41,6 @@ import net.minidev.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.expression.EvaluationContext;
-import org.springframework.expression.Expression;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -268,30 +265,36 @@ public class ActionFlowExecute {
     private Object executeWork(String jsonData,
                                Map<String, Object> stepWorkResult,
                                WorkExecuteEntity work) {
-        String refId = work.getRefId();
-        // 执行action
-        Object o = executeAction(fileName, jsonData, refId);
-        // 放入步骤结果容器
-        stepWorkResult.put(work.getStep(), o);
-        // 处理watcher标签
-        List<WatcherExecuteEntity> watchers = work.getWatchers();
-        for (WatcherExecuteEntity watcher : watchers) {
-            ExtractModel elType = watcher.getElType();
-            String condition = watcher.getCondition();
-            boolean aBoolean = actionFlowCondition.condition(condition, elType, o);
-            if (aBoolean) {
-                List<WorkExecuteEntity> then = watcher.getThen();
-                for (WorkExecuteEntity workExecuteEntity : then) {
-                    executeWork(jsonData, stepWorkResult, workExecuteEntity);
+        if (work instanceof WorkXML) {
+
+            String refId = ((WorkXML) work).getRefId();
+            // 执行action
+            Object o = executeAction(fileName, jsonData, refId);
+            // 放入步骤结果容器
+            stepWorkResult.put(work.getStep(), o);
+            // 处理watcher标签
+            List<WatcherExecuteEntity> watchers = work.getWatchers();
+            for (WatcherExecuteEntity watcher : watchers) {
+                ExtractModel elType = watcher.getElType();
+                String condition = watcher.getCondition();
+                boolean aBoolean = actionFlowCondition.condition(condition, elType, o);
+                if (aBoolean) {
+                    List<WorkExecuteEntity> then = watcher.getThen();
+                    for (WorkExecuteEntity workExecuteEntity : then) {
+                        executeWork(jsonData, stepWorkResult, workExecuteEntity);
+                    }
                 }
-            } else {
-                List<WorkExecuteEntity> cat = watcher.getCat();
-                for (WorkExecuteEntity workExecuteEntity : cat) {
-                    executeWork(jsonData, stepWorkResult, workExecuteEntity);
+                else {
+                    List<WorkExecuteEntity> cat = watcher.getCat();
+                    for (WorkExecuteEntity workExecuteEntity : cat) {
+                        executeWork(jsonData, stepWorkResult, workExecuteEntity);
+                    }
                 }
             }
+            return o;
         }
-        return o;
+
+        return null;
     }
 
     private Object executeAction(String fileName, String jsonData, Serializable refId) {
@@ -371,12 +374,12 @@ public class ActionFlowExecute {
         }
 
         // todo: 子集参数处理
-        List<ParamExecuteEntity.ForRestApi> restApis = restApi1.getRestApis();
+        List<ParamExecuteEntity.ForRestApi> restApis = restApi1.getRestApiParams();
 
         if (restApis != null) {
 
             for (ParamExecuteEntity.ForRestApi api : restApis) {
-                List<ParamExecuteEntity.ForRestApi> restApis1 = api.getRestApis();
+                List<ParamExecuteEntity.ForRestApi> restApis1 = api.getRestApiParams();
                 for (ParamExecuteEntity.ForRestApi forRestApi : restApis1) {
                     handlerRestApiParam(jsonData, queryParam, pathParam, headers, formatData, body, forRestApi);
                 }

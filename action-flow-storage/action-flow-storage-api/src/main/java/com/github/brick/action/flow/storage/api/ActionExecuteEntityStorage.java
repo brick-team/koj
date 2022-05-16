@@ -16,7 +16,9 @@
 
 package com.github.brick.action.flow.storage.api;
 
+import com.github.brick.action.flow.model.enums.ActionType;
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.model.res.Page;
 
 import java.io.Serializable;
 import java.util.List;
@@ -25,4 +27,7 @@ public interface ActionExecuteEntityStorage {
     void save(String fileName, List<ActionExecuteEntity> actions) throws Exception;
 
     ActionExecuteEntity getAction(String fileName, Serializable refId);
+
+    Page page(ActionType restApi, int page, int size);
+
 }

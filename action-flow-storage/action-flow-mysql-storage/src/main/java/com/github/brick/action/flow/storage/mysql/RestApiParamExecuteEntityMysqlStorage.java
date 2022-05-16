@@ -52,7 +52,7 @@ public class RestApiParamExecuteEntityMysqlStorage implements ParamExecuteEntity
 
             RestApiParam param = saveRestApiParam(restApi, actionId, null);
 
-            List<ParamExecuteEntity.ForRestApi> restApis = restApi.getRestApis();
+            List<ParamExecuteEntity.ForRestApi> restApis = restApi.getRestApiParams();
 
             if (restApis != null && !restApis.isEmpty()) {
                 recursiveParam(actionId, param.getId(), restApis);
@@ -65,8 +65,8 @@ public class RestApiParamExecuteEntityMysqlStorage implements ParamExecuteEntity
         for (ParamExecuteEntity.ForRestApi restApi : restApis) {
             RestApiParam restApiParam = saveRestApiParam(restApi, actionId, pid);
 
-            if (!restApi.getRestApis().isEmpty()) {
-                recursiveParam(actionId, restApiParam.getId(), restApi.getRestApis());
+            if (!restApi.getRestApiParams().isEmpty()) {
+                recursiveParam(actionId, restApiParam.getId(), restApi.getRestApiParams());
             }
         }
     }

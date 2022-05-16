@@ -16,13 +16,13 @@
 
 package com.github.brick.action.flow.storage.memory.nv;
 
+import com.github.brick.action.flow.model.enums.ActionType;
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
+import com.github.brick.action.flow.model.res.Page;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ActionExecuteEntityMemoryStorage implements ActionExecuteEntityStorage {
@@ -48,4 +48,23 @@ public class ActionExecuteEntityMemoryStorage implements ActionExecuteEntityStor
 
         return actionExecuteEntity;
     }
+
+    @Override
+    public Page page(ActionType restApi, int page, int size) {
+        List<ActionExecuteEntity> actionExecuteEntities = new ArrayList<>();
+        Collection<Map<Serializable, ActionExecuteEntity>> values = map.values();
+        for (Map<Serializable, ActionExecuteEntity> value : values) {
+            Collection<ActionExecuteEntity> values1 = value.values();
+            for (ActionExecuteEntity actionExecuteEntity : values1) {
+                if (actionExecuteEntity.getType().equals(restApi)) {
+                    actionExecuteEntities.add(actionExecuteEntity);
+                }
+            }
+        }
+        Page page1 = new Page();
+        page1.setTotal(actionExecuteEntities.size());
+        page1.setList(actionExecuteEntities);
+        return page1;
+    }
+
 }
