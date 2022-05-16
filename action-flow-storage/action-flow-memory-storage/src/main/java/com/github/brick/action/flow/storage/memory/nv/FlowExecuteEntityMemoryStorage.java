@@ -17,12 +17,11 @@
 package com.github.brick.action.flow.storage.memory.nv;
 
 import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
+import com.github.brick.action.flow.model.res.Page;
 import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FlowExecuteEntityMemoryStorage implements FlowExecuteEntityStorage {
@@ -46,5 +45,19 @@ public class FlowExecuteEntityMemoryStorage implements FlowExecuteEntityStorage 
             throw new IllegalArgumentException("当前文件名称 " + fileName + "中不存在 flowId 为" + flowId + "的数据");
         }
         return flowExecuteEntity;
+    }
+
+    @Override
+    public Page page(int size, int page) {
+        Page<FlowExecuteEntity> objectPage = new Page<>();
+        List<FlowExecuteEntity> res = new ArrayList<>();
+        Collection<Map<Serializable, FlowExecuteEntity>> values = map.values();
+        for (Map<Serializable, FlowExecuteEntity> value : values) {
+            Collection<FlowExecuteEntity> values1 = value.values();
+            res.addAll(values1);
+        }
+        objectPage.setList(res);
+
+        return objectPage;
     }
 }

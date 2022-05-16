@@ -16,13 +16,13 @@
 
 package com.github.brick.action.flow.storage.memory.nv;
 
+import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
 import com.github.brick.action.flow.model.execute.ResultExecuteEntity;
+import com.github.brick.action.flow.model.res.Page;
 import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ResultExecuteEntityMemoryStorage implements ResultExecuteEntityStorage {
@@ -45,5 +45,19 @@ public class ResultExecuteEntityMemoryStorage implements ResultExecuteEntityStor
     public void save(String fileName, List<ResultExecuteEntity> results) {
         Map<Serializable, ResultExecuteEntity> collect = results.stream().collect(Collectors.toMap(ResultExecuteEntity::getFlowId, s -> s));
         this.map.put(fileName, collect);
+    }
+
+    @Override
+    public Page page(int size, int page) {
+        Page<ResultExecuteEntity> objectPage = new Page<>();
+        List<ResultExecuteEntity> res = new ArrayList<>();
+        Collection<Map<Serializable, ResultExecuteEntity>> values = map.values();
+        for (Map<Serializable, ResultExecuteEntity> value : values) {
+            Collection<ResultExecuteEntity> values1 = value.values();
+            res.addAll(values1);
+        }
+        objectPage.setList(res);
+
+        return objectPage;
     }
 }

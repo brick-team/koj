@@ -17,6 +17,7 @@
 package com.github.brick.action.flow.storage.mysql;
 
 import com.github.brick.action.flow.model.execute.ResultExecuteEntity;
+import com.github.brick.action.flow.model.res.Page;
 import com.github.brick.action.flow.storage.api.ResultExecuteEntityStorage;
 
 import java.io.Serializable;
@@ -32,5 +33,10 @@ public class ResultExecuteEntityMySqlStorage implements ResultExecuteEntityStora
 
     @Override
     public void save(String fileName, List<ResultExecuteEntity> results) {
+    }
+
+    @Override
+    public Page page(int size, int page) {
+        return null;
     }
 }

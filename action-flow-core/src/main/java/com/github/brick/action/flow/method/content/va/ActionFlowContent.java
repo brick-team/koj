@@ -53,7 +53,7 @@ public abstract class ActionFlowContent {
     /**
      * 核心执行方法
      */
-    protected String execute(String fileName, Serializable flowId, String jsonData) {
+    public String execute(String fileName, Serializable flowId, String jsonData) {
         if (this.actionFlowExecute != null) {
             actionFlowExecute.setFileName(fileName);
             return actionFlowExecute.execute(flowId, jsonData);
@@ -64,7 +64,7 @@ public abstract class ActionFlowContent {
     /**
      * 核心执行方法
      */
-    protected String execute(Serializable flowId, String jsonData) {
+    public String execute(Serializable flowId, String jsonData) {
         if (this.actionFlowExecute != null) {
             return actionFlowExecute.execute(flowId, jsonData);
         }

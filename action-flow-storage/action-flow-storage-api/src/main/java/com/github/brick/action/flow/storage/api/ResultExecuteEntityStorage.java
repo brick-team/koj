@@ -17,6 +17,7 @@
 package com.github.brick.action.flow.storage.api;
 
 import com.github.brick.action.flow.model.execute.ResultExecuteEntity;
+import com.github.brick.action.flow.model.res.Page;
 
 import java.io.Serializable;
 import java.util.List;
@@ -25,4 +26,6 @@ public interface ResultExecuteEntityStorage {
     void save(String fileName, List<ResultExecuteEntity> results);
 
     ResultExecuteEntity getResult(String fileName, Serializable flowId);
+
+    Page page(int size, int page);
 }

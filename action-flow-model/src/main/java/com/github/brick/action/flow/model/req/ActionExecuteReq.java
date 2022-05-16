@@ -10,9 +10,13 @@ import java.io.Serializable;
 @Data
 public class ActionExecuteReq extends ActionExecuteEntity {
 
-
+    private String id;
     @Override
     public Serializable getId() {
-        return null;
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
