@@ -16,6 +16,7 @@
 
 package com.github.brick.action.flow.storage.memory.nv;
 
+import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
 import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
 import com.github.brick.action.flow.model.res.Page;
 import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
@@ -49,15 +50,30 @@ public class FlowExecuteEntityMemoryStorage implements FlowExecuteEntityStorage 
 
     @Override
     public Page page(int size, int page) {
-        Page<FlowExecuteEntity> objectPage = new Page<>();
         List<FlowExecuteEntity> res = new ArrayList<>();
         Collection<Map<Serializable, FlowExecuteEntity>> values = map.values();
         for (Map<Serializable, FlowExecuteEntity> value : values) {
             Collection<FlowExecuteEntity> values1 = value.values();
             res.addAll(values1);
         }
-        objectPage.setList(res);
 
-        return objectPage;
+
+
+
+
+        List<FlowExecuteEntity> collect = res.stream().skip((page - 1) * size).limit(size).
+                collect(Collectors.toList());
+        Page<FlowExecuteEntity> page1 = new Page<>();
+        page1.setPage(page);
+        page1.setSize(size);
+
+        int total = res.size();
+        int pageSum = total % size == 0 ? total / size : total / size + 1;
+        page1.setPageSum(pageSum);
+
+        page1.setTotal(total);
+        page1.setList(collect);
+
+        return page1;
     }
 }

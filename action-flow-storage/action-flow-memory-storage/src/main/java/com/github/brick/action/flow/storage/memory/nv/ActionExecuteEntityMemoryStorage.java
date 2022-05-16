@@ -19,6 +19,7 @@ package com.github.brick.action.flow.storage.memory.nv;
 import com.github.brick.action.flow.model.enums.ActionType;
 import com.github.brick.action.flow.model.execute.ActionExecuteEntity;
 import com.github.brick.action.flow.model.res.Page;
+import com.github.brick.action.flow.model.swagger.ApiEntity;
 import com.github.brick.action.flow.storage.api.ActionExecuteEntityStorage;
 
 import java.io.Serializable;
@@ -61,9 +62,22 @@ public class ActionExecuteEntityMemoryStorage implements ActionExecuteEntityStor
                 }
             }
         }
-        Page page1 = new Page();
-        page1.setTotal(actionExecuteEntities.size());
-        page1.setList(actionExecuteEntities);
+
+
+        List<ActionExecuteEntity> collect = actionExecuteEntities.stream().skip((page - 1) * size).limit(size).
+                collect(Collectors.toList());
+        Page<ActionExecuteEntity> page1 = new Page<>();
+        page1.setPage(page);
+        page1.setSize(size);
+
+        int total = actionExecuteEntities.size();
+        int pageSum = total % size == 0 ? total / size : total / size + 1;
+        page1.setPageSum(pageSum);
+
+        page1.setTotal(total);
+        page1.setList(collect);
+
+
         return page1;
     }
 
