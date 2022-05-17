@@ -9,6 +9,9 @@
         <a-menu-item key="4">
           <a href="/#/flow">Flow</a>
         </a-menu-item>
+        <a-menu-item key="5">
+          <a href="/#/swagger">swagger</a>
+        </a-menu-item>
 
       </a-menu>
     </a-layout-sider>

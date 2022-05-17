@@ -11,8 +11,15 @@ const routes = [{
         name: 'home',
         component: () =>
             import ('../views/Home.vue')
+    },
+    {
+        path: '/swagger',
+        name: 'swagger',
+        component: () =>
+            import ('../views/swagger.vue')
     }
-    ]
+
+]
 
 const router = createRouter({
     history: createWebHashHistory(),
