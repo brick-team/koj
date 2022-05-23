@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface FlowExecuteEntityStorage {
-    void save(String fileName, List<FlowExecuteEntity> flows);
+    void save(String fileName, List<FlowExecuteEntity> flows) throws Exception;
 
     FlowExecuteEntity getFlow(String fileName, Serializable flowId);
 

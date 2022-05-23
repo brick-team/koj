@@ -14,18 +14,37 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.execute;
+package com.github.brick.action.flow.storage.mysql.mapper;
 
-import lombok.Data;
+import com.github.brick.action.flow.model.entity.Flow;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
-import java.io.Serializable;
 import java.util.List;
 
-@Data
-public abstract class FlowExecuteEntity {
-    private List<WorkExecuteEntity> works;
+/**
+ * flow表Mapper文件
+ *
+ * @author xupenggao
+ */
 
-    public abstract Serializable getId();
+@Mapper
+public interface FlowMapper {
 
-    private String name;
+    /**
+     * 保存flow数据
+     *
+     * @param flow 流程
+     * @return int
+     */
+    int insert(Flow flow);
+
+    /**
+     * 通过文件名称查询
+     *
+     * @param fileName 文件名称
+     * @return {@link List}<{@link Flow}>
+     */
+    List<Flow> queryByFileName(@Param("fileName") String fileName);
+
 }

@@ -14,18 +14,15 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.execute;
+package com.github.brick.action.flow.storage.mysql;
 
-import lombok.Data;
+import com.github.brick.action.flow.storage.api.child.WorkExecuteEntityStorage;
 
-import java.io.Serializable;
-import java.util.List;
+/**
+ * works数据处理
+ *
+ * @author xupenggao
+ */
+public class WorkExecuteEntityMySqlStorage implements WorkExecuteEntityStorage {
 
-@Data
-public abstract class FlowExecuteEntity {
-    private List<WorkExecuteEntity> works;
-
-    public abstract Serializable getId();
-
-    private String name;
 }

@@ -14,18 +14,14 @@
  *    limitations under the License.
  */
 
-package com.github.brick.action.flow.model.execute;
+package com.github.brick.action.flow.storage.api.child;
 
-import lombok.Data;
+/**
+ * works数据处理
+ *
+ * @author xupenggao
+ */
+public interface WorkExecuteEntityStorage {
 
-import java.io.Serializable;
-import java.util.List;
-
-@Data
-public abstract class FlowExecuteEntity {
-    private List<WorkExecuteEntity> works;
-
-    public abstract Serializable getId();
-
-    private String name;
+//    void save(List<WorkExecuteEntity> works, Integer flowId);
 }

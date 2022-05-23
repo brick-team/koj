@@ -16,17 +16,46 @@
 
 package com.github.brick.action.flow.storage.mysql;
 
+import com.github.brick.action.flow.model.entity.Flow;
 import com.github.brick.action.flow.model.execute.FlowExecuteEntity;
 import com.github.brick.action.flow.model.res.Page;
+import com.github.brick.action.flow.model.execute.WorkExecuteEntity;
 import com.github.brick.action.flow.storage.api.FlowExecuteEntityStorage;
+import com.github.brick.action.flow.storage.mysql.dao.FlowExecuteMysqlStorageDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class FlowExecuteEntityMySqlStorage implements FlowExecuteEntityStorage {
 
+    public static final Logger log = LoggerFactory.getLogger(FlowExecuteEntityMySqlStorage.class);
+
+    private final FlowExecuteMysqlStorageDao flowExecuteMysqlStorageDao;
+
+    public FlowExecuteEntityMySqlStorage() {
+        flowExecuteMysqlStorageDao = new FlowExecuteMysqlStorageDao();
+    }
+
     @Override
-    public void save(String fileName, List<FlowExecuteEntity> flows) {
+    public void save(String fileName, List<FlowExecuteEntity> flows) throws Exception{
+        for (FlowExecuteEntity flowEntity : flows) {
+            Flow flow = new Flow();
+            flow.setFileName(fileName);
+            flow.setName(flowEntity.getName());
+//            flow.setQualifier();
+
+            flowExecuteMysqlStorageDao.saveAndValidate(flow);
+
+            List<WorkExecuteEntity> works = flowEntity.getWorks();
+            if (works != null && !works.isEmpty()) {
+
+
+
+            }
+
+        }
     }
 
     @Override

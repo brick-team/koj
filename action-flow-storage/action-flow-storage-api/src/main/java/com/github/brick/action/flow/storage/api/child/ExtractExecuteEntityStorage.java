@@ -21,11 +21,11 @@ import com.github.brick.action.flow.model.execute.ExtractExecuteEntity;
 import java.util.List;
 
 /**
+ * 取值器数据处理
+ *
  * @author xupenggao
- * @date 2022/5/5
  */
 public interface ExtractExecuteEntityStorage {
 
-    //TODO 入参
     void save(List<ExtractExecuteEntity> extractEntityList);
 }
