@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.github.brick.action.flow.web.common.security.ActionFlowSecurityAutoConfiguration
