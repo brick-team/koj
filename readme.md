@@ -24,8 +24,8 @@ The most important of the above three objects is the flow object, it needs to un
   flowchart TD;
   work --execution-->watcher
   watcher-->data logic validation
-  data logic validation--validation passed-->then
-  data logic validation--validation failed-->cat
+  data logic validation-->validation passed-->then
+  data logic validation-->validation failed-->cat
  
 ```
 
