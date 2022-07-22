@@ -13,8 +13,8 @@
 
 在了解 Action Flow 程序核心设计说明之前需要先对 *XML* 以及 **数据库** 设计有一定的了解，相关文档可查看：
 
-* xref:xml-core-design.adoc#xml-design-notes[Action Flow XML 设计说明]
-* xref:db-core-design.adoc#db-core-design[Action Flow 数据库设计说明]
+* xref:xml-core-design-zhcn.adoc#xml-design-notes[Action Flow XML 设计说明]
+* xref:db-core-design-zhcn.adoc#db-core-design[Action Flow 数据库设计说明]
 
 
 == 模块说明
@@ -214,7 +214,7 @@ MybatisUtil的例子：
 
 [TIP]
 ====
-更多配置信息查看 xref:config.adoc#action-flow-config[Action Flow 配置说明]
+更多配置信息查看 xref:config-en.adoc#action-flow-config[Action Flow 配置说明]
 ====
 
 下面对 XML 模式下的存储模式进行介绍，使用 XML 模式开发默认采用内存存储，基本构造函数如下。
