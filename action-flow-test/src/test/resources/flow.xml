@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~    Copyright [2022] [brick-team]
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<action-flow>
+    <actions>
+        <action id="rest_api_1" type="rest_api" url="http://localhost:8080/login" method="post">
+            <param in="formData" name="username" require="true">
+                <extract fromAction="java_method_1" el="$.username" elType=""/>
+            </param>
+
+            <param in="formData" name="password" require="true" value="123">
+            </param>
+
+        </action>
+        <action id="java_method_1" type="java_method" className="com.github.brick.action.flow.LoginAction"
+                method="login">
+            <param index="0" type="java.lang.String" value="testname"/>
+            <param index="1" type="java.lang.String" value="testPassword"/>
+
+        </action>
+    </actions>
+
+    <results>
+        <result flowId="1">
+            <fields>
+                <field>
+                    <fieldName>f1</fieldName>
+                    <type>String</type>
+                    <extract el="$.username" step="1"/>
+                </field>
+                <field>
+                    <fieldName>f2</fieldName>
+                    <type>String</type>
+                    <extract el="$.username" step="2"/>
+                </field>
+
+
+            </fields>
+        </result>
+
+    </results>
+
+    <flows>
+
+        <flow id="1">
+            <work step="1" ref_id="rest_api_1">
+                <watcher condition="($.age >= 10)">
+                    <then>
+                        <work step="2" ref_id="java_method_1">
+                            <watcher condition="($.age >= 10)">
+                                <then>
+                                    <work step="2" ref_id="java_method_1">
+                                    </work>
+                                    <work step="3" ref_id="java_method_1"/>
+                                </then>
+                                <cat>
+                                    <work step="4" ref_id="java_method_1"/>
+                                    <work step="5" ref_id="java_method_1"/>
+                                </cat>
+                            </watcher>
+
+                        </work>
+                        <work step="3" ref_id="java_method_1"/>
+                    </then>
+                    <cat>
+                        <work step="4" ref_id="java_method_1"/>
+                        <work step="5" ref_id="java_method_1"/>
+                    </cat>
+                </watcher>
+                <watcher condition="($.age >= 10)">
+                    <then>
+                        <work step="2" ref_id="java_method_1"/>
+                        <work step="3" ref_id="java_method_1"/>
+                    </then>
+                    <cat>
+                        <work step="4" ref_id="java_method_1"/>
+                        <work step="5" ref_id="java_method_1"/>
+                    </cat>
+                </watcher>
+
+            </work>
+        </flow>
+    </flows>
+
+
+</action-flow>

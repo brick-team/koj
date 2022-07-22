@@ -1,0 +1,75 @@
+{
+  "groups": [
+    {
+      "name": "action-flow",
+      "type" : "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration",
+      "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration",
+      "description": "action flow 顶层配置"
+
+    },
+    {
+      "name": "action-flow.security",
+      "type": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.SecurityConfiguration",
+      "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.SecurityConfiguration",
+      "description": "action flow 安全配置"
+    },
+    {
+      "name": "action-flow.storage",
+      "type": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.StorageConfiguration",
+      "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.StorageConfiguration",
+      "description": "action flow 存储配置"
+    },
+    {
+      "name": "action-flow.datasource",
+      "type": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.DataSourceConfiguration",
+      "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.DataSourceConfiguration",
+      "description": "action flow 数据源配置"
+    },{
+      "name": "action-flow.discovery",
+      "type": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.DiscoveryClient",
+      "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.DiscoveryClient",
+      "description": "action flow 服务发现"
+    }
+  ],
+  "properties": [
+    {
+      "name": "action-flow.security.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否启用安全配置",
+      "sourceType": "com.github.brick.action.flow.web.common.config.ActionFlowConfiguration.SecurityConfiguration",
+      "defaultValue": false
+    },
+    {
+      "name": "action-flow.storage.type",
+      "type": "com.github.brick.action.flow.model.enums.StorageType",
+      "description": "存储类型",
+      "sourceType": "com.github.brick.action.flow.storage.mysql.config.ActionFlowMySQLStorageConfig",
+      "defaultValue": "mysql"
+    },
+    {
+      "name": "action-flow.datasource.url",
+      "type": "java.lang.String",
+      "description": "数据库地址"
+    },
+    {
+      "name": "action-flow.datasource.driver",
+      "type": "java.lang.String",
+      "description": "数据库启动"
+    },
+    {
+      "name": "action-flow.datasource.username",
+      "type": "java.lang.String",
+      "description": "数据库账号"
+    },
+    {
+      "name": "action-flow.datasource.password",
+      "type": "java.lang.String",
+      "description": "数据库密码"
+    },
+    {
+      "name": "action-flow.discovery.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否启用服务发现"
+    }
+  ]
+}

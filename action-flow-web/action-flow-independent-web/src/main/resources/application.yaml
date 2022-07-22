@@ -1,0 +1,31 @@
+server:
+  port: 9011
+logging:
+  level:
+    com.github.brick.action.flow: debug
+
+
+action-flow:
+  security:
+    enable: false
+  storage:
+    type: memory
+  datasource:
+    driver: ${spring.datasource.driver-class-name}
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+
+
+
+
+
+spring:
+  application:
+    name: action-flow-server
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/action-flow
+    username: root
+    password: root123@
+
