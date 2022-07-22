@@ -11,7 +11,7 @@
 
 == MySQL 设计
 
-MySQL 设计基于 xref:xml-core-design.adoc#xml-design-notes[Action Flow XML 设计说明] 进行。MySQL 设计将 Action Flow 分为两部分： . 候选配置: 候选配置用于存储 REST_API ， Java_Method ， 取值表达式相关内容，为运行时配置提供基础数据。 . 运行时配置: 运行时配置用于存储 flow 执行期间所需信息。例如工作流程，结果信息，工作期间取值信息。
+MySQL 设计基于 xref:xml-core-design-zhcn.adoc#xml-design-notes[Action Flow XML 设计说明] 进行。MySQL 设计将 Action Flow 分为两部分： . 候选配置: 候选配置用于存储 REST_API ， Java_Method ， 取值表达式相关内容，为运行时配置提供基础数据。 . 运行时配置: 运行时配置用于存储 flow 执行期间所需信息。例如工作流程，结果信息，工作期间取值信息。
 
 === 候选配置
 

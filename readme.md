@@ -1,54 +1,34 @@
 # Action Flow
 
-Action Flow是一个轻量，快速的流程引擎框架。
+Action Flow is a lightweight, fast flow engine framework.
 
-## 为什么有 Action Flow
+## Why Action Flow
 
-从宏观角度来看随着微服务架构逐渐成为WEB后端架构的主流，在微服务架构中通常会将服务拆分的越来越细，对于后端而言这些微服务之间相对独立，但是这些独立服务还需要通过聚合服务将其进行组合才能够达成某项业务的实际实现，随着时间推移聚合服务的数量会日益增多，这些众多的聚合服务所需要的维护成本也会随之增加。
-从微观角度来看单个服务（应用）的研发方式一般会采取最小粒度的实现各个核心业务服务，然后在外层组装出符合业务的处理流程，随着时间推移这些业务流程所在的类会日益增多，这些众多的类所需要的维护成本也会随之增加。
+From a macro perspective, as microservices architecture becomes the mainstream of WEB backend architecture, the services are usually split more and more finely in microservices architecture, which are relatively independent of each other for the backend, but these independent services also need to be combined by aggregation services to achieve the actual implementation of a business. As the number of aggregated services grows over time, the maintenance cost of these numerous aggregated services will also increase.
+From a micro perspective, the development of individual services (applications) generally takes the smallest granularity to implement each core business service, and then assembles the business processes in the outer layer, and as time goes by, the number of classes in which these business processes are located will increase, and the maintenance cost of these numerous classes will also increase.
 
-站在宏观角度和微观角度可以发现这些核心操作无非就是REST_API调用或者函数的调用，它们的多种组合通过程序代码将其进行固化（如果需要修改需要通过改变程序代码）。面对这样的问题 Action Flow 项目想要通过一定的可视化配置的方式将其进行管理，从而适当降低微服务架构中聚合服务的数量，以及在单体应用中将组合业务的形式通过可视化的方式进行配置，从而适当减少单体服务中的大量组合性质的类。
-
-
+From a macro perspective and a micro perspective, we can find that these core operations are nothing more than REST_API calls or function calls, and their various combinations are solidified by the program code (if you need to modify the program code needs to be changed). The Action Flow project wants to manage them through some visual configuration to reduce the number of aggregated services in the microservice architecture, and to visually configure the combined business forms in a single application to reduce the number of combined classes in a single service.
 
 
-## Action Flow 设计思想
-在 Action Flow 项目中将执行流程做出了三个核心对象。
-1. action: 用于定义需要执行的具体行为，行为包含JAVA函数,HTTP请求。
-2. flow: 用于定义执行流程。
-3. result: 用于定义某个执行流程的结果。
 
-在上述三个对象中最重要的是flow对象，它需要承担整个执行链路的定义工作，层级结构: work->watcher->then\cat
+
+## Action Flow Design Ideas
+In the Action Flow project, the execution flow is made up of three core objects.
+1. action: used to define the specific behavior that needs to be executed, including JAVA functions, HTTP requests. 2.
+2. flow: used to define the execution flow. 3.
+3. result: used to define the results of an execution process.
+
+The most important of the above three objects is the flow object, it needs to undertake the entire implementation of the definition of the chain of work, hierarchy: work->watcher->then\cat
 
 ```mermaid
-  flowchart  TD;
-  work --执行-->watcher
-  watcher-->数据逻辑验证
-  数据逻辑验证--验证通过-->then
-  数据逻辑验证--验证不通过-->cat
+  flowchart TD;
+  work --execution-->watcher
+  watcher-->data logic validation
+  data logic validation--validation passed-->then
+  data logic validation--validation failed-->cat
  
 ```
 
->  TIPS：在上述执行流程中then和cat都存储work，支持嵌套使用。
+> TIPS: In the above execution flow then and cat both store work and support nested use.
 
 
-
-
-
-## 快速开始
-
-- [ ] 快速开始文档编写
-
-  - [ ] XML模式
-
-    - [ ] JAVA函数调用
-    - [ ] HTTP接口调用
-    - [ ] HTTP接口和JAVA函数混用
-
-  - [ ] WEB模式
-
-    - [ ] JAVA函数调用
-    - [ ] HTTP接口调用
-    - [ ] HTTP接口和JAVA函数混用
-
-    

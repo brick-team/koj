@@ -1,15 +1,23 @@
 
-= Action Flow 目录
+= Action Flow
 :reproducible:
 :listing-caption: Listing
 :source-highlighter: rouge
 
 
 
-作者:  https://github.com/brick-team[brick-team]
+Author:  https://github.com/brick-team[brick-team]
 
 
-* xref:xml-core-design.adoc#xml-design-notes[Action Flow XML 设计说明]
-* xref:db-core-design.adoc#db-core-design[Action Flow 数据库设计说明]
-* xref:program-core-design.adoc#program-core-design[Action Flow 程序设计说明]
-* xref:sample.adoc#sample[Action Flow 演示]
+* Action Flow XML Design Notes
+** xref:xml-core-design-zhcn.adoc#xml-design-notes[中文]
+** xref:xml-core-design-en.adoc#xml-design-notes[English]
+* Action Flow Database Design Notes
+** xref:db-core-design-zhcn.adoc#db-core-design[中文]
+** xref:db-core-design-en.adoc#db-core-design[English]
+* Action Flow Program Design Notes
+** xref:program-core-design-zhcn.adoc#program-core-design[中文]
+** xref:program-core-design-en.adoc#program-core-design[English]
+* Action Flow Demo
+** [中文]
+** [English]
